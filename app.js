@@ -561,6 +561,12 @@ document.addEventListener('DOMContentLoaded', () => {
             category: 'riego',
             title: 'Establecimiento de Aromáticas y Autoriego',
             details: 'Siembra de albahaca y orégano en bancales sur. Conexión de manguera de autoriego con aspersores e inicio de monitoreo de humedad a profundidad de 10-15 cm.'
+        },
+        {
+            date: '2026-08-22',
+            category: 'siembra',
+            title: 'Siembra de 3 Pan de Palo en Sistema Hidroponico',
+            details: 'Se sembraron 3 semillas de Pan de Palo (Artocarpus camansi) en sistema hidroponico. Sustrato preparado con tierra agricola, arena y humus de lombriz en proporcion 2:1:1. Semillas colocadas en posicion horizontal a 5 cm de profundidad. Ubicacion: entrada de la casa con malla de sombra al 45%.'
         }
     ];
 
@@ -569,15 +575,16 @@ document.addEventListener('DOMContentLoaded', () => {
         'riego': 'Autoriego',
         'limpieza': 'Limpieza',
         'poda': 'Mantenimiento Patio',
-        'servicio': 'Servicios Públicos'
+        'servicio': 'Servicios Públicos',
+        'siembra': 'Siembra'
     };
 
     function getLogs() {
-        const stored = localStorage.getItem('yagua_logs_v4');
+        const stored = localStorage.getItem('yagua_logs_v5');
         if (stored) {
             return JSON.parse(stored);
         }
-        localStorage.setItem('yagua_logs_v4', JSON.stringify(seedLogs));
+        localStorage.setItem('yagua_logs_v5', JSON.stringify(seedLogs));
         return seedLogs;
     }
 
@@ -626,7 +633,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const logs = getLogs();
             logs.push(newLog);
             
-            localStorage.setItem('yagua_logs_v4', JSON.stringify(logs));
+            localStorage.setItem('yagua_logs_v5', JSON.stringify(logs));
             bitacoraForm.reset();
             setTodayDates();
             renderLogs();
@@ -643,7 +650,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (btnClearLogs) {
         btnClearLogs.addEventListener('click', () => {
             if (confirm('¿Estás seguro de que deseas limpiar la bitácora pública? Esto borrará tus registros públicos locales.')) {
-                localStorage.removeItem('yagua_logs_v4');
+                localStorage.removeItem('yagua_logs_v5');
                 renderLogs();
             }
         });

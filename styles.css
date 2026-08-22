@@ -1485,6 +1485,7 @@ input[type="range"]::-webkit-slider-thumb:hover {
 .timeline-dot.limpieza { background-color: var(--accent-green); }
 .timeline-dot.poda { background-color: var(--accent-gold); }
 .timeline-dot.servicio { background-color: #ef233c; }
+.timeline-dot.siembra { background-color: #22c55e; }
 
 .timeline-time {
     font-size: 0.75rem;
