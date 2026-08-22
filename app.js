@@ -1067,8 +1067,233 @@ document.addEventListener('DOMContentLoaded', () => {
         if (privateDateInput) privateDateInput.value = todayStr;
     }
 
+    // ---------------------------------------------------------
+    // 11. Semillero (Seedbed / Nursery) - Plantule Management
+    // ---------------------------------------------------------
+    const SEMILLERO_KEY = 'yagua_semillero';
+    const semilleroForm = document.getElementById('semillero-form');
+    const semilleroGrid = document.getElementById('semillero-grid');
+    const semilleroTimeline = document.getElementById('semillero-timeline');
+
+    const seedStatusIcons = {
+        'Semilla': 'circle-dot',
+        'Brote': 'sprout',
+        'Enraizado': 'root',
+        'En crecimiento': 'leaf',
+        'Maduro': 'flower'
+    };
+
+    const seedStatusColors = {
+        'Semilla': 'var(--accent-brown)',
+        'Brote': 'var(--accent-gold)',
+        'Enraizado': 'var(--accent-blue)',
+        'En crecimiento': 'var(--accent-green)',
+        'Maduro': '#22c55e'
+    };
+
+    const defaultSeedlings = [
+        {
+            id: 'seed-1',
+            name: 'Limoncillo',
+            scientific: 'Cymbopogon citratus',
+            location: 'Entrada de la casa',
+            date: '2026-08-15',
+            status: 'En crecimiento',
+            notes: 'Planta aromatica utilizada para preparaciones culinarias y medicinales. Requiere riego regular y sol directo.'
+        },
+        {
+            id: 'seed-2',
+            name: 'Oregano orejon',
+            scientific: 'Plectranthus amboinicus',
+            location: 'Entrada de la casa',
+            date: '2026-08-15',
+            status: 'Brote',
+            notes: 'Hierba aromatica de hoja grande, ideal para sazones y remedios naturales. Sensible a exceso de humedad.'
+        }
+    ];
+
+    function getSeedlings() {
+        const stored = localStorage.getItem(SEMILLERO_KEY);
+        if (stored) {
+            return JSON.parse(stored);
+        }
+        localStorage.setItem(SEMILLERO_KEY, JSON.stringify(defaultSeedlings));
+        return [...defaultSeedlings];
+    }
+
+    function generateSeedId() {
+        return 'seed-' + Date.now();
+    }
+
+    function renderSeedlingCards() {
+        if (!semilleroGrid) return;
+        const seedlings = getSeedlings();
+        semilleroGrid.innerHTML = '';
+
+        if (seedlings.length === 0) {
+            semilleroGrid.innerHTML = '<p class="panel-placeholder">No hay plantulas registradas. ¡Registra tu primera siembra!</p>';
+            return;
+        }
+
+        seedlings.forEach(seed => {
+            const card = document.createElement('div');
+            card.className = 'semillero-card card';
+
+            const dateParts = seed.date.split('-');
+            const formattedDate = dateParts.length === 3 ? `${dateParts[2]}/${dateParts[1]}/${dateParts[0]}` : seed.date;
+
+            const statusColor = seedStatusColors[seed.status] || 'var(--accent-green)';
+            const statusIcon = seedStatusIcons[seed.status] || 'sprout';
+
+            card.innerHTML = `
+                <div class="semillero-card-header">
+                    <div class="semillero-card-icon" style="color: ${statusColor};">
+                        <i data-lucide="${statusIcon}"></i>
+                    </div>
+                    <span class="seed-status-badge" style="background: ${statusColor}20; color: ${statusColor}; border-color: ${statusColor}40;">${seed.status}</span>
+                </div>
+                <h4>${seed.name}</h4>
+                <p class="seed-scientific-name">${seed.scientific || 'Sin nombre cientifico'}</p>
+                <div class="seed-card-meta">
+                    <span><i data-lucide="map-pin"></i> ${seed.location}</span>
+                    <span><i data-lucide="calendar"></i> ${formattedDate}</span>
+                </div>
+                ${seed.notes ? `<p class="seed-notes-text">${seed.notes}</p>` : ''}
+                <button class="btn btn-secondary btn-sm seed-delete-btn" data-id="${seed.id}" title="Eliminar plantula">
+                    <i data-lucide="trash-2"></i>
+                </button>
+            `;
+            semilleroGrid.appendChild(card);
+        });
+
+        semilleroGrid.querySelectorAll('.seed-delete-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const id = btn.getAttribute('data-id');
+                if (confirm('¿Eliminar esta plantula del semillero?')) {
+                    const seeds = getSeedlings().filter(s => s.id !== id);
+                    localStorage.setItem(SEMILLERO_KEY, JSON.stringify(seeds));
+                    renderSeedlingCards();
+                    renderSemilleroTimeline();
+                }
+            });
+        });
+
+        if (typeof lucide !== 'undefined') lucide.createIcons();
+    }
+
+    function renderSemilleroTimeline() {
+        if (!semilleroTimeline) return;
+        const seedlings = getSeedlings();
+
+        seedlings.sort((a, b) => new Date(b.date) - new Date(a.date));
+        semilleroTimeline.innerHTML = '';
+
+        if (seedlings.length === 0) {
+            semilleroTimeline.innerHTML = '<p class="panel-placeholder">No hay registros de siembra.</p>';
+            return;
+        }
+
+        seedlings.forEach(seed => {
+            const item = document.createElement('div');
+            item.className = 'timeline-item';
+
+            const dateParts = seed.date.split('-');
+            const formattedDate = dateParts.length === 3 ? `${dateParts[2]}/${dateParts[1]}/${dateParts[0]}` : seed.date;
+
+            item.innerHTML = `
+                <div class="timeline-dot semillero-dot"></div>
+                <div class="timeline-time">${formattedDate} • Siembra</div>
+                <div class="timeline-content">
+                    <h4>${seed.name} (${seed.scientific || 'N/A'})</h4>
+                    <p>${seed.location} — Estado: ${seed.status}</p>
+                </div>
+            `;
+            semilleroTimeline.appendChild(item);
+        });
+    }
+
+    const seedNameInput = document.getElementById('seed-name');
+    const seedScientificInput = document.getElementById('seed-scientific');
+    const seedLocationInput = document.getElementById('seed-location');
+    const seedDateInput = document.getElementById('seed-date');
+    const seedStatusInput = document.getElementById('seed-status');
+    const seedNotesInput = document.getElementById('seed-notes');
+
+    function updateSeedPreview() {
+        const name = document.getElementById('preview-name');
+        const scientific = document.getElementById('preview-scientific');
+        const location = document.getElementById('preview-location');
+        const date = document.getElementById('preview-date');
+        const status = document.getElementById('preview-status');
+        const notes = document.getElementById('preview-notes');
+
+        if (name) name.textContent = seedNameInput?.value || 'Nombre de la plantula';
+        if (scientific) scientific.textContent = seedScientificInput?.value || 'Nombre cientifico';
+        if (location) location.textContent = seedLocationInput?.value || 'Ubicacion';
+        if (date && seedDateInput?.value) {
+            const parts = seedDateInput.value.split('-');
+            date.textContent = parts.length === 3 ? `${parts[2]}/${parts[1]}/${parts[0]}` : seedDateInput.value;
+        }
+        if (status && seedStatusInput?.value) {
+            status.textContent = seedStatusInput.value;
+            const color = seedStatusColors[seedStatusInput.value] || 'var(--accent-green)';
+            status.style.background = `${color}20`;
+            status.style.color = color;
+            status.style.borderColor = `${color}40`;
+        }
+        if (notes) notes.textContent = seedNotesInput?.value || '';
+    }
+
+    if (seedNameInput) seedNameInput.addEventListener('input', updateSeedPreview);
+    if (seedScientificInput) seedScientificInput.addEventListener('input', updateSeedPreview);
+    if (seedLocationInput) seedLocationInput.addEventListener('input', updateSeedPreview);
+    if (seedDateInput) seedDateInput.addEventListener('input', updateSeedPreview);
+    if (seedStatusInput) seedStatusInput.addEventListener('change', updateSeedPreview);
+    if (seedNotesInput) seedNotesInput.addEventListener('input', updateSeedPreview);
+
+    if (semilleroForm) {
+        semilleroForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const newSeedling = {
+                id: generateSeedId(),
+                name: seedNameInput.value.trim(),
+                scientific: seedScientificInput?.value.trim() || '',
+                location: seedLocationInput.value.trim(),
+                date: seedDateInput.value,
+                status: seedStatusInput.value,
+                notes: seedNotesInput?.value.trim() || ''
+            };
+
+            const seedlings = getSeedlings();
+            seedlings.push(newSeedling);
+            localStorage.setItem(SEMILLERO_KEY, JSON.stringify(seedlings));
+
+            semilleroForm.reset();
+            updateSeedDates();
+            updateSeedPreview();
+            renderSeedlingCards();
+            renderSemilleroTimeline();
+        });
+    }
+
+    function updateSeedDates() {
+        const seedDate = document.getElementById('seed-date');
+        const today = new Date();
+        const yyyy = today.getFullYear();
+        let mm = today.getMonth() + 1;
+        let dd = today.getDate();
+        if (dd < 10) dd = '0' + dd;
+        if (mm < 10) mm = '0' + mm;
+        if (seedDate) seedDate.value = `${yyyy}-${mm}-${dd}`;
+    }
+
     setTodayDates();
     renderLogs();
     updateAuthScreenLabels();
     updatePlatanoSimulation();
+    renderSeedlingCards();
+    renderSemilleroTimeline();
+    updateSeedDates();
 });

@@ -54,6 +54,9 @@
         <button class="nav-btn" data-tab="bitacora">
             <i data-lucide="calendar"></i> <span>Bitácora</span>
         </button>
+        <button class="nav-btn" data-tab="semillero">
+            <i data-lucide="sprout"></i> <span>Semillero</span>
+        </button>
     </nav>
 
     <!-- Main Content Container -->
@@ -891,6 +894,103 @@
                         </div>
                         <div class="timeline" id="private-timeline">
                             <!-- Populated dynamically via JS -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tab 6: Semillero (Vivero de Plantulas) -->
+        <section id="semillero" class="tab-panel">
+            <div class="section-header">
+                <h2>Semillero de Plantulas</h2>
+                <p>Registra y monitorea las plantulas cultivadas en la finca. Lleva control de su ciclo de vida desde semilla hasta planta establecida.</p>
+            </div>
+
+            <!-- Sub Nav -->
+            <div class="sub-nav">
+                <button class="sub-nav-btn active" data-subtab="semillero-plantulas-tab">
+                    <i data-lucide="leaf"></i> <span>Plantulas</span>
+                </button>
+                <button class="sub-nav-btn" data-subtab="semillero-registrar-tab">
+                    <i data-lucide="plus-circle"></i> <span>Registrar Siembra</span>
+                </button>
+            </div>
+
+            <!-- Subtab 1: Plantulas (Current seedlings) -->
+            <div id="semillero-plantulas-tab" class="subtab-panel active">
+                <div class="semillero-layout">
+                    <!-- Seedling Cards Grid -->
+                    <div class="semillero-grid" id="semillero-grid">
+                        <!-- Populated via JS -->
+                    </div>
+
+                    <!-- Timeline (History of all registrations) -->
+                    <div class="log-history-card card" style="margin-top: 24px;">
+                        <div class="history-header">
+                            <h3>Historial de Siembras</h3>
+                        </div>
+                        <div class="timeline" id="semillero-timeline">
+                            <!-- Populated via JS -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Subtab 2: Registrar Siembra (Planting Form) -->
+            <div id="semillero-registrar-tab" class="subtab-panel hidden">
+                <div class="bitacora-layout">
+                    <div class="log-form-card card">
+                        <h3>Registrar Nueva Plantula</h3>
+                        <form id="semillero-form">
+                            <div class="form-group">
+                                <label for="seed-name">Nombre Comun</label>
+                                <input type="text" id="seed-name" placeholder="Ej: Cilantro, Aji dulce..." required>
+                            </div>
+                            <div class="form-group">
+                                <label for="seed-scientific">Nombre Cientifico</label>
+                                <input type="text" id="seed-scientific" placeholder="Ej: Coriandrum sativum...">
+                            </div>
+                            <div class="form-group">
+                                <label for="seed-location">Ubicacion en la Finca</label>
+                                <input type="text" id="seed-location" placeholder="Ej: Entrada de la casa, Bancales sur..." required>
+                            </div>
+                            <div class="form-group">
+                                <label for="seed-date">Fecha de Siembra</label>
+                                <input type="date" id="seed-date" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="seed-status">Estado</label>
+                                <select id="seed-status" required>
+                                    <option value="Semilla">Semilla</option>
+                                    <option value="Brote">Brote</option>
+                                    <option value="Enraizado">Enraizado</option>
+                                    <option value="En crecimiento" selected>En crecimiento</option>
+                                    <option value="Maduro">Maduro</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="seed-notes">Notas</label>
+                                <textarea id="seed-notes" rows="3" placeholder="Detalles sobre la siembra, condiciones del suelo, riego..."></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary"><i data-lucide="plus"></i> Registrar Plantula</button>
+                        </form>
+                    </div>
+
+                    <!-- Preview card -->
+                    <div class="semillero-preview card">
+                        <h3>Vista Previa</h3>
+                        <p class="helper-text">Asi se verá tu nueva plantula en el semillero.</p>
+                        <div class="semillero-card-preview" id="seed-preview-card">
+                            <div class="seed-card-icon"><i data-lucide="sprout"></i></div>
+                            <h4 id="preview-name">Nombre de la plantula</h4>
+                            <p class="seed-scientific-name" id="preview-scientific">Nombre cientifico</p>
+                            <div class="seed-card-meta">
+                                <span><i data-lucide="map-pin"></i> <span id="preview-location">Ubicacion</span></span>
+                                <span><i data-lucide="calendar"></i> <span id="preview-date">Fecha</span></span>
+                            </div>
+                            <span class="seed-status-badge" id="preview-status">Estado</span>
+                            <p class="seed-notes-text" id="preview-notes"></p>
                         </div>
                     </div>
                 </div>

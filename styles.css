@@ -1513,6 +1513,163 @@ input[type="range"]::-webkit-slider-thumb:hover {
 }
 
 /* ==========================================================================
+   Semillero (Seedbed/Nursery) Styles
+   ========================================================================== */
+.semillero-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.semillero-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.semillero-card {
+    position: relative;
+    padding: 20px;
+    transition: border-color var(--transition-fast), transform var(--transition-fast);
+}
+
+.semillero-card:hover {
+    border-color: var(--border-glow);
+    transform: translateY(-2px);
+}
+
+.semillero-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.semillero-card-icon {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(82, 183, 136, 0.1);
+    border-radius: 50%;
+    border: 1px solid var(--border-light);
+}
+
+.semillero-card-icon i {
+    width: 20px;
+    height: 20px;
+}
+
+.semillero-card h4 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.15rem;
+    color: #fff;
+    margin-bottom: 2px;
+}
+
+.seed-scientific-name {
+    font-style: italic;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 10px;
+}
+
+.seed-card-meta {
+    display: flex;
+    gap: 16px;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+}
+
+.seed-card-meta span {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.seed-card-meta i {
+    width: 14px;
+    height: 14px;
+}
+
+.seed-status-badge {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 12px;
+    border: 1px solid;
+    margin-bottom: 8px;
+}
+
+.seed-notes-text {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    margin-top: 6px;
+    padding-top: 8px;
+    border-top: 1px solid var(--border-light);
+}
+
+.seed-delete-btn {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+}
+
+.seed-delete-btn i {
+    width: 14px;
+    height: 14px;
+}
+
+.semillero-preview {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.semillero-preview h3 {
+    color: #fff;
+    font-family: 'Outfit', sans-serif;
+    margin-bottom: 4px;
+}
+
+.semillero-card-preview {
+    background: rgba(12, 28, 19, 0.4);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-md);
+    padding: 24px;
+    width: 100%;
+    max-width: 320px;
+    margin-top: 16px;
+}
+
+.seed-card-icon {
+    width: 48px;
+    height: 48px;
+    margin: 0 auto 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(82, 183, 136, 0.1);
+    color: var(--accent-green);
+    border-radius: 50%;
+    border: 1px solid var(--border-light);
+}
+
+.seed-card-icon i {
+    width: 24px;
+    height: 24px;
+}
+
+.timeline-dot.semillero-dot {
+    background-color: var(--accent-green);
+}
+
+/* ==========================================================================
    Footer Styles
    ========================================================================== */
 .app-footer {
