@@ -573,11 +573,11 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     function getLogs() {
-        const stored = localStorage.getItem('yagua_logs_v2');
+        const stored = localStorage.getItem('yagua_logs_v3');
         if (stored) {
             return JSON.parse(stored);
         }
-        localStorage.setItem('yagua_logs_v2', JSON.stringify(seedLogs));
+        localStorage.setItem('yagua_logs_v3', JSON.stringify(seedLogs));
         return seedLogs;
     }
 
@@ -626,7 +626,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const logs = getLogs();
             logs.push(newLog);
             
-            localStorage.setItem('yagua_logs_v2', JSON.stringify(logs));
+            localStorage.setItem('yagua_logs_v3', JSON.stringify(logs));
             bitacoraForm.reset();
             setTodayDates();
             renderLogs();
@@ -643,7 +643,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (btnClearLogs) {
         btnClearLogs.addEventListener('click', () => {
             if (confirm('¿Estás seguro de que deseas limpiar la bitácora pública? Esto borrará tus registros públicos locales.')) {
-                localStorage.removeItem('yagua_logs_v2');
+                localStorage.removeItem('yagua_logs_v3');
                 renderLogs();
             }
         });
@@ -1103,6 +1103,15 @@ document.addEventListener('DOMContentLoaded', () => {
             date: '2026-08-15',
             status: 'Brote',
             notes: 'Hierba aromatica de hoja grande, ideal para sazones y remedios naturales. Sensible a exceso de humedad.'
+        },
+        {
+            id: 'seed-3',
+            name: 'Oregano frances',
+            scientific: 'Origanum vulgare',
+            location: 'Entrada de la casa',
+            date: '2026-08-22',
+            status: 'Brote',
+            notes: 'Hierba aromatica de sabor intenso, ideal para cocinar. Necesita buena luz y drenaje.'
         }
     ];
 
