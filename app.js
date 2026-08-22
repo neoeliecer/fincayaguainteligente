@@ -546,12 +546,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const seedLogs = [
         {
             date: '2026-08-01',
-            category: 'limpieza',
-            title: 'Recepción de Inmueble y Bienes',
-            details: 'Se recibe formalmente el inmueble y los artefactos de la Finca Yagua. Cocina y nevera en perfecto estado de aseo e higiene.'
-        },
-        {
-            date: '2026-08-01',
             category: 'poda',
             title: 'Limpieza e Inspección del Patio',
             details: 'Se realiza desmalezamiento de las áreas cercanas a la casa de habitación. Se contabiliza el dosel forestal: 4 mangos, 1 mamón, 1 moringa y 10 matas de plátano.'
