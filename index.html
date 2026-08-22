@@ -57,6 +57,9 @@
         <button class="nav-btn" data-tab="semillero">
             <i data-lucide="sprout"></i> <span>Semillero</span>
         </button>
+        <button class="nav-btn" data-tab="biblioteca">
+            <i data-lucide="book-open"></i> <span>Biblioteca</span>
+        </button>
     </nav>
 
     <!-- Main Content Container -->
@@ -992,6 +995,278 @@
                             <span class="seed-status-badge" id="preview-status">Estado</span>
                             <p class="seed-notes-text" id="preview-notes"></p>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tab 7: Biblioteca -->
+        <section id="biblioteca" class="tab-panel">
+            <div class="section-header">
+                <h2>Biblioteca Agroecologica</h2>
+                <p>Manuales de siembra, guias de cuidado y recomendaciones cientificas para tus cultivos.</p>
+            </div>
+
+            <!-- Sub Nav -->
+            <div class="sub-nav">
+                <button class="sub-nav-btn active" data-subtab="bib-maniales-tab">
+                    <i data-lucide="book-open"></i> <span>Manuales</span>
+                </button>
+                <button class="sub-nav-btn" data-subtab="bib-plantas-tab">
+                    <i data-lucide="trees"></i> <span>Guia de Plantas</span>
+                </button>
+            </div>
+
+            <!-- Subtab 1: Manuales de Siembra -->
+            <div id="bib-maniales-tab" class="subtab-panel active">
+                
+                <!-- Manual: Pan de Palo -->
+                <div class="manual-card card">
+                    <div class="manual-header">
+                        <div class="manual-icon">
+                            <i data-lucide="trees"></i>
+                        </div>
+                        <div>
+                            <h3>Manual de Siembra: Pan de Palo (Pana)</h3>
+                            <p class="manual-scientific">Artocarpus altilis</p>
+                        </div>
+                        <span class="manual-badge">Arbol Frutal</span>
+                    </div>
+
+                    <div class="manual-content">
+                        <!-- Seccion 1 -->
+                        <div class="manual-section">
+                            <div class="manual-section-header">
+                                <span class="manual-step-num">1</span>
+                                <h4>Siembra Inicial (Hazlo de inmediato)</h4>
+                            </div>
+                            <div class="manual-section-body">
+                                <div class="manual-alert manual-alert-danger">
+                                    <i data-lucide="alert-triangle"></i>
+                                    <span>Las semillas de este arbol son de tipo <strong>recalcitrante</strong>, lo que significa que pierden su viabilidad con mucha facilidad si se deshidratan o si se exponen al frio. Debes sembrarla tan pronto como sea posible tras extraerla del fruto.</span>
+                                </div>
+                                <ul class="manual-list">
+                                    <li><strong>No la guardes:</strong> No intentes secarla ni guardarla en la nevera.</li>
+                                    <li><strong>Profundidad:</strong> Siembrcubriendola con tierra a una profundidad equivalente al doble del tamano de la semilla (aproximadamente 5 cm).</li>
+                                    <li><strong>Germinacion:</strong> Tardara entre 10 dias y 2 semanas en presentarse.</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Seccion 2 -->
+                        <div class="manual-section">
+                            <div class="manual-section-header">
+                                <span class="manual-step-num">2</span>
+                                <h4>Cuidados Durante el Primer Mes</h4>
+                            </div>
+                            <div class="manual-section-body">
+                                <div class="manual-tip">
+                                    <i data-lucide="lightbulb"></i>
+                                    <div>
+                                        <strong>Sustrato Recomendado:</strong>
+                                        <p>Mezcla ideal: 2 partes de tierra agricola + 1 de arena + 1 de humus de lombriz.</p>
+                                    </div>
+                                </div>
+                                <ul class="manual-list">
+                                    <li><strong>Proteccion solar:</strong> Manten la maceta en un lugar con luz solar indirecta o bajo una malla de sombra (alrededor del 45% de sombra).</li>
+                                    <li><strong>Riego:</strong> Necesita alta humedad constante. Riega de forma regular para mantener la tierra siempre humeda, pero asegurate de que el recipiente drene perfectamente.</li>
+                                    <li><strong>Peligro:</strong> El exceso de agua estancada sofoca las raices y causa pudricion por hongos.</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Seccion 3 -->
+                        <div class="manual-section">
+                            <div class="manual-section-header">
+                                <span class="manual-step-num">3</span>
+                                <h4>El Dilema del Trasplante</h4>
+                            </div>
+                            <div class="manual-section-body">
+                                <div class="manual-comparison">
+                                    <div class="manual-comparison-item manual-comparison-bad">
+                                        <div class="manual-comparison-header">
+                                            <i data-lucide="x-circle"></i>
+                                            <span>A las 4 semanas (1 mes)</span>
+                                        </div>
+                                        <p>El sistema de raices y el tallo son demasiado jovenes y fragiles. El estrés del trasplante directo al suelo podria matarla.</p>
+                                    </div>
+                                    <div class="manual-comparison-item manual-comparison-good">
+                                        <div class="manual-comparison-header">
+                                            <i data-lucide="check-circle"></i>
+                                            <span>A los 6 meses (Recomendado)</span>
+                                        </div>
+                                        <p>El planton es mas fuerte y alcanza una altura de unos 40 cm. Trasplante ideal para sobrevivir en el suelo definitivo.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Seccion 4 -->
+                        <div class="manual-section">
+                            <div class="manual-section-header">
+                                <span class="manual-step-num">4</span>
+                                <h4>Seleccion del Terreno Cerca de tu Casa</h4>
+                            </div>
+                            <div class="manual-section-body">
+                                <div class="manual-grid">
+                                    <div class="manual-info-card">
+                                        <div class="manual-info-icon"><i data-lucide="maximize"></i></div>
+                                        <h5>Espacio y Distancia</h5>
+                                        <ul>
+                                            <li>Altura adulta: 18-30 metros</li>
+                                            <li>Copa sumamente frondosa</li>
+                                            <li>Raices superficiales</li>
+                                            <li>Distancia minima: 8x8 m o 10x10 m</li>
+                                            <li>Alejado de cimientos, paredes y tuberias</li>
+                                        </ul>
+                                    </div>
+                                    <div class="manual-info-card">
+                                        <div class="manual-info-icon"><i data-lucide="mountain"></i></div>
+                                        <h5>Suelo</h5>
+                                        <ul>
+                                            <li>Profundo, fertil, textura areno-limosa</li>
+                                            <li>Drenaje excelente (sin encharcamiento)</li>
+                                            <li>pH optimo: 6.1 - 7.4</li>
+                                            <li>Enriquecer con composta antes de plantar</li>
+                                        </ul>
+                                    </div>
+                                    <div class="manual-info-card">
+                                        <div class="manual-info-icon"><i data-lucide="sun"></i></div>
+                                        <h5>Exposicion Solar</h5>
+                                        <ul>
+                                            <li><strong>Planton:</strong> Sombra o luz indirecta</li>
+                                            <li><strong>Adulto:</strong> Pleno sol directo</li>
+                                        </ul>
+                                    </div>
+                                    <div class="manual-info-card">
+                                        <div class="manual-info-icon"><i data-lucide="droplets"></i></div>
+                                        <h5>Agua</h5>
+                                        <ul>
+                                            <li>Humedad constante alta</li>
+                                            <li>Riego regular sin saturacion</li>
+                                            <li>No dejar que el suelo se seque</li>
+                                            <li>Sequia = perdida de flores y frutos</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Resumen visual -->
+                        <div class="manual-summary">
+                            <h4><i data-lucide="calendar"></i> Calendario de Cuidados</h4>
+                            <div class="manual-timeline">
+                                <div class="manual-timeline-item">
+                                    <div class="manual-timeline-dot"></div>
+                                    <div class="manual-timeline-content">
+                                        <strong>Semilla</strong>
+                                        <span>Siembrar inmediatamente al extraer del fruto</span>
+                                    </div>
+                                </div>
+                                <div class="manual-timeline-item">
+                                    <div class="manual-timeline-dot"></div>
+                                    <div class="manual-timeline-content">
+                                        <strong>Semana 2</strong>
+                                        <span>Germinacion (10-14 dias)</span>
+                                    </div>
+                                </div>
+                                <div class="manual-timeline-item">
+                                    <div class="manual-timeline-dot"></div>
+                                    <div class="manual-timeline-content">
+                                        <strong>Mes 1-5</strong>
+                                        <span>Cuidados en maceta: sombra 45%, riego constante, sustrato enriquecido</span>
+                                    </div>
+                                </div>
+                                <div class="manual-timeline-item">
+                                    <div class="manual-timeline-dot"></div>
+                                    <div class="manual-timeline-content">
+                                        <strong>Mes 6</strong>
+                                        <span>Trasplante al suelo definitivo (40 cm de altura)</span>
+                                    </div>
+                                </div>
+                                <div class="manual-timeline-item">
+                                    <div class="manual-timeline-dot"></div>
+                                    <div class="manual-timeline-content">
+                                        <strong>Adulto</strong>
+                                        <span>Pleno sol, riego regular, 18-30 m de altura</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Subtab 2: Guia de Plantas -->
+            <div id="bib-plantas-tab" class="subtab-panel hidden">
+                <div class="guia-plantas-grid">
+                    <div class="guia-plantas-card card">
+                        <div class="guia-plantas-icon" style="color: var(--accent-gold);">
+                            <i data-lucide="trees"></i>
+                        </div>
+                        <h4>Pan de Palo (Pana)</h4>
+                        <p class="guia-plantas-sci">Artocarpus altilis</p>
+                        <div class="guia-plantas-tags">
+                            <span class="guia-tag">Arbol Frutal</span>
+                            <span class="guia-tag">Tropical</span>
+                            <span class="guia-tag">Gran tamano</span>
+                        </div>
+                        <p class="guia-plantas-desc">Arbol de gran tamano (18-30 m) con frutos grandes y carnosos. Requiere suelo profundo, drenaje excelente y pleno sol en etapa adulta.</p>
+                        <a href="#" class="btn btn-secondary btn-sm" onclick="document.querySelector('[data-subtab=bib-maniales-tab]').click(); return false;">Ver manual completo</a>
+                    </div>
+
+                    <div class="guia-plantas-card card">
+                        <div class="guia-plantas-icon" style="color: var(--accent-green);">
+                            <i data-lucide="leaf"></i>
+                        </div>
+                        <h4>Limoncillo</h4>
+                        <p class="guia-plantas-sci">Cymbopogon citratus</p>
+                        <div class="guia-plantas-tags">
+                            <span class="guia-tag">Aromatica</span>
+                            <span class="guia-tag">Hierba</span>
+                            <span class="guia-tag">Medicinal</span>
+                        </div>
+                        <p class="guia-plantas-desc">Hierba aromatica con aroma citrico. Ideal para te y repelente natural de insectos. Necesita sol directo y riego regular.</p>
+                    </div>
+
+                    <div class="guia-plantas-card card">
+                        <div class="guia-plantas-icon" style="color: var(--accent-green);">
+                            <i data-lucide="leaf"></i>
+                        </div>
+                        <h4>Oregano Orejon</h4>
+                        <p class="guia-plantas-sci">Plectranthus amboinicus</p>
+                        <div class="guia-plantas-tags">
+                            <span class="guia-tag">Aromatica</span>
+                            <span class="guia-tag">Culinaria</span>
+                            <span class="guia-tag">Medicinal</span>
+                        </div>
+                        <p class="guia-plantas-desc">Hierba de hoja grande y aroma intenso. Sensible a exceso de humedad. Ideal para sazones y remedios naturales.</p>
+                    </div>
+
+                    <div class="guia-plantas-card card">
+                        <div class="guia-plantas-icon" style="color: var(--accent-green);">
+                            <i data-lucide="leaf"></i>
+                        </div>
+                        <h4>Oregano Frances</h4>
+                        <p class="guia-plantas-sci">Origanum vulgare</p>
+                        <div class="guia-plantas-tags">
+                            <span class="guia-tag">Aromatica</span>
+                            <span class="guia-tag">Culinaria</span>
+                        </div>
+                        <p class="guia-plantas-desc">Hierba de sabor intenso, ideal para cocinar. Necesita buena luz y drenaje. Sensible al exceso de agua.</p>
+                    </div>
+
+                    <div class="guia-plantas-card card">
+                        <div class="guia-plantas-icon" style="color: var(--accent-green);">
+                            <i data-lucide="leaf"></i>
+                        </div>
+                        <h4>Malojillo</h4>
+                        <p class="guia-plantas-sci">Cymbopogon citratus</p>
+                        <div class="guia-plantas-tags">
+                            <span class="guia-tag">Aromatica</span>
+                            <span class="guia-tag">Culinaria</span>
+                        </div>
+                        <p class="guia-plantas-desc">Similar al limoncillo, uso culinario y medicinal. Aroma citrico suave. Necesita sol y riego moderado.</p>
                     </div>
                 </div>
             </div>
