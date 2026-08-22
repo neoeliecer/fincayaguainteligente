@@ -573,11 +573,11 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     function getLogs() {
-        const stored = localStorage.getItem('yagua_logs');
+        const stored = localStorage.getItem('yagua_logs_v2');
         if (stored) {
             return JSON.parse(stored);
         }
-        localStorage.setItem('yagua_logs', JSON.stringify(seedLogs));
+        localStorage.setItem('yagua_logs_v2', JSON.stringify(seedLogs));
         return seedLogs;
     }
 
@@ -626,7 +626,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const logs = getLogs();
             logs.push(newLog);
             
-            localStorage.setItem('yagua_logs', JSON.stringify(logs));
+            localStorage.setItem('yagua_logs_v2', JSON.stringify(logs));
             bitacoraForm.reset();
             setTodayDates();
             renderLogs();
@@ -643,7 +643,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (btnClearLogs) {
         btnClearLogs.addEventListener('click', () => {
             if (confirm('¿Estás seguro de que deseas limpiar la bitácora pública? Esto borrará tus registros públicos locales.')) {
-                localStorage.removeItem('yagua_logs');
+                localStorage.removeItem('yagua_logs_v2');
                 renderLogs();
             }
         });
