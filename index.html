@@ -1245,19 +1245,214 @@
                 </div>
 
 <!-- Subtab 2: Guia de Plantas -->
-            <div id="bib-plantas-tab" class="subtab-panel hidden">
-                <div class="guia-plantas-grid">
-                    <div class="guia-plantas-card card">
-                        <div class="guia-plantas-icon" style="color: var(--accent-gold);">
-                            <i data-lucide="trees"></i>
+                        <div id="bib-plantas-tab" class="subtab-panel hidden">
+                <!-- Frutales -->
+                <div class="guia-category">
+                    <div class="guia-category-header">
+                        <i data-lucide="trees"></i>
+                        <h3>Frutales</h3>
+                    </div>
+                    <div class="guia-plantas-grid">
+                        <div class="guia-plantas-card card">
+                            <div class="guia-plantas-icon" style="color: var(--accent-gold);"><i data-lucide="trees"></i></div>
+                            <h4>Mango</h4>
+                            <p class="guia-plantas-sci">Mangifera indica</p>
+                            <div class="guia-plantas-tags">
+                                <span class="guia-tag guia-tag-frutal">Frutal</span>
+                                <span class="guia-tag">Dosel Alto</span>
+                            </div>
+                            <p class="guia-plantas-desc">Arbol de gran tamano (10-45 m) con copa frondosa. Fruto drupa tropical de pulpa carnosa y aromatica. Produce gran cantidad de hojarasca (alto en carbono) ideal para compostaje. Requiere sol directo, suelo profundo y riego regular en epocas secas.</p>
+                            <div class="guia-plantas-details">
+                                <span><i data-lucide="ruler"></i> 10-45 m</span>
+                                <span><i data-lucide="sun"></i> Pleno sol</span>
+                                <span><i data-lucide="droplets"></i> Riego regular</span>
+                            </div>
                         </div>
-                        <h4>Pan de Palo (Pana)</h4>
-                        <p class="guia-plantas-sci">Artocarpus altilis</p>
-                        <div class="guia-plantas-tags">
-                            <span class="guia-tag">Arbol Frutal</span>
-                            <span class="guia-tag">Tropical</span>
-                            <span class="guia-tag">Gran tamano</span>
+                        <div class="guia-plantas-card card">
+                            <div class="guia-plantas-icon" style="color: var(--accent-gold);"><i data-lucide="trees"></i></div>
+                            <h4>Mamon</h4>
+                            <p class="guia-plantas-sci">Melicoccus bijugatus</p>
+                            <div class="guia-plantas-tags">
+                                <span class="guia-tag guia-tag-frutal">Frutal</span>
+                                <span class="guia-tag">Dosel Medio-Alto</span>
+                            </div>
+                            <p class="guia-plantas-desc">Arbol tropical de hoja caduca con frutos pequenos en racimo de sabor dulce-acido. Sus hojas pequenas se descomponen rapido, ideales para capas intermedias del compostaje. Resistente a la sequia una vez establecido.</p>
+                            <div class="guia-plantas-details">
+                                <span><i data-lucide="ruler"></i> 10-20 m</span>
+                                <span><i data-lucide="sun"></i> Pleno sol</span>
+                                <span><i data-lucide="droplets"></i> Bajo riego</span>
+                            </div>
                         </div>
+                        <div class="guia-plantas-card card">
+                            <div class="guia-plantas-icon" style="color: var(--accent-gold);"><i data-lucide="trees"></i></div>
+                            <h4>Pan de Palo (Pana)</h4>
+                            <p class="guia-plantas-sci">Artocarpus camansi / altilis</p>
+                            <div class="guia-plantas-tags">
+                                <span class="guia-tag guia-tag-frutal">Frutal</span>
+                                <span class="guia-tag">Siembra reciente</span>
+                            </div>
+                            <p class="guia-plantas-desc">Arbol de gran tamano (18-30 m) con frutos grandes. Las semillas son recalcitrantes, requieren siembra inmediata. Actualmente en sistema hidroponico con malla de sombra 45%. Trasplante al suelo a los 6 meses cuando alcance 40 cm.</p>
+                            <div class="guia-plantas-details">
+                                <span><i data-lucide="ruler"></i> 18-30 m</span>
+                                <span><i data-lucide="sun"></i> Sombra 45%</span>
+                                <span><i data-lucide="droplets"></i> Alta humedad</span>
+                            </div>
+                            <a href="#" class="btn btn-secondary btn-sm" onclick="document.querySelector('[data-subtab=bib-maniales-tab]').click(); return false;">Ver manual completo</a>
+                        </div>
+                        <div class="guia-plantas-card card">
+                            <div class="guia-plantas-icon" style="color: #22c55e;"><i data-lucide="smile"></i></div>
+                            <h4>Arbol de la Felicidad</h4>
+                            <p class="guia-plantas-sci">Enterolobium cyclocarpum</p>
+                            <div class="guia-plantas-tags">
+                                <span class="guia-tag guia-tag-frutal">Frutal</span>
+                                <span class="guia-tag">Entrada</span>
+                            </div>
+                            <p class="guia-plantas-desc">Arbol majestuoso de la familia de las leguminosas, simbolo de la riqueza natural. Su copa puede alcanzar 30 m de diametro, proporcionando sombra excepcional. Fruto en forma de oreja. Fija nitrogeno del aire mejorando el suelo circundante.</p>
+                            <div class="guia-plantas-details">
+                                <span><i data-lucide="ruler"></i> 20-35 m</span>
+                                <span><i data-lucide="sun"></i> Pleno sol</span>
+                                <span><i data-lucide="map-pin"></i> Entrada</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>                 <!-- Aromaticas e Hierbas -->
+                <div class="guia-category">
+                    <div class="guia-category-header">
+                        <i data-lucide="flower"></i>
+                        <h3>Aromaticas e Hierbas</h3>
+                    </div>
+                    <div class="guia-plantas-grid">
+                        <div class="guia-plantas-card card">
+                            <div class="guia-plantas-icon" style="color: var(--accent-green);"><i data-lucide="leaf"></i></div>
+                            <h4>Limoncillo</h4>
+                            <p class="guia-plantas-sci">Cymbopogon citratus</p>
+                            <div class="guia-plantas-tags">
+                                <span class="guia-tag guia-tag-aromatica">Aromatica</span>
+                                <span class="guia-tag guia-tag-medicinal">Medicinal</span>
+                            </div>
+                            <p class="guia-plantas-desc">Hierba perenne de aroma citrico intenso. Utilizada para preparar te digestivo, repelente natural de insectos y en cocina. Crece en manojos densos que pueden alcanzar 1.5 m de altura. Sus hojas contienen citronelal, componente activo contra mosquitos.</p>
+                            <div class="guia-plantas-details">
+                                <span><i data-lucide="ruler"></i> 0.5-1.5 m</span>
+                                <span><i data-lucide="sun"></i> Sol directo</span>
+                                <span><i data-lucide="droplets"></i> Riego regular</span>
+                            </div>
+                        </div>
+                        <div class="guia-plantas-card card">
+                            <div class="guia-plantas-icon" style="color: var(--accent-green);"><i data-lucide="leaf"></i></div>
+                            <h4>Oregano Orejon</h4>
+                            <p class="guia-plantas-sci">Plectranthus amboinicus</p>
+                            <div class="guia-plantas-tags">
+                                <span class="guia-tag guia-tag-aromatica">Aromatica</span>
+                                <span class="guia-tag guia-tag-medicinal">Medicinal</span>
+                            </div>
+                            <p class="guia-plantas-desc">Hierba suculenta de hojas grandes y carnosas con aroma muy intenso. Usada en cocina venezolana para sazonar carnes y sopas. En medicina tradicional se usa para calmar la tos y el dolor de garganta. Sensible al exceso de humedad.</p>
+                            <div class="guia-plantas-details">
+                                <span><i data-lucide="ruler"></i> 0.3-0.8 m</span>
+                                <span><i data-lucide="sun"></i> Sol/semisombra</span>
+                                <span><i data-lucide="droplets"></i> Poco riego</span>
+                            </div>
+                        </div>
+                        <div class="guia-plantas-card card">
+                            <div class="guia-plantas-icon" style="color: var(--accent-green);"><i data-lucide="leaf"></i></div>
+                            <h4>Oregano Frances</h4>
+                            <p class="guia-plantas-sci">Origanum vulgare</p>
+                            <div class="guia-plantas-tags">
+                                <span class="guia-tag guia-tag-aromatica">Aromatica</span>
+                                <span class="guia-tag guia-tag-medicinal">Medicinal</span>
+                            </div>
+                            <p class="guia-plantas-desc">Hierba aromatica de sabor mas suave y dulce que el orejon. Ideal para pizzas, pastas y ensaladas. Contiene timol y carvacrol con propiedades antibacterianas. Florece en verano atrayendo polinizadores al huerto.</p>
+                            <div class="guia-plantas-details">
+                                <span><i data-lucide="ruler"></i> 0.2-0.5 m</span>
+                                <span><i data-lucide="sun"></i> Pleno sol</span>
+                                <span><i data-lucide="droplets"></i> Moderado</span>
+                            </div>
+                        </div>
+                        <div class="guia-plantas-card card">
+                            <div class="guia-plantas-icon" style="color: var(--accent-green);"><i data-lucide="leaf"></i></div>
+                            <h4>Albahaca</h4>
+                            <p class="guia-plantas-sci">Ocimum basilicum</p>
+                            <div class="guia-plantas-tags">
+                                <span class="guia-tag guia-tag-aromatica">Aromatica</span>
+                                <span class="guia-tag">Culinaria</span>
+                            </div>
+                            <p class="guia-plantas-desc">Hierba anual de aroma dulce y fresco, base de la cocina mediterranea y venezolana. Ideal para pesto, ensaladas y sopas. Atrae abejas y mariquitas. Necesita calor, sol directo y riego abundante sin encharcar.</p>
+                            <div class="guia-plantas-details">
+                                <span><i data-lucide="ruler"></i> 0.3-0.7 m</span>
+                                <span><i data-lucide="sun"></i> Pleno sol</span>
+                                <span><i data-lucide="droplets"></i> Riego abundante</span>
+                            </div>
+                        </div>
+                        <div class="guia-plantas-card card">
+                            <div class="guia-plantas-icon" style="color: var(--accent-green);"><i data-lucide="leaf"></i></div>
+                            <h4>Malojillo</h4>
+                            <p class="guia-plantas-sci">Cymbopogon citratus</p>
+                            <div class="guia-plantas-tags">
+                                <span class="guia-tag guia-tag-aromatica">Aromatica</span>
+                                <span class="guia-tag guia-tag-medicinal">Medicinal</span>
+                            </div>
+                            <p class="guia-plantas-desc">Similar al limoncillo pero con aroma citrico mas suave. Usado en bebidas frescas, infusiones y repelente natural de insectos. De crecimiento rapido, ideal para bordes de cultivos como barrera natural.</p>
+                            <div class="guia-plantas-details">
+                                <span><i data-lucide="ruler"></i> 0.5-1.2 m</span>
+                                <span><i data-lucide="sun"></i> Sol directo</span>
+                                <span><i data-lucide="droplets"></i> Riego moderado</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>                 <!-- Medicinales -->
+                <div class="guia-category">
+                    <div class="guia-category-header">
+                        <i data-lucide="heart-pulse"></i>
+                        <h3>Medicinales</h3>
+                    </div>
+                    <div class="guia-plantas-grid">
+                        <div class="guia-plantas-card card">
+                            <div class="guia-plantas-icon" style="color: #f97316;"><i data-lucide="heart-pulse"></i></div>
+                            <h4>Limoncillo</h4>
+                            <p class="guia-plantas-sci">Cymbopogon citratus</p>
+                            <div class="guia-plantas-tags">
+                                <span class="guia-tag guia-tag-medicinal">Medicinal</span>
+                                <span class="guia-tag guia-tag-aromatica">Aromatica</span>
+                            </div>
+                            <p class="guia-plantas-desc">Te de limoncillo: antiinflamatorio, digestivo y calmante. Ayuda con los dolores estomacales, fiebre y ansiedad. Preparacion: hervir 5-8 hojas por 10 min, colar y endulzar con miel.</p>
+                            <div class="guia-plantas-details">
+                                <span><i data-lucide="flask-conical"></i> Digestivo</span>
+                                <span><i data-lucide="flask-conical"></i> Antiinflamatorio</span>
+                                <span><i data-lucide="flask-conical"></i> Calmante</span>
+                            </div>
+                        </div>
+                        <div class="guia-plantas-card card">
+                            <div class="guia-plantas-icon" style="color: #f97316;"><i data-lucide="heart-pulse"></i></div>
+                            <h4>Oregano Orejon</h4>
+                            <p class="guia-plantas-sci">Plectranthus amboinicus</p>
+                            <div class="guia-plantas-tags">
+                                <span class="guia-tag guia-tag-medicinal">Medicinal</span>
+                                <span class="guia-tag guia-tag-aromatica">Aromatica</span>
+                            </div>
+                            <p class="guia-plantas-desc">Infusion de oregano orejon: expectorante para la tos y bronquitis.Masticar una hoja calma el dolor de garganta. En compresas alivia el dolor muscular. Propiedades antimicrobianas comprobadas.</p>
+                            <div class="guia-plantas-details">
+                                <span><i data-lucide="flask-conical"></i> Expectorante</span>
+                                <span><i data-lucide="flask-conical"></i> Analgesico</span>
+                                <span><i data-lucide="flask-conical"></i> Antimicrobiano</span>
+                            </div>
+                        </div>
+                        <div class="guia-plantas-card card">
+                            <div class="guia-plantas-icon" style="color: #f97316;"><i data-lucide="heart-pulse"></i></div>
+                            <h4>Oregano Frances</h4>
+                            <p class="guia-plantas-sci">Origanum vulgare</p>
+                            <div class="guia-plantas-tags">
+                                <span class="guia-tag guia-tag-medicinal">Medicinal</span>
+                                <span class="guia-tag guia-tag-aromatica">Aromatica</span>
+                            </div>
+                            <p class="guia-plantas-desc">Aceite esencial de orégano: potente antibacteriano y antifungico. En infusion ayuda con resfriados y gripa. Su uso tópico alivia el acné y las infecciones de piel. Concentracion de timol muy alta.</p>
+                            <div class="guia-plantas-details">
+                                <span><i data-lucide="flask-conical"></i> Antibacteriano</span>
+                                <span><i data-lucide="flask-conical"></i> Antifungico</span>
+                                <span><i data-lucide="flask-conical"></i> Antiviral</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
                         <p class="guia-plantas-desc">Arbol de gran tamano (18-30 m) con frutos grandes y carnosos. Requiere suelo profundo, drenaje excelente y pleno sol en etapa adulta.</p>
                         <a href="#" class="btn btn-secondary btn-sm" onclick="document.querySelector('[data-subtab=bib-maniales-tab]').click(); return false;">Ver manual completo</a>
                     </div>
