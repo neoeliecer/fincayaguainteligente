@@ -567,6 +567,12 @@ document.addEventListener('DOMContentLoaded', () => {
             category: 'siembra',
             title: 'Siembra de 3 Pan de Palo en Sistema Hidroponico',
             details: 'Se sembraron 3 semillas de Pan de Palo (Artocarpus camansi) en sistema hidroponico. Sustrato preparado con tierra agricola, arena y humus de lombriz en proporcion 2:1:1. Semillas colocadas en posicion horizontal a 5 cm de profundidad. Ubicacion: entrada de la casa con malla de sombra al 45%.'
+        },
+        {
+            date: '2026-08-22',
+            category: 'servicio',
+            title: 'Mantenimiento Baños - Reparaciones en curso',
+            details: 'Se continuo con los arreglos del baño de Amelia y el baño propio. En el baño de Amelia se cambio la llave de la ducha. Actualmente presenta fuga en las uniones de la llave nueva, requiere sellado o ajuste de conexiones.'
         }
     ];
 
@@ -580,11 +586,11 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     function getLogs() {
-        const stored = localStorage.getItem('yagua_logs_v5');
+        const stored = localStorage.getItem('yagua_logs_v6');
         if (stored) {
             return JSON.parse(stored);
         }
-        localStorage.setItem('yagua_logs_v5', JSON.stringify(seedLogs));
+        localStorage.setItem('yagua_logs_v6', JSON.stringify(seedLogs));
         return seedLogs;
     }
 
@@ -633,7 +639,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const logs = getLogs();
             logs.push(newLog);
             
-            localStorage.setItem('yagua_logs_v5', JSON.stringify(logs));
+            localStorage.setItem('yagua_logs_v6', JSON.stringify(logs));
             bitacoraForm.reset();
             setTodayDates();
             renderLogs();
@@ -650,7 +656,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (btnClearLogs) {
         btnClearLogs.addEventListener('click', () => {
             if (confirm('¿Estás seguro de que deseas limpiar la bitácora pública? Esto borrará tus registros públicos locales.')) {
-                localStorage.removeItem('yagua_logs_v5');
+                localStorage.removeItem('yagua_logs_v6');
                 renderLogs();
             }
         });
