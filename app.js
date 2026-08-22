@@ -573,11 +573,11 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     function getLogs() {
-        const stored = localStorage.getItem('yagua_logs_v3');
+        const stored = localStorage.getItem('yagua_logs_v4');
         if (stored) {
             return JSON.parse(stored);
         }
-        localStorage.setItem('yagua_logs_v3', JSON.stringify(seedLogs));
+        localStorage.setItem('yagua_logs_v4', JSON.stringify(seedLogs));
         return seedLogs;
     }
 
@@ -626,7 +626,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const logs = getLogs();
             logs.push(newLog);
             
-            localStorage.setItem('yagua_logs_v3', JSON.stringify(logs));
+            localStorage.setItem('yagua_logs_v4', JSON.stringify(logs));
             bitacoraForm.reset();
             setTodayDates();
             renderLogs();
@@ -643,7 +643,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (btnClearLogs) {
         btnClearLogs.addEventListener('click', () => {
             if (confirm('¿Estás seguro de que deseas limpiar la bitácora pública? Esto borrará tus registros públicos locales.')) {
-                localStorage.removeItem('yagua_logs_v3');
+                localStorage.removeItem('yagua_logs_v4');
                 renderLogs();
             }
         });
@@ -1112,6 +1112,24 @@ document.addEventListener('DOMContentLoaded', () => {
             date: '2026-08-22',
             status: 'Brote',
             notes: 'Hierba aromatica de sabor intenso, ideal para cocinar. Necesita buena luz y drenaje.'
+        },
+        {
+            id: 'seed-4',
+            name: 'Limoncillo',
+            scientific: 'Cymbopogon citratus',
+            location: 'Entrada de la casa',
+            date: '2026-08-22',
+            status: 'Brote',
+            notes: 'Segunda mata de limoncillo. Aroma citrico, ideal para te y repelente natural de insectos.'
+        },
+        {
+            id: 'seed-5',
+            name: 'Malojillo',
+            scientific: 'Cymbopogon citratus',
+            location: 'Entrada de la casa',
+            date: '2026-08-22',
+            status: 'Brote',
+            notes: 'Hierba aromatica similar al limoncillo, uso culinario y medicinal.'
         }
     ];
 
