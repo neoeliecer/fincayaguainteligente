@@ -1,0 +1,1074 @@
+/* ==========================================================================
+   Finca Virtual de Yagua - Application Logic (SPA & Simulation)
+   ========================================================================== */
+
+document.addEventListener('DOMContentLoaded', () => {
+    let rainTotalGlobal = 0; // Stores live weather rain volume
+
+    // Initialize Lucide Icons
+    if (typeof lucide !== 'undefined') {
+        lucide.createIcons();
+    }
+
+    // ---------------------------------------------------------
+    // 1. Tab Navigation (Main Menu)
+    // ---------------------------------------------------------
+    const navButtons = document.querySelectorAll('.nav-btn');
+    const tabPanels = document.querySelectorAll('.tab-panel');
+
+    navButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const tabId = btn.getAttribute('data-tab');
+            
+            // Toggle buttons
+            navButtons.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            
+            // Toggle panels
+            tabPanels.forEach(p => p.classList.remove('active'));
+            const targetPanel = document.getElementById(tabId);
+            if (targetPanel) {
+                targetPanel.classList.add('active');
+            }
+        });
+    });
+
+    // ---------------------------------------------------------
+    // 2. Sub-tab Navigation (Generic handler for any sub-navigation)
+    // ---------------------------------------------------------
+    const subNavButtons = document.querySelectorAll('.sub-nav-btn');
+    const subtabPanels = document.querySelectorAll('.subtab-panel');
+
+    subNavButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const subtabId = btn.getAttribute('data-subtab');
+            const parentSection = btn.closest('.tab-panel');
+
+            // Toggle subtabs buttons ONLY within the same parent tab-panel
+            parentSection.querySelectorAll('.sub-nav-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            // Toggle subtab panels ONLY within the same parent tab-panel
+            parentSection.querySelectorAll('.subtab-panel').forEach(p => p.classList.remove('active'));
+            const targetSubPanel = document.getElementById(subtabId);
+            if (targetSubPanel) {
+                targetSubPanel.classList.remove('hidden');
+                targetSubPanel.classList.add('active');
+            }
+        });
+    });
+
+    // ---------------------------------------------------------
+    // 3. Real-Time Active Paca #1 Monitor & Countdown
+    // ---------------------------------------------------------
+    const pacaStartDate = new Date('2026-07-28T00:00:00');
+    const pacaHarvestDate = new Date(pacaStartDate);
+    pacaHarvestDate.setMonth(pacaHarvestDate.getMonth() + 6);
+
+    const cdDays = document.getElementById('cd-days');
+    const cdHours = document.getElementById('cd-hours');
+    const cdMin = document.getElementById('cd-minutes');
+    const cdSec = document.getElementById('cd-seconds');
+    const realProgress = document.getElementById('real-paca-progress');
+    const realPercent = document.getElementById('real-paca-percent');
+    const realDaysElapsed = document.getElementById('real-paca-days-elapsed');
+    const realStageTitle = document.getElementById('real-paca-stage-title');
+    const realTemp = document.getElementById('real-paca-temp');
+    const realMicrobeText = document.getElementById('real-paca-microbe-text');
+
+    function updateRealPacaTimer() {
+        const now = new Date();
+        const elapsedMs = now - pacaStartDate;
+        const totalMs = pacaHarvestDate - pacaStartDate;
+        const remainingMs = pacaHarvestDate - now;
+
+        const percent = Math.min(100, Math.max(0, (elapsedMs / totalMs) * 100));
+        
+        if (realPercent) realPercent.textContent = `${percent.toFixed(2)}%`;
+        if (realProgress) realProgress.style.width = `${percent}%`;
+
+        const daysElapsed = Math.floor(elapsedMs / (1000 * 60 * 60 * 24));
+        if (realDaysElapsed) realDaysElapsed.textContent = `Día ${daysElapsed} transcurrido`;
+
+        if (remainingMs <= 0) {
+            if (cdDays) cdDays.textContent = '0';
+            if (cdHours) cdHours.textContent = '0';
+            if (cdMin) cdMin.textContent = '0';
+            if (cdSec) cdSec.textContent = '0';
+            
+            if (realStageTitle) realStageTitle.textContent = 'Cosecha: Humus Maduro Listo';
+            if (realTemp) realTemp.textContent = 'Temperatura Ambiente (~25°C)';
+            if (realMicrobeText) realMicrobeText.textContent = 'El humus está totalmente maduro, estable y cargado de bioflora benéfica listo para ser cosechado.';
+            return;
+        }
+
+        const d = Math.floor(remainingMs / (1000 * 60 * 60 * 24));
+        const h = Math.floor((remainingMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const m = Math.floor((remainingMs % (1000 * 60 * 60)) / (1000 * 60));
+        const s = Math.floor((remainingMs % (1000 * 60)) / 1000);
+
+        if (cdDays) cdDays.textContent = d;
+        if (cdHours) cdHours.textContent = h;
+        if (cdMin) cdMin.textContent = m;
+        if (cdSec) cdSec.textContent = s;
+
+        if (daysElapsed <= 7) {
+            if (realStageTitle) realStageTitle.textContent = 'Actividad Biológica: Fase Térmica Temprana (Compactación)';
+            if (realTemp) realTemp.textContent = `~${45 + Math.min(5, daysElapsed)}°C (Calentamiento activo)`;
+            if (realMicrobeText) realMicrobeText.textContent = 'Bacterias anaeróbicas y termófilas comienzan a multiplicarse y digerir azúcares simples en condiciones densas sin oxígeno.';
+        } else if (daysElapsed <= 45) {
+            if (realStageTitle) realStageTitle.textContent = 'Actividad Biológica: Fase Termófila Activa';
+            if (realTemp) realTemp.textContent = '~60°C (Sanitización biológica)';
+            if (realMicrobeText) realMicrobeText.textContent = 'El calor extremo inactiva patógenos y semillas de malezas. Microorganismos especializados degradan celulosa.';
+        } else if (daysElapsed <= 120) {
+            if (realStageTitle) realStageTitle.textContent = 'Actividad Biológica: Fase Fúngica Mesófila (Enfriamiento)';
+            if (realTemp) realTemp.textContent = `~${35 + Math.max(0, 10 - (daysElapsed - 45))}°C (Colonización de hongos)`;
+            if (realMicrobeText) realMicrobeText.textContent = 'Hongos benéficos del suelo (micelio blanco) colonizan la paca desde los bordes para romper la celulosa leñosa dura.';
+        } else {
+            if (realStageTitle) realStageTitle.textContent = 'Actividad Biológica: Maduración y Humificación';
+            if (realTemp) realTemp.textContent = 'Temperatura Ambiente (~25°C)';
+            if (realMicrobeText) realMicrobeText.textContent = 'Lombrices e insectos benéficos del suelo terminan de digerir la biomasa foliar, convirtiéndola en humus rico y mineralizado.';
+        }
+    }
+
+    setInterval(updateRealPacaTimer, 1000);
+    updateRealPacaTimer();
+
+    // ---------------------------------------------------------
+    // 4. Interactive SVG Map & Details Metadata
+    // ---------------------------------------------------------
+    const svgElements = document.querySelectorAll('.clickable');
+    const panelPlaceholder = document.getElementById('panel-placeholder-msg');
+    const panelContent = document.getElementById('panel-detail-content');
+    const detailTitle = document.getElementById('detail-title');
+    const detailDesc = document.getElementById('detail-desc');
+    const detailStats = document.getElementById('detail-stats');
+
+    const elementMetadata = {
+        'elem-house': [
+            { label: 'Uso de Vivienda', value: 'Habitación Familiar' },
+            { label: 'Nevera y Cocina', value: 'Excelente estado / Aseo estricto' },
+            { label: 'Servicios Básicos', value: 'Luz y Agua pagados y al día' },
+            { label: 'Obligación', value: 'Mantenimiento del patio libre de maleza' }
+        ],
+        'elem-mango1': [
+            { label: 'Especie', value: 'Mangifera indica (Mango)' },
+            { label: 'Estrato', value: 'Dosel Alto (Sombra densa)' },
+            { label: 'Rol Ecológico', value: 'Gran aporte de Carbono (Hojas secas)' },
+            { label: 'Estado', value: 'Saludable, cargado de frutos' }
+        ],
+        'elem-mango2': [
+            { label: 'Especie', value: 'Mangifera indica (Mango)' },
+            { label: 'Estrato', value: 'Dosel Alto' },
+            { label: 'Aporte de Materia Seca', value: 'Alto en hojarasca foliar' },
+            { label: 'Estado', value: 'Saludable, sin plagas' }
+        ],
+        'elem-mango3': [
+            { label: 'Especie', value: 'Mangifera indica (Mango)' },
+            { label: 'Estrato', value: 'Dosel Alto' },
+            { label: 'Cobertura', value: 'Protección contra erosión por lluvia' },
+            { label: 'Estado', value: 'Estable' }
+        ],
+        'elem-mango4': [
+            { label: 'Especie', value: 'Mangifera indica (Mango)' },
+            { label: 'Estrato', value: 'Dosel Alto' },
+            { label: 'Amortiguación', value: 'Barrera natural contra vientos del sur' },
+            { label: 'Estado', value: 'Saludable' }
+        ],
+        'elem-mamon': [
+            { label: 'Especie', value: 'Melicoccus bijugatus (Mamón)' },
+            { label: 'Estrato', value: 'Dosel Medio-Alto' },
+            { label: 'Hojas', value: 'Pequeñas (Descomposición rápida para compost)' },
+            { label: 'Estado', value: 'Operativo, follaje verde' }
+        ],
+        'elem-moringa': [
+            { label: 'Especie', value: 'Moringa oleifera (Moringa)' },
+            { label: 'Estrato', value: 'Dosel Medio (Crecimiento rápido)' },
+            { label: 'Rol Ecológico', value: 'Concentrado de Nitrógeno y Potasio' },
+            { label: 'Uso en Compost', value: 'Acelerador verde de fermentación' }
+        ],
+        'elem-platanos-grandes': [
+            { label: 'Especie', value: 'Musa paradisiaca (Plátano)' },
+            { label: 'Cantidad', value: '5 Matas Grandes (Adultas)' },
+            { label: 'Fase de Cultivo', value: 'Fase productiva (Desarrollo de racimos)' },
+            { label: 'Humedad Suelo', value: 'Monitoreando por Clima...' }
+        ],
+        'elem-platanos-bebes': [
+            { label: 'Especie', value: 'Musa paradisiaca (Plátano)' },
+            { label: 'Cantidad', value: '5 Matas Chicas (Bebés/Colinos)' },
+            { label: 'Fase de Cultivo', value: 'Crecimiento inicial y enraizamiento' },
+            { label: 'Humedad Suelo', value: 'Monitoreando por Clima...' }
+        ],
+        'elem-paca1': [
+            { label: 'Método', value: 'Paca Digestora Silva (Fermentación Prensada)' },
+            { label: 'Dimensiones', value: '1 m x 1 m x 1 m (1,000 Litros)' },
+            { label: 'Ubicación', value: 'Extremo de la cerca norte' },
+            { label: 'Día de Inicio', value: '28 de Julio de 2026 (Hace 4 días)' },
+            { label: 'Estado actual', value: 'Fase Térmica Temprana (~48°C)' }
+        ],
+        'elem-paca2': [
+            { label: 'Método', value: 'Paca Digestora Silva' },
+            { label: 'Ubicación', value: 'Línea de cerca norte, continua a Paca 1' },
+            { label: 'Fase', value: 'Llenado y compactación progresiva' },
+            { label: 'Aporte de Biomasa', value: 'Recibiendo hojarasca diaria de mango' }
+        ],
+        'elem-aromaticas': [
+            { label: 'Cultivos instalados', value: 'Albahaca y Orégano' },
+            { label: 'Sistema de Riego', value: 'Autoriego por goteo localizado' },
+            { label: 'Control Biológico', value: 'Atrae mariquitas, avispas y polinizadores' },
+            { label: 'Humedad Suelo Promedio', value: '65% - Óptimo' }
+        ]
+    };
+
+    svgElements.forEach(elem => {
+        elem.addEventListener('click', () => {
+            const id = elem.getAttribute('id');
+            const title = elem.getAttribute('data-title');
+            const desc = elem.getAttribute('data-desc');
+            const stats = elementMetadata[id] || [];
+
+            panelPlaceholder.classList.add('hidden');
+            panelContent.classList.remove('hidden');
+
+            detailTitle.textContent = title;
+            detailDesc.textContent = desc;
+
+            detailStats.innerHTML = '';
+            stats.forEach(s => {
+                const statItem = document.createElement('div');
+                statItem.className = 'detail-stat-item';
+                
+                if (id === 'elem-aromaticas') {
+                    statItem.classList.add('water-status');
+                } else if (id === 'elem-paca1' || id === 'elem-paca2') {
+                    statItem.classList.add('paca-status');
+                } else if (id.includes('platanos')) {
+                    statItem.classList.add('water-status');
+                }
+                
+                statItem.innerHTML = `
+                    <div class="stat-label">${s.label}</div>
+                    <div class="stat-val">${s.value}</div>
+                `;
+                detailStats.appendChild(statItem);
+            });
+        });
+    });
+
+    // ---------------------------------------------------------
+    // 5. Open-Meteo Weather API Integration (Yagua, Venezuela)
+    // ---------------------------------------------------------
+    async function fetchLocalWeather() {
+        const weatherHeader = document.getElementById('header-weather');
+        const pacaWeatherFactor = document.getElementById('real-paca-weather-factor');
+        const pacaHumidity = document.getElementById('real-paca-humidity');
+
+        try {
+            // Latitude and Longitude for El Toco, Yagua, Guacara, Carabobo: 10.2576, -67.8867
+            const response = await fetch('https://api.open-meteo.com/v1/forecast?latitude=10.2576&longitude=-67.8867&current=temperature_2m,relative_humidity_2m,rain,showers,weather_code&daily=rain_sum&timezone=auto');
+            if (!response.ok) throw new Error('Weather API request failed');
+            const data = await response.json();
+
+            const temp = data.current.temperature_2m;
+            const humidity = data.current.relative_humidity_2m;
+            const rainCurrent = data.current.rain + data.current.showers;
+            const rainDailySum = data.daily && data.daily.rain_sum ? data.daily.rain_sum[0] : 0;
+            const weatherCode = data.current.weather_code;
+
+            let weatherText = 'Despejado';
+            let weatherIcon = 'sun';
+            if (weatherCode >= 1 && weatherCode <= 3) {
+                weatherText = 'Poco nublado';
+                weatherIcon = 'cloud-sun';
+            } else if (weatherCode >= 45 && weatherCode <= 48) {
+                weatherText = 'Niebla';
+                weatherIcon = 'cloud-fog';
+            } else if (weatherCode >= 51 && weatherCode <= 67) {
+                weatherText = 'Lluvia débil';
+                weatherIcon = 'cloud-rain';
+            } else if (weatherCode >= 80 && weatherCode <= 82) {
+                weatherText = 'Chubascos';
+                weatherIcon = 'cloud-rain';
+            } else if (weatherCode >= 95) {
+                weatherText = 'Tormenta';
+                weatherIcon = 'cloud-lightning';
+            }
+
+            if (weatherHeader) {
+                weatherHeader.innerHTML = `<i data-lucide="${weatherIcon}"></i> Clima: ${temp}°C • ${weatherText}`;
+            }
+
+            const rainTotal = Math.max(rainCurrent, rainDailySum);
+            rainTotalGlobal = rainTotal;
+            updatePlatanoSimulation();
+
+            if (rainTotal > 0) {
+                // Update Paca factor
+                if (pacaWeatherFactor) {
+                    pacaWeatherFactor.textContent = `Lluvia registrada: +${rainTotal.toFixed(1)} mm. Humedad alta.`;
+                    pacaWeatherFactor.style.color = '#3a86c8';
+                }
+                const rainHydrationBonus = Math.round(rainTotal * 1.5);
+                const finalMoisture = Math.min(85, 60 + rainHydrationBonus);
+                if (pacaHumidity) {
+                    pacaHumidity.textContent = `~${finalMoisture}% (Aumentado por lluvia y humedad)`;
+                    pacaHumidity.style.color = '#3a86c8';
+                }
+
+                // Update Plantains soil status dynamically inside metadata!
+                elementMetadata['elem-platanos-grandes'][3].value = `~80% (Suelo húmedo por lluvia de +${rainTotal.toFixed(1)} mm)`;
+                elementMetadata['elem-platanos-bebes'][3].value = `~85% (Óptimo, colinos hidratados por lluvia)`;
+            } else {
+                // Dry weather paca update
+                if (pacaWeatherFactor) {
+                    pacaWeatherFactor.textContent = `Seco (Humedad del aire: ${humidity}%). Riego normal.`;
+                    pacaWeatherFactor.style.color = 'var(--text-muted)';
+                }
+                if (pacaHumidity) {
+                    pacaHumidity.textContent = `~60% (Estable / Óptimo)`;
+                    pacaHumidity.style.color = 'var(--accent-green)';
+                }
+
+                // Dry weather plantains update
+                elementMetadata['elem-platanos-grandes'][3].value = 'Seco (Suelo requiere goteo / abono paca)';
+                elementMetadata['elem-platanos-bebes'][3].value = 'Seco (Vulnerable a sequía. Aplicar riego manual)';
+            }
+
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+
+        } catch (error) {
+            console.warn('Could not fetch real-time weather, fallback to defaults:', error);
+            if (weatherHeader) {
+                weatherHeader.innerHTML = `<i data-lucide="cloud-sun"></i> Clima: 28°C • Despejado`;
+            }
+            if (pacaWeatherFactor) {
+                pacaWeatherFactor.textContent = `Simulado (Sin lluvia registrada).`;
+            }
+            elementMetadata['elem-platanos-grandes'][3].value = 'Seco (Suelo requiere goteo auxiliar)';
+            elementMetadata['elem-platanos-bebes'][3].value = 'Seco (Vulnerable, regar colinos)';
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+        }
+    }
+
+    fetchLocalWeather();
+
+    // ---------------------------------------------------------
+    // 6. Paca Digestora Silva Simulator
+    // ---------------------------------------------------------
+    const inputBrown = document.getElementById('input-brown');
+    const inputGreen = document.getElementById('input-green');
+    const valBrown = document.getElementById('val-brown');
+    const valGreen = document.getElementById('val-green');
+    const metricCN = document.getElementById('metric-cn');
+    const metricCNStatus = document.getElementById('metric-cn-status');
+    const cnPointer = document.getElementById('cn-pointer');
+    const metricHumus = document.getElementById('metric-humus');
+    
+    const timelineSlider = document.getElementById('timeline-slider');
+    const timelineMarkers = document.querySelectorAll('.timeline-markers .marker');
+    const pacaCube = document.getElementById('paca-cube');
+    const pacaText = document.getElementById('paca-text');
+    const stageTitle = document.getElementById('stage-title');
+    const stageDesc = document.getElementById('stage-desc');
+    const stageAlertText = document.getElementById('stage-alert-text');
+    
+    const stagesData = {
+        0: {
+            title: 'Fase 1: Compactación y Llenado (Día 1)',
+            desc: 'Se colocan capas alternas de hojarasca foliar y residuos orgánicos, apisonando intensamente con un molde de 1 m³ para expulsar el exceso de aire.',
+            alert: 'La alta compresión anaeróbica impide la putrefacción y malos olores.',
+            cubeClass: 'cube-day1',
+            text: 'Día 1 (1 m³)',
+            myceliumOpacity: 0
+        },
+        30: {
+            title: 'Fase 2: Inicio de Fermentación (Mes 1)',
+            desc: 'Las bacterias anaeróbicas inician el desglose de los materiales húmedos. El bloque se asienta y compacta por gravedad. No hay presencia de moscas ni lixiviados.',
+            alert: 'La temperatura interna aumenta ligeramente debido a la actividad microbiana.',
+            cubeClass: 'cube-month1',
+            text: 'Mes 1 (~90cm)',
+            myceliumOpacity: 0.1
+        },
+        60: {
+            title: 'Fase 2: Fermentación Estable (Mes 2)',
+            desc: 'La fermentación anaeróbica ácida descompone la materia blanda. Los olores son ácidos y controlados dentro de la estructura densa.',
+            alert: 'La acidez inhibe la germinación de semillas de malezas invasoras.',
+            cubeClass: 'cube-month1',
+            text: 'Mes 2 (~80cm)',
+            myceliumOpacity: 0.2
+        },
+        90: {
+            title: 'Fase 3: Colonización Fúngica (Mes 3)',
+            desc: 'Los hongos benéficos del suelo penetran el bloque. Aparece el micelio blanco degradando el material leñoso y la celulosa de las hojas de mango y mamón.',
+            alert: 'Los hongos del suelo (actinomicedas) transforman los polímeros complejos en humus.',
+            cubeClass: 'cube-month3',
+            text: 'Mes 3 (~75cm)',
+            myceliumOpacity: 0.7
+        },
+        120: {
+            title: 'Fase 4: Enfriamiento y Maduración (Mes 4)',
+            desc: 'La fermentación disminuye. La fauna del suelo (lombrices e insectos detrívoros) coloniza el compost desde la base del suelo.',
+            alert: 'Se estabilizan los nutrientes móviles como el amonio convirtiéndose en nitratos.',
+            cubeClass: 'cube-month5',
+            text: 'Mes 4 (~70cm)',
+            myceliumOpacity: 0.9
+        },
+        150: {
+            title: 'Fase 4: Estabilización Humificadora (Mes 5)',
+            desc: 'La biomasa original es irreconocible. Se forma una estructura granulada negra y rica. La paca ha reducido su volumen a casi la mitad.',
+            alert: 'Los hongos micorrícicos y benéficos alcanzan su pico biológico.',
+            cubeClass: 'cube-month5',
+            text: 'Mes 5 (~65cm)',
+            myceliumOpacity: 0.6
+        },
+        180: {
+            title: 'Fase 5: Cosecha de Humus Maduro (Mes 6)',
+            desc: 'Compost maduro listo con un olor característico a tierra de bosque húmedo. Relación C:N final balanceada (10:1 - 12:1). Listo para aplicar.',
+            alert: 'Este abono regenera el suelo de tus mangos y potencia tus aromáticas.',
+            cubeClass: 'cube-month6',
+            text: 'Cosecha (~60cm)',
+            myceliumOpacity: 0.2
+        }
+    };
+
+    function updateSimulation() {
+        const brownKg = parseInt(inputBrown.value);
+        const greenKg = parseInt(inputGreen.value);
+        
+        valBrown.textContent = `${brownKg} kg`;
+        valGreen.textContent = `${greenKg} kg`;
+        
+        const totalC = (brownKg * 0.26) + (greenKg * 0.08);
+        const totalN = (brownKg * 0.002) + (greenKg * 0.015);
+        const cnRatio = Math.round(totalC / totalN);
+        metricCN.textContent = `${cnRatio}:1`;
+        
+        let statusText = 'Óptimo';
+        if (cnRatio < 20) {
+            statusText = 'Bajo (Riesgo de mal olor)';
+            metricCNStatus.className = 'metric-status status-danger';
+        } else if (cnRatio > 35) {
+            statusText = 'Alto (Descomposición muy lenta)';
+            metricCNStatus.className = 'metric-status status-warning';
+        } else {
+            statusText = 'Óptimo (Fermentación limpia)';
+            metricCNStatus.className = 'metric-status status-good';
+        }
+        metricCNStatus.textContent = statusText;
+        
+        const pointerPos = Math.max(0, Math.min(100, ((cnRatio - 10) / 50) * 100));
+        cnPointer.style.left = `${pointerPos}%`;
+        
+        const dryMatter = (brownKg * 0.85) + (greenKg * 0.20);
+        const humusKg = Math.round(dryMatter * 0.70);
+        metricHumus.textContent = `${humusKg} kg`;
+    }
+
+    function updateTimelineStage() {
+        const days = parseInt(timelineSlider.value);
+        
+        timelineMarkers.forEach(marker => {
+            const markerDay = parseInt(marker.getAttribute('data-day'));
+            if (markerDay === days) {
+                marker.classList.add('active');
+            } else {
+                marker.classList.remove('active');
+            }
+        });
+        
+        const stage = stagesData[days];
+        if (stage) {
+            stageTitle.textContent = stage.title;
+            stageDesc.textContent = stage.desc;
+            stageAlertText.textContent = stage.alert;
+            pacaText.textContent = stage.text;
+            pacaCube.className.baseVal = stage.cubeClass;
+            
+            const myceliumDots = document.querySelectorAll('.mycelium');
+            myceliumDots.forEach(dot => {
+                dot.style.opacity = stage.myceliumOpacity;
+                if (stage.myceliumOpacity > 0.5) {
+                    dot.style.animation = 'pulseWater 3s infinite ease-in-out';
+                } else {
+                    dot.style.animation = 'none';
+                }
+            });
+        }
+    }
+
+    if (inputBrown) inputBrown.addEventListener('input', updateSimulation);
+    if (inputGreen) inputGreen.addEventListener('input', updateSimulation);
+    if (timelineSlider) timelineSlider.addEventListener('input', updateTimelineStage);
+    
+    timelineMarkers.forEach(marker => {
+        marker.addEventListener('click', () => {
+            const day = marker.getAttribute('data-day');
+            timelineSlider.value = day;
+            updateTimelineStage();
+        });
+    });
+
+    updateSimulation();
+    updateTimelineStage();
+
+    // ---------------------------------------------------------
+    // 7. Digital Inventory search filtering
+    // ---------------------------------------------------------
+    const searchInput = document.getElementById('inventory-search');
+    const tableRows = document.querySelectorAll('#inventory-tbody tr');
+
+    if (searchInput) {
+        searchInput.addEventListener('input', () => {
+            const query = searchInput.value.toLowerCase().trim();
+            
+            tableRows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                if (text.includes(query)) {
+                    row.classList.remove('hidden');
+                } else {
+                    row.classList.add('hidden');
+                }
+            });
+        });
+    }
+
+    // ---------------------------------------------------------
+    // 8. Bitácora (Public Activity Logs) with LocalStorage
+    // ---------------------------------------------------------
+    const bitacoraForm = document.getElementById('bitacora-form');
+    const logTimeline = document.getElementById('log-timeline');
+    const btnClearLogs = document.getElementById('btn-clear-logs');
+    
+    const seedLogs = [
+        {
+            date: '2026-08-01',
+            category: 'limpieza',
+            title: 'Recepción de Inmueble y Bienes',
+            details: 'Se recibe formalmente el inmueble y los artefactos de la Finca Yagua. Cocina y nevera en perfecto estado de aseo e higiene.'
+        },
+        {
+            date: '2026-08-01',
+            category: 'poda',
+            title: 'Limpieza e Inspección del Patio',
+            details: 'Se realiza desmalezamiento de las áreas cercanas a la casa de habitación. Se contabiliza el dosel forestal: 4 mangos, 1 mamón, 1 moringa y 10 matas de plátano.'
+        },
+        {
+            date: '2026-07-28',
+            category: 'compost',
+            title: 'Instalación de la Paca Digestora #1',
+            details: 'Se inicia la primera paca digestora de 1 m³ Silva en el extremo de la cerca perimetral norte. Cargada con 250 kg de hojas secas de los mangos y 150 kg de desechos verdes.'
+        },
+        {
+            date: '2026-08-10',
+            category: 'riego',
+            title: 'Establecimiento de Aromáticas y Autoriego',
+            details: 'Siembra de albahaca y orégano en bancales sur. Conexión de manguera de autoriego con aspersores e inicio de monitoreo de humedad a profundidad de 10-15 cm.'
+        }
+    ];
+
+    const categoryLabels = {
+        'compost': 'Compost',
+        'riego': 'Autoriego',
+        'limpieza': 'Limpieza',
+        'poda': 'Mantenimiento Patio',
+        'servicio': 'Servicios Públicos'
+    };
+
+    function getLogs() {
+        const stored = localStorage.getItem('yagua_logs');
+        if (stored) {
+            return JSON.parse(stored);
+        }
+        localStorage.setItem('yagua_logs', JSON.stringify(seedLogs));
+        return seedLogs;
+    }
+
+    function renderLogs() {
+        if (!logTimeline) return;
+        const logs = getLogs();
+        
+        logs.sort((a, b) => new Date(b.date) - new Date(a.date));
+        logTimeline.innerHTML = '';
+        
+        if (logs.length === 0) {
+            logTimeline.innerHTML = '<p class="panel-placeholder">No hay actividades registradas en el historial.</p>';
+            return;
+        }
+
+        logs.forEach(log => {
+            const item = document.createElement('div');
+            item.className = 'timeline-item';
+            
+            const dateParts = log.date.split('-');
+            const formattedDate = dateParts.length === 3 ? `${dateParts[2]}/${dateParts[1]}/${dateParts[0]}` : log.date;
+            
+            item.innerHTML = `
+                <div class="timeline-dot ${log.category}"></div>
+                <div class="timeline-time">${formattedDate} • ${categoryLabels[log.category] || log.category}</div>
+                <div class="timeline-content">
+                    <h4>${log.title}</h4>
+                    <p>${log.details}</p>
+                </div>
+            `;
+            logTimeline.appendChild(item);
+        });
+    }
+
+    if (bitacoraForm) {
+        bitacoraForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const date = document.getElementById('log-date').value;
+            const category = document.getElementById('log-category').value;
+            const title = document.getElementById('log-title').value;
+            const details = document.getElementById('log-details').value;
+            
+            const newLog = { date, category, title, details };
+            
+            const logs = getLogs();
+            logs.push(newLog);
+            
+            localStorage.setItem('yagua_logs', JSON.stringify(logs));
+            bitacoraForm.reset();
+            setTodayDates();
+            renderLogs();
+
+            if (category === 'compost' && title.toLowerCase().includes('paca 2')) {
+                const paca2 = document.getElementById('elem-paca2');
+                if (paca2) {
+                    paca2.setAttribute('data-desc', `Paca Digestora Silva #2 en progreso avanzado. Detalle: ${details}`);
+                }
+            }
+        });
+    }
+
+    if (btnClearLogs) {
+        btnClearLogs.addEventListener('click', () => {
+            if (confirm('¿Estás seguro de que deseas limpiar la bitácora pública? Esto borrará tus registros públicos locales.')) {
+                localStorage.removeItem('yagua_logs');
+                renderLogs();
+            }
+        });
+    }
+
+    // ---------------------------------------------------------
+    // 9. Diario Privado (Encrypted Personal Logbook)
+    // ---------------------------------------------------------
+    function xorCipher(text, key) {
+        let result = '';
+        for (let i = 0; i < text.length; i++) {
+            result += String.fromCharCode(text.charCodeAt(i) ^ key.charCodeAt(i % key.length));
+        }
+        return result;
+    }
+
+    function stringToHex(str) {
+        let hex = '';
+        for (let i = 0; i < str.length; i++) {
+            hex += str.charCodeAt(i).toString(16).padStart(2, '0');
+        }
+        return hex;
+    }
+
+    function hexToString(hex) {
+        let str = '';
+        for (let i = 0; i < hex.length; i += 2) {
+            str += String.fromCharCode(parseInt(hex.substr(i, 2), 16));
+        }
+        return str;
+    }
+
+    function encryptData(text, password) {
+        return stringToHex(xorCipher(text, password));
+    }
+
+    function decryptData(hex, password) {
+        try {
+            return xorCipher(hexToString(hex), password);
+        } catch (e) {
+            return null;
+        }
+    }
+
+    let decryptedPassword = null;
+
+    const lockView = document.getElementById('private-lock-view');
+    const unlockedView = document.getElementById('private-unlocked-view');
+    const passwordInput = document.getElementById('private-password-input');
+    const authTitle = document.getElementById('auth-title');
+    const authDesc = document.getElementById('auth-desc');
+    const authErrorMsg = document.getElementById('auth-error-msg');
+    const btnUnlockPrivate = document.getElementById('btn-unlock-private');
+    const btnLockPrivate = document.getElementById('btn-lock-private');
+    const privateForm = document.getElementById('private-diary-form');
+    const privateTimeline = document.getElementById('private-timeline');
+    const btnClearPrivateLogs = document.getElementById('btn-clear-private-logs');
+
+    const privateCategoryLabels = {
+        'priv-nota': 'Nota de Campo',
+        'priv-gasto': 'Gasto / Compra',
+        'priv-riego': 'Observación Riego',
+        'priv-personal': 'Mantenimiento Crítico'
+    };
+
+    function checkHasPassword() {
+        return localStorage.getItem('yagua_priv_pass_check') !== null;
+    }
+
+    function updateAuthScreenLabels() {
+        if (!checkHasPassword()) {
+            if (authTitle) authTitle.textContent = 'Configurar Diario Privado';
+            if (authDesc) authDesc.textContent = 'Crea una contraseña de seguridad para activar tu diario. Esta contraseña cifrará localmente todas tus anotaciones privadas.';
+            if (btnUnlockPrivate) btnUnlockPrivate.innerHTML = '<i data-lucide="shield-check"></i> Activar Diario Privado';
+        } else {
+            if (authTitle) authTitle.textContent = 'Acceso al Diario Privado';
+            if (authDesc) authDesc.textContent = 'Introduce tu contraseña de seguridad para desencriptar y ver tus notas personales.';
+            if (btnUnlockPrivate) btnUnlockPrivate.innerHTML = '<i data-lucide="key-round"></i> Desbloquear Diario';
+        }
+        if (typeof lucide !== 'undefined') lucide.createIcons();
+    }
+
+    function lockSession() {
+        decryptedPassword = null;
+        if (passwordInput) passwordInput.value = '';
+        if (lockView) lockView.classList.remove('hidden');
+        if (unlockedView) unlockedView.classList.add('hidden');
+        if (authErrorMsg) authErrorMsg.classList.add('hidden');
+        if (privateTimeline) privateTimeline.innerHTML = '';
+        updateAuthScreenLabels();
+    }
+
+    function unlockSession(password) {
+        if (!checkHasPassword()) {
+            const token = encryptData('VERIFIED', password);
+            localStorage.setItem('yagua_priv_pass_check', token);
+            decryptedPassword = password;
+            authErrorMsg.classList.add('hidden');
+            lockView.classList.add('hidden');
+            unlockedView.classList.remove('hidden');
+            renderPrivateLogs();
+        } else {
+            const storedToken = localStorage.getItem('yagua_priv_pass_check');
+            const decryptedToken = decryptData(storedToken, password);
+
+            if (decryptedToken === 'VERIFIED') {
+                decryptedPassword = password;
+                authErrorMsg.classList.add('hidden');
+                lockView.classList.add('hidden');
+                unlockedView.classList.remove('hidden');
+                renderPrivateLogs();
+            } else {
+                authErrorMsg.classList.remove('hidden');
+                passwordInput.value = '';
+                passwordInput.focus();
+            }
+        }
+    }
+
+    function getPrivateLogsCipher() {
+        return localStorage.getItem('yagua_priv_logs_cipher');
+    }
+
+    function getDecryptedPrivateLogs() {
+        const cipher = getPrivateLogsCipher();
+        if (!cipher) return [];
+        try {
+            const rawJSON = decryptData(cipher, decryptedPassword);
+            return JSON.parse(rawJSON) || [];
+        } catch (e) {
+            console.error('Error decrypting private logs:', e);
+            return [];
+        }
+    }
+
+    function savePrivateLogsEncrypted(logsArray) {
+        const rawJSON = JSON.stringify(logsArray);
+        const cipher = encryptData(rawJSON, decryptedPassword);
+        localStorage.setItem('yagua_priv_logs_cipher', cipher);
+    }
+
+    function renderPrivateLogs() {
+        if (!privateTimeline || !decryptedPassword) return;
+        const logs = getDecryptedPrivateLogs();
+        
+        logs.sort((a, b) => new Date(b.date) - new Date(a.date));
+        privateTimeline.innerHTML = '';
+
+        if (logs.length === 0) {
+            privateTimeline.innerHTML = '<p class="panel-placeholder">Tu Diario está vacío. ¡Registra tu primera entrada privada arriba!</p>';
+            return;
+        }
+
+        logs.forEach(log => {
+            const item = document.createElement('div');
+            item.className = 'timeline-item';
+            
+            const dateParts = log.date.split('-');
+            const formattedDate = dateParts.length === 3 ? `${dateParts[2]}/${dateParts[1]}/${dateParts[0]}` : log.date;
+            
+            item.innerHTML = `
+                <div class="timeline-dot ${log.category}"></div>
+                <div class="timeline-time">${formattedDate} • ${privateCategoryLabels[log.category] || log.category}</div>
+                <div class="timeline-content" style="border-color: rgba(255, 183, 3, 0.15);">
+                    <h4 style="color: var(--accent-gold);"><i data-lucide="lock" style="width: 12px; height: 12px; vertical-align: middle; margin-right: 4px;"></i>${log.title}</h4>
+                    <p style="color: var(--text-primary);">${log.details}</p>
+                </div>
+            `;
+            privateTimeline.appendChild(item);
+        });
+
+        if (typeof lucide !== 'undefined') lucide.createIcons();
+    }
+
+    if (btnUnlockPrivate) {
+        btnUnlockPrivate.addEventListener('click', () => {
+            const pass = passwordInput.value.trim();
+            if (pass.length < 4) {
+                alert('La contraseña debe tener al menos 4 caracteres.');
+                return;
+            }
+            unlockSession(pass);
+        });
+    }
+
+    if (passwordInput) {
+        passwordInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                const pass = passwordInput.value.trim();
+                if (pass.length < 4) {
+                    alert('La contraseña debe tener al menos 4 caracteres.');
+                    return;
+                }
+                unlockSession(pass);
+            }
+        });
+    }
+
+    if (btnLockPrivate) {
+        btnLockPrivate.addEventListener('click', lockSession);
+    }
+
+    if (privateForm) {
+        privateForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            if (!decryptedPassword) return;
+
+            const date = document.getElementById('priv-date').value;
+            const category = document.getElementById('priv-category').value;
+            const title = document.getElementById('priv-title').value;
+            const details = document.getElementById('priv-details').value;
+
+            const newEntry = { date, category, title, details };
+            const logs = getDecryptedPrivateLogs();
+            logs.push(newEntry);
+
+            savePrivateLogsEncrypted(logs);
+            privateForm.reset();
+            setTodayDates();
+            renderPrivateLogs();
+        });
+    }
+
+    if (btnClearPrivateLogs) {
+        btnClearPrivateLogs.addEventListener('click', () => {
+            if (confirm('¿Estás seguro de que deseas borrar permanentemente todo tu diario privado encriptado? Esta acción es irreversible.')) {
+                localStorage.removeItem('yagua_priv_logs_cipher');
+                renderPrivateLogs();
+            }
+        });
+    }
+
+    // ---------------------------------------------------------
+    // 10. Plantain Simulator (Musa paradisiaca)
+    // ---------------------------------------------------------
+    const inputCompostPlatano = document.getElementById('input-compost-platano');
+    const inputRiegoPlatano = document.getElementById('input-riego-platano');
+    const timelinePlatanoSlider = document.getElementById('timeline-platano-slider');
+    const timelinePlatanoMarkers = document.querySelectorAll('.timeline-markers .marker[data-month]');
+
+    const valCompostPlatano = document.getElementById('val-compost-platano');
+    const valRiegoPlatano = document.getElementById('val-riego-platano');
+
+    const metricPlatanoSoilHumidity = document.getElementById('metric-platano-soil-humidity');
+    const platanoStressLevel = document.getElementById('platano-stress-level');
+    const metricPlatanoWeight = document.getElementById('metric-platano-weight');
+    const metricPlatanoYieldDesc = document.getElementById('metric-platano-yield-desc');
+
+    const platanoTimelineTitle = document.getElementById('platano-timeline-title');
+    const platanoTimelineDesc = document.getElementById('platano-timeline-desc');
+    const platanoStageAlertText = document.getElementById('platano-stage-alert-text');
+    const platanoStageAlert = document.getElementById('platano-stage-alert');
+
+    function updatePlatanoSimulation() {
+        if (!inputCompostPlatano || !inputRiegoPlatano || !timelinePlatanoSlider) return;
+
+        const compostKg = parseFloat(inputCompostPlatano.value);
+        const riegoManual = parseInt(inputRiegoPlatano.value);
+        const months = parseInt(timelinePlatanoSlider.value);
+
+        // Update labels
+        if (valCompostPlatano) valCompostPlatano.textContent = `${compostKg.toFixed(1)} kg/mata`;
+        if (valRiegoPlatano) valRiegoPlatano.textContent = `${riegoManual} veces/semana`;
+
+        // Humidity calculations (Rain impact + manual irrigation)
+        let baseHumidity = 20; // Dry base
+        if (typeof rainTotalGlobal !== 'undefined' && rainTotalGlobal > 0) {
+            baseHumidity = Math.min(75, 45 + Math.round(rainTotalGlobal * 2.5));
+        }
+        const finalHumidity = Math.min(100, baseHumidity + (riegoManual * 8));
+        if (metricPlatanoSoilHumidity) metricPlatanoSoilHumidity.textContent = `${finalHumidity}%`;
+
+        // Water Stress Evaluation
+        let stress = 'Óptimo';
+        let stressClass = 'metric-status status-good';
+        let waterMultiplier = 1.15;
+
+        if (finalHumidity < 35) {
+            stress = 'Crítico (Sequía)';
+            stressClass = 'metric-status status-danger';
+            waterMultiplier = 0.55;
+        } else if (finalHumidity < 55) {
+            stress = 'Moderado (Bajo riego)';
+            stressClass = 'metric-status status-warning';
+            waterMultiplier = 0.85;
+        } else if (finalHumidity > 90) {
+            stress = 'Saturado (Exceso)';
+            stressClass = 'metric-status status-warning';
+            waterMultiplier = 0.75;
+        } else {
+            stress = 'Óptimo (Excelente)';
+            stressClass = 'metric-status status-good';
+            waterMultiplier = 1.15;
+        }
+
+        if (platanoStressLevel) {
+            platanoStressLevel.textContent = stress;
+            platanoStressLevel.className = stressClass;
+        }
+
+        // Bunch weight projection (base 12kg + up to 10kg compost bonus, modulated by stress)
+        const baseWeight = 12.0;
+        const compostBonus = compostKg * 1.0;
+        const projectedWeight = (baseWeight + compostBonus) * waterMultiplier;
+        
+        if (metricPlatanoWeight) metricPlatanoWeight.textContent = `${projectedWeight.toFixed(1)} kg`;
+
+        // Yield descriptor
+        let yieldDesc = 'Cosecha base';
+        if (projectedWeight < 10) {
+            yieldDesc = 'Mala (Fruto pequeño por estrés hídrico)';
+        } else if (projectedWeight >= 10 && projectedWeight < 16) {
+            yieldDesc = 'Normal (Racimo estándar)';
+        } else if (projectedWeight >= 16 && projectedWeight < 21) {
+            yieldDesc = 'Buena (Cosecha mejorada por abono)';
+        } else {
+            yieldDesc = 'Excelente (Gran racimo, alta nutrición)';
+        }
+        if (metricPlatanoYieldDesc) metricPlatanoYieldDesc.textContent = yieldDesc;
+
+        // Timeline stage info
+        let title = '';
+        let desc = '';
+        let alertText = '';
+        let alertClass = 'alert alert-info';
+        let activeSvgStage = 'sprout';
+
+        if (months <= 2) {
+            title = `Fase 1: Enraizamiento y Brotación (Mes ${months})`;
+            desc = 'Los colinos recién trasplantados se adaptan al suelo. Echan raíces finas y despliegan sus primeras hojas verdes pequeñas. Exigen humedad estable.';
+            alertText = 'Fase sumamente crítica. Sin riego ni lluvia, la tasa de mortalidad de los colinos recién sembrados es del 50%.';
+            alertClass = 'alert alert-danger';
+            activeSvgStage = 'sprout';
+        } else if (months <= 6) {
+            title = `Fase 2: Crecimiento Vegetativo Rápido (Mes ${months})`;
+            desc = 'La mata desarrolla un pseudotallo grueso y produce hojas gigantes de hasta 2 metros. Demanda gran aporte de Nitrógeno (aplica compost de paca Silva) para ganar altura y robustez.';
+            alertText = 'Aplica 2-3 kg de compost de paca alrededor del tallo este mes para acelerar el engrosamiento del pseudotallo.';
+            alertClass = 'alert alert-info';
+            activeSvgStage = 'growth';
+        } else if (months <= 9) {
+            title = `Fase 3: Floración y Emergencia de la Bellota (Mes ${months})`;
+            desc = 'La bellota (inflorescencia púrpura) brota del centro de la planta. Al abrirse sus brácteas, deja al descubierto las flores femeninas que se convertirán en plátanos.';
+            alertText = 'En esta fase, la mata necesita gran cantidad de Potasio. El humus maduro de tu paca aporta potasio orgánico asimilable.';
+            activeSvgStage = 'flower';
+        } else {
+            title = `Fase 4: Llenado de Fruto y Cosecha (Mes ${months})`;
+            desc = 'Los plátanos absorben nutrientes para ganar tamaño y adquirir su curvatura. Al cumplir el mes 12, el racimo está lleno y listo para la cosecha. Se corta la mata madre para ceder espacio al hijo.';
+            alertText = '¡Listo para cosechar! Cada mata produce un solo racimo. Recuerda picar el tallo viejo e incorporarlo al suelo para reciclar agua y fibra.';
+            activeSvgStage = 'harvest';
+        }
+
+        if (platanoTimelineTitle) platanoTimelineTitle.textContent = title;
+        if (platanoTimelineDesc) platanoTimelineDesc.textContent = desc;
+        if (platanoStageAlertText) platanoStageAlertText.textContent = alertText;
+        if (platanoStageAlert) platanoStageAlert.className = alertClass;
+
+        // Toggle SVG growth stages visibility
+        const svgStages = ['sprout', 'growth', 'flower', 'harvest'];
+        svgStages.forEach(st => {
+            const g = document.getElementById(`platano-stage-${st}`);
+            if (g) {
+                if (st === activeSvgStage) {
+                    g.classList.remove('hidden');
+                } else {
+                    g.classList.add('hidden');
+                }
+            }
+        });
+    }
+
+    if (inputCompostPlatano) inputCompostPlatano.addEventListener('input', updatePlatanoSimulation);
+    if (inputRiegoPlatano) inputRiegoPlatano.addEventListener('input', updatePlatanoSimulation);
+    if (timelinePlatanoSlider) timelinePlatanoSlider.addEventListener('input', updatePlatanoSimulation);
+
+    timelinePlatanoMarkers.forEach(marker => {
+        marker.addEventListener('click', () => {
+            const m = marker.getAttribute('data-month');
+            if (timelinePlatanoSlider) {
+                timelinePlatanoSlider.value = m;
+                updatePlatanoSimulation();
+            }
+        });
+    });
+
+    // Update active marker indicators for Platanal timeline
+    if (timelinePlatanoSlider) {
+        timelinePlatanoSlider.addEventListener('input', () => {
+            const currentVal = parseInt(timelinePlatanoSlider.value);
+            timelinePlatanoMarkers.forEach(marker => {
+                const markerMonth = parseInt(marker.getAttribute('data-month'));
+                if (markerMonth === currentVal) {
+                    marker.classList.add('active');
+                } else {
+                    marker.classList.remove('active');
+                }
+            });
+        });
+    }
+
+    function setTodayDates() {
+        const publicDateInput = document.getElementById('log-date');
+        const privateDateInput = document.getElementById('priv-date');
+        
+        const today = new Date();
+        const yyyy = today.getFullYear();
+        let mm = today.getMonth() + 1;
+        let dd = today.getDate();
+        
+        if (dd < 10) dd = '0' + dd;
+        if (mm < 10) mm = '0' + mm;
+        
+        const todayStr = `${yyyy}-${mm}-${dd}`;
+        
+        if (publicDateInput) publicDateInput.value = todayStr;
+        if (privateDateInput) privateDateInput.value = todayStr;
+    }
+
+    setTodayDates();
+    renderLogs();
+    updateAuthScreenLabels();
+    updatePlatanoSimulation();
+});

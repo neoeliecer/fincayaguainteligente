@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finca Virtual de Yagua - Agroecología y Monitoreo</title>
+    <meta name="description" content="Plataforma de monitoreo, simulación y gestión agroecológica para la Finca Yagua de 3,500 m².">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Plus+Jakarta+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- CSS Stylesheet -->
+    <link rel="stylesheet" href="styles.css">
+    
+    <!-- Icons (Lucide Icons via CDN) -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+    <!-- Background glow elements for rich aesthetic -->
+    <div class="glow-bg glow-1"></div>
+    <div class="glow-bg glow-2"></div>
+
+    <header class="app-header">
+        <div class="header-logo">
+            <i data-lucide="sprout" class="icon-logo"></i>
+            <div>
+                <h1>Finca Yagua</h1>
+                <p class="subtitle">Finca Agroecológica Virtual • 3,500 m²</p>
+            </div>
+        </div>
+        <div class="header-meta">
+            <span class="badge badge-location"><i data-lucide="map-pin"></i> El Toco, Yagua, Ven.</span>
+            <span class="badge badge-weather" id="header-weather"><i data-lucide="cloud-sun"></i> Clima: Cargando...</span>
+            <span class="badge badge-status"><i data-lucide="check-circle-2"></i> Estado: Operativo</span>
+        </div>
+    </header>
+
+    <!-- Main Navigation Bar -->
+    <nav class="app-nav">
+        <button class="nav-btn active" data-tab="mapa">
+            <i data-lucide="map"></i> <span>Mapa Finca</span>
+        </button>
+        <button class="nav-btn" data-tab="simulador">
+            <i data-lucide="calculator"></i> <span>Simulador Paca</span>
+        </button>
+        <button class="nav-btn" data-tab="decalogo">
+            <i data-lucide="book-open"></i> <span>Decálogo</span>
+        </button>
+        <button class="nav-btn" data-tab="inventario">
+            <i data-lucide="file-text"></i> <span>Inventario</span>
+        </button>
+        <button class="nav-btn" data-tab="bitacora">
+            <i data-lucide="calendar"></i> <span>Bitácora</span>
+        </button>
+    </nav>
+
+    <!-- Main Content Container -->
+    <main class="app-content">
+        
+        <!-- Tab 1: Mapa Interactivo -->
+        <section id="mapa" class="tab-panel active">
+            <div class="section-header">
+                <h2>Distribución Espacial de la Finca</h2>
+                <p>Mapa interactivo a escala de los 3,500 m². Explora los árboles, platanales, pacas digestoras y el sistema de riego.</p>
+            </div>
+            
+            <div class="map-container-layout">
+                <div class="map-card card">
+                    <div class="svg-map-wrapper">
+                        <!-- SVG Map of the Farm -->
+                        <svg viewBox="0 0 800 500" class="farm-svg" id="farm-svg">
+                            <!-- Definitions for patterns, gradients, etc -->
+                            <defs>
+                                <pattern id="grass-pattern" width="10" height="10" patternUnits="userSpaceOnUse">
+                                    <path d="M 0 10 L 5 5 L 10 10 Z" fill="rgba(45, 106, 79, 0.05)"/>
+                                </pattern>
+                                <radialGradient id="sun-glow" cx="50%" cy="50%" r="50%">
+                                    <stop offset="0%" stop-color="rgba(255, 214, 10, 0.15)" />
+                                    <stop offset="100%" stop-color="rgba(255, 214, 10, 0)" />
+                                </radialGradient>
+                            </defs>
+
+                            <!-- Ground / Grass Base -->
+                            <rect width="800" height="500" class="svg-ground" fill="url(#grass-pattern)" />
+                            
+                            <!-- Sun Glow overlay -->
+                            <circle cx="100" cy="100" r="180" fill="url(#sun-glow)" />
+
+                            <!-- Fence / Cerca Perimetral (Dashed brown border) -->
+                            <rect x="20" y="20" width="760" height="460" rx="10" class="svg-fence" />
+
+                            <!-- Water / Irrigation Pipes (Dashed blue lines) -->
+                            <path d="M 400 350 L 520 350 L 520 280 L 680 280" class="svg-irrigation-pipe" />
+
+                            <!-- Farmhouse Area / Casa Yagua -->
+                            <g class="svg-element clickable" id="elem-house" data-title="Casa Principal Yagua" data-desc="Vivienda bajo régimen de comodato. Cuenta con cocina, nevera y áreas de estancia. El comodatario asume el mantenimiento estricto de higiene y orden de estas instalaciones.">
+                                <rect x="330" y="200" width="140" height="110" rx="8" class="svg-house-base" />
+                                <polygon points="315,200 400,140 485,200" class="svg-house-roof" />
+                                <rect x="380" y="250" width="40" height="60" class="svg-house-door" />
+                                <rect x="345" y="225" width="25" height="25" rx="3" class="svg-house-window" />
+                                <rect x="430" y="225" width="25" height="25" rx="3" class="svg-house-window" />
+                                <text x="400" y="190" text-anchor="middle" class="svg-house-label">CASA YAGUA</text>
+                            </g>
+
+                            <!-- Large Mango Trees (4 Matas Grandes de Mango) -->
+                            <!-- Mango 1 -->
+                            <g class="svg-element clickable svg-tree" id="elem-mango1" data-title="Mango Grande #1" data-desc="Uno de los 4 mangos gigantes del dosel alto. Produce gran cantidad de hojarasca (alta en carbono) ideal para balancear las pacas digestoras, además de frutos estacionales.">
+                                <circle cx="140" cy="120" r="45" class="svg-leaf-shadow" />
+                                <circle cx="140" cy="120" r="40" class="svg-mango-leaves" />
+                                <circle cx="125" cy="110" r="10" class="svg-mango-fruit" />
+                                <circle cx="155" cy="130" r="8" class="svg-mango-fruit" />
+                                <text x="140" y="125" class="svg-tree-label">MANGO</text>
+                            </g>
+
+                            <!-- Mango 2 -->
+                            <g class="svg-element clickable svg-tree" id="elem-mango2" data-title="Mango Grande #2" data-desc="Gran árbol de mango. Proporciona sombra y amortiguación térmica a la sección norte de la finca. Su hojarasca se almacena para alimentar la Paca #2.">
+                                <circle cx="270" cy="90" r="48" class="svg-leaf-shadow" />
+                                <circle cx="270" cy="90" r="42" class="svg-mango-leaves" />
+                                <circle cx="275" cy="80" r="9" class="svg-mango-fruit" />
+                                <text x="270" y="95" class="svg-tree-label">MANGO</text>
+                            </g>
+
+                            <!-- Mango 3 -->
+                            <g class="svg-element clickable svg-tree" id="elem-mango3" data-title="Mango Grande #3" data-desc="Ubicado en la franja este. Genera biomasa densa. Excelente salud forestal. Aporte clave de materia orgánica para el reciclaje de nutrientes en el suelo.">
+                                <circle cx="680" cy="140" r="45" class="svg-leaf-shadow" />
+                                <circle cx="680" cy="140" r="40" class="svg-mango-leaves" />
+                                <circle cx="690" cy="130" r="8" class="svg-mango-fruit" />
+                                <circle cx="665" cy="150" r="10" class="svg-mango-fruit" />
+                                <text x="680" y="145" class="svg-tree-label">MANGO</text>
+                            </g>
+
+                            <!-- Mango 4 -->
+                            <g class="svg-element clickable svg-tree" id="elem-mango4" data-title="Mango Grande #4" data-desc="Árbol de mango en la sección sur-oeste. Forma parte de la barrera cortaviento natural de la finca. Su cobertura foliar reduce la evaporación del suelo circundante.">
+                                <circle cx="160" cy="380" r="45" class="svg-leaf-shadow" />
+                                <circle cx="160" cy="380" r="40" class="svg-mango-leaves" />
+                                <circle cx="170" cy="370" r="9" class="svg-mango-fruit" />
+                                <text x="160" y="385" class="svg-tree-label">MANGO</text>
+                            </g>
+
+                            <!-- Mamón Tree (1 Mata de Mamón) -->
+                            <g class="svg-element clickable svg-tree" id="elem-mamon" data-title="Mata de Mamón" data-desc="Árbol de dosel medio-alto con frutos dulces en racimo. Sus hojas pequeñas se descomponen más rápido que las del mango, ideales para las capas intermedias del compostaje.">
+                                <circle cx="580" cy="110" r="38" class="svg-leaf-shadow" />
+                                <circle cx="580" cy="110" r="34" class="svg-mamon-leaves" />
+                                <circle cx="570" cy="100" r="4" class="svg-mamon-fruit" />
+                                <circle cx="585" cy="120" r="5" class="svg-mamon-fruit" />
+                                <text x="580" y="115" class="svg-tree-label">MAMÓN</text>
+                            </g>
+
+                            <!-- Moringa Tree (1 Mata de Moringa) -->
+                            <g class="svg-element clickable svg-tree" id="elem-moringa" data-title="Mata de Moringa" data-desc="Conocida como el árbol de la vida. Altamente rica en nutrientes (nitrógeno, potasio). Sus recortes verdes se usan en las pacas digestoras como catalizador de fermentación debido a su alto contenido proteico.">
+                                <ellipse cx="640" cy="370" rx="30" ry="38" class="svg-leaf-shadow" />
+                                <ellipse cx="640" cy="370" rx="26" ry="34" class="svg-moringa-leaves" />
+                                <text x="640" y="375" class="svg-tree-label">MORINGA</text>
+                            </g>
+
+                            <!-- Plátanos Grandes (5 Matas Adultas) -->
+                            <g class="clickable svg-element" id="elem-platanos-grandes" data-title="Platanal - 5 Matas Grandes" data-desc="Grupo de 5 matas adultas de plátano (Musa paradisiaca) en crecimiento vegetativo avanzado y desarrollo de racimos. Poseen hojas anchas de gran tamaño y demandan alta humedad de suelo.">
+                                <!-- Trunk 1 -->
+                                <path d="M 335 440 L 335 410" stroke="#7a8d6e" stroke-width="4.5" stroke-linecap="round" fill="none" />
+                                <path d="M 335 410 Q 320 395 315 400" stroke="#52b788" stroke-width="2.5" stroke-linecap="round" fill="none" />
+                                <path d="M 335 410 Q 350 395 355 400" stroke="#52b788" stroke-width="2.5" stroke-linecap="round" fill="none" />
+                                <!-- Trunk 2 -->
+                                <path d="M 355 445 L 355 415" stroke="#7a8d6e" stroke-width="4.5" stroke-linecap="round" fill="none" />
+                                <path d="M 355 415 Q 340 400 335 405" stroke="#52b788" stroke-width="2.5" stroke-linecap="round" fill="none" />
+                                <path d="M 355 415 Q 370 400 375 405" stroke="#52b788" stroke-width="2.5" stroke-linecap="round" fill="none" />
+                                <path d="M 355 415 Q 355 390 360 395" stroke="#52b788" stroke-width="2" stroke-linecap="round" fill="none" />
+                                <!-- Trunk 3 -->
+                                <path d="M 375 435 L 375 405" stroke="#7a8d6e" stroke-width="4.5" stroke-linecap="round" fill="none" />
+                                <path d="M 375 405 Q 360 390 355 395" stroke="#52b788" stroke-width="2.5" stroke-linecap="round" fill="none" />
+                                <path d="M 375 405 Q 390 390 395 395" stroke="#52b788" stroke-width="2.5" stroke-linecap="round" fill="none" />
+                                <!-- Trunk 4 -->
+                                <path d="M 395 440 L 395 410" stroke="#7a8d6e" stroke-width="4.5" stroke-linecap="round" fill="none" />
+                                <path d="M 395 410 Q 380 395 375 400" stroke="#52b788" stroke-width="2.5" stroke-linecap="round" fill="none" />
+                                <path d="M 395 410 Q 410 395 415 400" stroke="#52b788" stroke-width="2.5" stroke-linecap="round" fill="none" />
+                                <!-- Trunk 5 (Center Back) -->
+                                <path d="M 365 425 L 365 395" stroke="#7a8d6e" stroke-width="4.5" stroke-linecap="round" fill="none" />
+                                <path d="M 365 395 Q 350 380 345 385" stroke="#52b788" stroke-width="2.5" stroke-linecap="round" fill="none" />
+                                <path d="M 365 395 Q 380 380 385 385" stroke="#52b788" stroke-width="2.5" stroke-linecap="round" fill="none" />
+                                <!-- Hanging Bananas group (yellow/gold small arcs) -->
+                                <path d="M 355 422 Q 352 429 350 433" stroke="#ffb703" stroke-width="3.5" stroke-linecap="round" fill="none" />
+                                
+                                <text x="365" y="458" text-anchor="middle" class="svg-tree-label" style="fill: var(--text-primary); font-size: 8px;">5 PLÁTANOS G.</text>
+                            </g>
+
+                            <!-- Plátanos Bebés (5 Hijos/Colinos pequeños) -->
+                            <g class="clickable svg-element" id="elem-platanos-bebes" data-title="Platanal - 5 Hijos (Bebés)" data-desc="Grupo de 5 plantas jóvenes (colinos recién establecidos). Se encuentran en desarrollo inicial de raíces y son muy sensibles a la pérdida de humedad del suelo.">
+                                <!-- Baby 1 -->
+                                <path d="M 445 440 L 445 428" stroke="#5c8f6e" stroke-width="2.5" stroke-linecap="round" fill="none" />
+                                <path d="M 445 428 Q 438 420 435 424" stroke="#74c69d" stroke-width="1.8" stroke-linecap="round" fill="none" />
+                                <path d="M 445 428 Q 452 420 455 424" stroke="#74c69d" stroke-width="1.8" stroke-linecap="round" fill="none" />
+                                <!-- Baby 2 -->
+                                <path d="M 460 445 L 460 433" stroke="#5c8f6e" stroke-width="2.5" stroke-linecap="round" fill="none" />
+                                <path d="M 460 433 Q 453 425 450 429" stroke="#74c69d" stroke-width="1.8" stroke-linecap="round" fill="none" />
+                                <path d="M 460 433 Q 467 425 470 429" stroke="#74c69d" stroke-width="1.8" stroke-linecap="round" fill="none" />
+                                <!-- Baby 3 -->
+                                <path d="M 475 440 L 475 428" stroke="#5c8f6e" stroke-width="2.5" stroke-linecap="round" fill="none" />
+                                <path d="M 475 428 Q 468 420 465 424" stroke="#74c69d" stroke-width="1.8" stroke-linecap="round" fill="none" />
+                                <path d="M 475 428 Q 482 420 485 424" stroke="#74c69d" stroke-width="1.8" stroke-linecap="round" fill="none" />
+                                <!-- Baby 4 -->
+                                <path d="M 490 445 L 490 433" stroke="#5c8f6e" stroke-width="2.5" stroke-linecap="round" fill="none" />
+                                <path d="M 490 433 Q 483 425 480 429" stroke="#74c69d" stroke-width="1.8" stroke-linecap="round" fill="none" />
+                                <path d="M 490 433 Q 497 425 500 429" stroke="#74c69d" stroke-width="1.8" stroke-linecap="round" fill="none" />
+                                <!-- Baby 5 (Back center) -->
+                                <path d="M 468 430 L 468 418" stroke="#5c8f6e" stroke-width="2.5" stroke-linecap="round" fill="none" />
+                                <path d="M 468 418 Q 461 410 458 414" stroke="#74c69d" stroke-width="1.8" stroke-linecap="round" fill="none" />
+                                <path d="M 468 418 Q 475 410 478 414" stroke="#74c69d" stroke-width="1.8" stroke-linecap="round" fill="none" />
+                                
+                                <text x="468" y="458" text-anchor="middle" class="svg-tree-label" style="fill: var(--text-secondary); font-size: 8px;">5 PLÁTANOS B.</text>
+                            </g>
+
+                            <!-- Paca Digestora Silva #1 (En un extremo de la cerca) -->
+                            <g class="svg-element clickable" id="elem-paca1" data-title="Paca Digestora Silva #1" data-desc="Primera paca digestora de compost instalada. Ubicada en el extremo de la cerca norte. En fase de fermentación densa a partir de hojarasca y desechos orgánicos de cocina. Sin olores ni plagas.">
+                                <rect x="25" y="25" width="30" height="30" rx="4" class="svg-paca svg-paca-active" />
+                                <text x="40" y="44" class="svg-paca-num">1</text>
+                                <text x="40" y="70" text-anchor="middle" class="svg-paca-label">PACA 1</text>
+                            </g>
+
+                            <!-- Paca Digestora Silva #2 (Iniciándose) -->
+                            <g class="svg-element clickable" id="elem-paca2" data-title="Paca Digestora Silva #2" data-desc="Segunda paca digestora en proceso de construcción. Alimentada activamente con hojarasca de los mangos y los residuos de la cocina de esta semana.">
+                                <rect x="65" y="25" width="30" height="30" rx="4" class="svg-paca svg-paca-progress" />
+                                <text x="80" y="44" class="svg-paca-num">2</text>
+                                <text x="80" y="70" text-anchor="middle" class="svg-paca-label">PACA 2</text>
+                            </g>
+
+                            <!-- Cultivos de Aromáticas & Autoriego (Orégano y Albahaca) -->
+                            <g class="svg-element clickable" id="elem-aromaticas" data-title="Parcela de Aromáticas (Autoriego)" data-desc="Cultivos de albahaca y orégano. Equipado con un sistema de riego localizado. Actúa como barrera biológica: las aromáticas confunden a las plagas y atraen insectos polinizadores y depredadores benéficos.">
+                                <!-- Planting Beds -->
+                                <rect x="520" y="230" width="140" height="40" rx="5" class="svg-bed" />
+                                <rect x="520" y="280" width="140" height="40" rx="5" class="svg-bed" />
+                                <!-- Basil icons represented as dark green dots -->
+                                <circle cx="535" cy="250" r="6" class="svg-basil-plant" />
+                                <circle cx="565" cy="250" r="6" class="svg-basil-plant" />
+                                <circle cx="595" cy="250" r="6" class="svg-basil-plant" />
+                                <circle cx="625" cy="250" r="6" class="svg-basil-plant" />
+                                <!-- Oregano represented as lighter green clusters -->
+                                <path d="M 530 300 Q 535 292 540 300" class="svg-oregano-plant" stroke-width="4" />
+                                <path d="M 560 300 Q 565 292 570 300" class="svg-oregano-plant" stroke-width="4" />
+                                <path d="M 590 300 Q 595 292 600 300" class="svg-oregano-plant" stroke-width="4" />
+                                <path d="M 620 300 Q 625 292 630 300" class="svg-oregano-plant" stroke-width="4" />
+                                <!-- Water Spraying simulation circles -->
+                                <circle cx="550" cy="250" r="12" class="svg-water-sprinkle" />
+                                <circle cx="610" cy="250" r="12" class="svg-water-sprinkle" />
+                                <circle cx="550" cy="300" r="12" class="svg-water-sprinkle" />
+                                <circle cx="610" cy="300" r="12" class="svg-water-sprinkle" />
+                                <text x="590" y="215" text-anchor="middle" class="svg-bed-label">AROMÁTICAS</text>
+                            </g>
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- Info panel updating dynamically -->
+                <div class="map-detail-panel card">
+                    <div class="panel-placeholder" id="panel-placeholder-msg">
+                        <i data-lucide="info" class="pulse-icon"></i>
+                        <p>Haz clic en cualquier elemento del mapa (árboles, casa, platanales, pacas, o cultivos) para ver sus detalles agroecológicos y estado actual.</p>
+                    </div>
+                    <div class="panel-content hidden" id="panel-detail-content">
+                        <h3 id="detail-title">Nombre del Elemento</h3>
+                        <div class="divider"></div>
+                        <p id="detail-desc" class="detail-description">Descripción...</p>
+                        
+                        <div class="detail-stats-grid" id="detail-stats">
+                            <!-- Dynamically populated -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Monitoreo de Paca Real #1 (COUNTDOWN & ANIMATION WIDGET) -->
+            <div class="paca-real-monitor card" style="margin-top: 24px;">
+                <div class="monitor-header">
+                    <div class="monitor-title">
+                        <i data-lucide="flame" class="icon-hot"></i>
+                        <div>
+                            <h3>Monitoreo en Tiempo Real: Paca Digestora #1</h3>
+                            <p class="helper-text" style="margin-bottom: 0;">Paca activa instalada en el extremo norte de la cerca perimetral.</p>
+                        </div>
+                    </div>
+                    <div class="date-badge">
+                        <span>Inicio: 28 de Julio de 2026</span>
+                    </div>
+                </div>
+
+                <div class="monitor-grid">
+                    <!-- Column 1: Live Animation -->
+                    <div class="monitor-col-anim">
+                        <div class="paca-3d-box-container">
+                            <div class="heat-wave wave-1"></div>
+                            <div class="heat-wave wave-2"></div>
+                            <div class="heat-wave wave-3"></div>
+                            <div class="paca-3d-box">
+                                <div class="paca-box-side paca-front"></div>
+                                <div class="paca-box-side paca-top"></div>
+                                <div class="paca-box-side paca-right"></div>
+                                <div class="percent-label" id="real-paca-percent">2.2%</div>
+                            </div>
+                        </div>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar-fill" id="real-paca-progress" style="width: 2.2%;"></div>
+                        </div>
+                        <div class="progress-labels">
+                            <span id="real-paca-days-elapsed">Día 4 transcurrido</span>
+                            <span>Día 180 (Cosecha)</span>
+                        </div>
+                    </div>
+
+                    <!-- Column 2: Countdown Timer -->
+                    <div class="monitor-col-countdown">
+                        <h4>Tiempo Restante para la Cosecha (6 Meses)</h4>
+                        <div class="countdown-clock" id="countdown-clock">
+                            <div class="clock-unit">
+                                <span class="number" id="cd-days">175</span>
+                                <span class="label">Días</span>
+                            </div>
+                            <div class="clock-unit">
+                                <span class="number" id="cd-hours">23</span>
+                                <span class="label">Horas</span>
+                            </div>
+                            <div class="clock-unit">
+                                <span class="number" id="cd-minutes">59</span>
+                                <span class="label">Min.</span>
+                            </div>
+                            <div class="clock-unit">
+                                <span class="number" id="cd-seconds">59</span>
+                                <span class="label">Seg.</span>
+                            </div>
+                        </div>
+                        <p class="harvest-date-hint">Cosecha estimada para: <strong>28 de Enero de 2027</strong></p>
+                    </div>
+
+                    <!-- Column 3: Biological Process Info -->
+                    <div class="monitor-col-stats">
+                        <h4 id="real-paca-stage-title">Actividad Biológica Actual (Fase Térmica Temprana)</h4>
+                        <ul class="stats-list">
+                            <li>
+                                <i data-lucide="thermometer" class="stat-icon-temp"></i>
+                                <div>
+                                    <strong>Temperatura Estimada:</strong>
+                                    <span id="real-paca-temp">~48°C (Calentamiento activo)</span>
+                                </div>
+                            </li>
+                            <li>
+                                <i data-lucide="droplets" class="stat-icon-hum"></i>
+                                <div>
+                                    <strong>Humedad Interna Ajustada:</strong>
+                                    <span id="real-paca-humidity">~60% (Óptimo)</span>
+                                </div>
+                            </li>
+                            <li>
+                                <i data-lucide="cloud-rain" style="color: var(--accent-blue);"></i>
+                                <div>
+                                    <strong>Factor Clima Yagua (Open-Meteo):</strong>
+                                    <span id="real-paca-weather-factor">Obteniendo datos de lluvia...</span>
+                                </div>
+                            </li>
+                            <li>
+                                <i data-lucide="binary" class="stat-icon-bio"></i>
+                                <div>
+                                    <strong>Proceso Microbiológico:</strong>
+                                    <span id="real-paca-microbe-text">Bacterias anaeróbicas termófilas digieren las proteínas y azúcares simples en condiciones densas.</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tab 2: Simulador de Agroprocesos -->
+        <section id="simulador" class="tab-panel">
+            <div class="section-header">
+                <h2>Simuladores de Agroprocesos</h2>
+                <p>Monitorea y proyecta el balance de tus pacas compostadoras y el desarrollo productivo de tus matas de plátano.</p>
+            </div>
+
+            <!-- Sub Navigation for Simulators -->
+            <div class="sub-nav">
+                <button class="sub-nav-btn active" data-subtab="sim-paca-tab">
+                    <i data-lucide="box"></i> <span>Simulador Paca Silva</span>
+                </button>
+                <button class="sub-nav-btn" data-subtab="sim-platano-tab">
+                    <i data-lucide="leaf"></i> <span>Simulador Platanal</span>
+                </button>
+            </div>
+
+            <!-- Subtab 1: Paca Silva Simulator -->
+            <div id="sim-paca-tab" class="subtab-panel active">
+                <div class="simulator-layout">
+                    <!-- Controls and Inputs -->
+                    <div class="sim-controls-card card">
+                        <h3>1. Proporciones de la Paca (1 m³ - Prensada)</h3>
+                        <p class="helper-text">La paca ideal pesa aprox. 400-500 kg compactados y requiere un balance óptimo de Carbono (hojas secas) y Nitrógeno (residuos verdes).</p>
+                        
+                        <div class="control-group">
+                            <div class="control-label">
+                                <span><i data-lucide="leaf"></i> Residuos Secos (Hojas de Mango, Mamón, Ramas - Alto Carbono)</span>
+                                <span class="value-display" id="val-brown">250 kg</span>
+                            </div>
+                            <input type="range" id="input-brown" min="100" max="400" step="10" value="250">
+                            <div class="range-labels">
+                                <span>100 kg (Poco estructural)</span>
+                                <span>400 kg (Muy leñoso)</span>
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <div class="control-label">
+                                <span><i data-lucide="carrot"></i> Residuos Verdes (Desechos de cocina, Moringa, Aromáticas - Alto Nitrógeno)</span>
+                                <span class="value-display" id="val-green">150 kg</span>
+                            </div>
+                            <input type="range" id="input-green" min="20" max="250" step="5" value="150">
+                            <div class="range-labels">
+                                <span>20 kg (Lento proceso)</span>
+                                <span>250 kg (Exceso humedad)</span>
+                            </div>
+                        </div>
+
+                        <div class="divider"></div>
+
+                        <h3>2. Línea de Tiempo de Procesamiento</h3>
+                        <p class="helper-text">Desliza para ver la transformación biológica del bloque a lo largo de los 6 meses de fermentación y maduración.</p>
+                        
+                        <div class="timeline-slider-wrapper">
+                            <input type="range" id="timeline-slider" min="0" max="180" step="30" value="0">
+                            <div class="timeline-markers">
+                                <span class="marker active" data-day="0">Día 1</span>
+                                <span class="marker" data-day="30">Mes 1</span>
+                                <span class="marker" data-day="60">Mes 2</span>
+                                <span class="marker" data-day="90">Mes 3</span>
+                                <span class="marker" data-day="120">Mes 4</span>
+                                <span class="marker" data-day="150">Mes 5</span>
+                                <span class="marker" data-day="180">Mes 6</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Simulation Results -->
+                    <div class="sim-results-card card">
+                        <h3>Monitoreo Químico y Físico</h3>
+                        
+                        <div class="metrics-grid">
+                            <div class="metric-card">
+                                <span class="metric-title">Relación C:N Inicial</span>
+                                <span class="metric-value" id="metric-cn">28:1</span>
+                                <span class="metric-status status-good" id="metric-cn-status">Óptimo</span>
+                                <div class="cn-gauge-bg">
+                                    <div class="cn-gauge-pointer" id="cn-pointer" style="left: 56%;"></div>
+                                </div>
+                            </div>
+
+                            <div class="metric-card">
+                                <span class="metric-title">Humus Esperado (Compost final)</span>
+                                <span class="metric-value" id="metric-humus">145 kg</span>
+                                <p class="metric-subtext">≈ 35% de biomasa inicial</p>
+                            </div>
+                        </div>
+
+                        <div class="timeline-visual-preview">
+                            <div class="paca-graphic">
+                                <svg viewBox="0 0 200 200" width="100%" height="150" id="paca-graphic-svg">
+                                    <rect x="40" y="40" width="120" height="120" rx="8" id="paca-cube" class="cube-day1" />
+                                    <line x1="40" y1="70" x2="160" y2="70" stroke="rgba(255,255,255,0.2)" stroke-dasharray="3,3" id="paca-line1" />
+                                    <line x1="40" y1="100" x2="160" y2="100" stroke="rgba(255,255,255,0.2)" stroke-dasharray="3,3" id="paca-line2" />
+                                    <line x1="40" y1="130" x2="160" y2="130" stroke="rgba(255,255,255,0.2)" stroke-dasharray="3,3" id="paca-line3" />
+                                    <circle cx="60" cy="140" r="3" fill="#fff" opacity="0" id="fungus1" class="mycelium" />
+                                    <circle cx="100" cy="120" r="5" fill="#fff" opacity="0" id="fungus2" class="mycelium" />
+                                    <circle cx="140" cy="150" r="4" fill="#fff" opacity="0" id="fungus3" class="mycelium" />
+                                    <circle cx="80" cy="80" r="3.5" fill="#fff" opacity="0" id="fungus4" class="mycelium" />
+                                    <text x="100" y="105" text-anchor="middle" id="paca-text" fill="#fff" font-weight="bold">1 m³</text>
+                                </svg>
+                            </div>
+                            <div class="stage-info">
+                                <h4 id="stage-title">Fase 1: Compactación y Llenado</h4>
+                                <p id="stage-desc">Se colocan capas de hojarasca y residuos orgánicos domésticos prensados para eliminar el aire e iniciar la digestión anaeróbica.</p>
+                                <div class="alert alert-info" id="stage-alert">
+                                    <i data-lucide="alert-circle"></i>
+                                    <span id="stage-alert-text">La alta densidad previene la aparición de malos olores y plagas.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Subtab 2: Plantain Simulator -->
+            <div id="sim-platano-tab" class="subtab-panel hidden">
+                <div class="simulator-layout">
+                    <!-- Controls and Inputs -->
+                    <div class="sim-controls-card card">
+                        <h3>1. Manejo del Platanal (Nutrición y Agua)</h3>
+                        <p class="helper-text">Como no hay sistema de riego, la humedad depende enteramente del clima (Open-Meteo) y de los riegos manuales de mantenimiento.</p>
+                        
+                        <div class="control-group">
+                            <div class="control-label">
+                                <span><i data-lucide="nut"></i> Abono Orgánico Aplicado (Compost de Paca)</span>
+                                <span class="value-display" id="val-compost-platano">2.0 kg/mata</span>
+                            </div>
+                            <input type="range" id="input-compost-platano" min="0" max="10" step="0.5" value="2">
+                            <div class="range-labels">
+                                <span>0 kg (Suelo pobre)</span>
+                                <span>10 kg (Nutrición excelente)</span>
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <div class="control-label">
+                                <span><i data-lucide="droplets"></i> Riego Manual Auxiliar</span>
+                                <span class="value-display" id="val-riego-platano">2 veces/semana</span>
+                            </div>
+                            <input type="range" id="input-riego-platano" min="0" max="7" step="1" value="2">
+                            <div class="range-labels">
+                                <span>0 veces (Depende del clima)</span>
+                                <span>7 veces (Saturación)</span>
+                            </div>
+                        </div>
+
+                        <div class="divider"></div>
+
+                        <h3>2. Ciclo de Crecimiento del Plátano (12 Meses)</h3>
+                        <p class="helper-text">Desliza para simular los cambios botánicos de los colinos (bebés) a lo largo de un año completo de desarrollo.</p>
+                        
+                        <div class="timeline-slider-wrapper">
+                            <input type="range" id="timeline-platano-slider" min="1" max="12" step="1" value="1">
+                            <div class="timeline-markers" style="margin-top: 5px;">
+                                <span class="marker active" data-month="1">Mes 1</span>
+                                <span class="marker" data-month="3">Mes 3</span>
+                                <span class="marker" data-month="6">Mes 6</span>
+                                <span class="marker" data-month="9">Mes 9</span>
+                                <span class="marker" data-month="12">Mes 12</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Simulation Results -->
+                    <div class="sim-results-card card">
+                        <h3>Proyección de Cosecha & Hidratación</h3>
+                        
+                        <div class="metrics-grid">
+                            <div class="metric-card">
+                                <span class="metric-title">Humedad Suelo Estimada</span>
+                                <span class="metric-value" id="metric-platano-soil-humidity">60%</span>
+                                <span class="metric-status status-good" id="platano-stress-level">Óptimo</span>
+                            </div>
+
+                            <div class="metric-card">
+                                <span class="metric-title">Peso del Racimo (Promedio)</span>
+                                <span class="metric-value" id="metric-platano-weight">12.5 kg</span>
+                                <p class="metric-subtext" id="metric-platano-yield-desc">Cosecha base proyectada</p>
+                            </div>
+                        </div>
+
+                        <div class="timeline-visual-preview">
+                            <div class="paca-graphic" style="background: rgba(0,0,0,0.25); display: flex; align-items: center; justify-content: center; height: 180px;">
+                                <svg viewBox="0 0 200 200" width="100%" height="180" id="platano-graphic-svg">
+                                    <line x1="20" y1="180" x2="180" y2="180" stroke="var(--accent-brown)" stroke-width="3" />
+                                    
+                                    <!-- Stage 1: Sprout (Mes 1-2) -->
+                                    <g id="platano-stage-sprout" class="platano-svg-group">
+                                        <path d="M 100 180 Q 93 162 88 158" stroke="#74c69d" stroke-width="4.5" stroke-linecap="round" fill="none"/>
+                                        <path d="M 100 180 Q 107 167 114 163" stroke="#74c69d" stroke-width="4" stroke-linecap="round" fill="none"/>
+                                    </g>
+                                    
+                                    <!-- Stage 2: Growth (Mes 3-6) -->
+                                    <g id="platano-stage-growth" class="platano-svg-group hidden">
+                                        <path d="M 100 180 L 100 125" stroke="#7a8d6e" stroke-width="6.5" stroke-linecap="round" fill="none"/>
+                                        <path d="M 100 125 C 80 105, 62 118, 56 128" stroke="#52b788" stroke-width="4" stroke-linecap="round" fill="none"/>
+                                        <path d="M 100 125 C 120 105, 138 118, 144 128" stroke="#52b788" stroke-width="4" stroke-linecap="round" fill="none"/>
+                                        <path d="M 100 142 C 82 127, 72 137, 66 145" stroke="#52b788" stroke-width="3" stroke-linecap="round" fill="none"/>
+                                        <path d="M 100 142 C 118 127, 128 137, 134 145" stroke="#52b788" stroke-width="3" stroke-linecap="round" fill="none"/>
+                                    </g>
+                                    
+                                    <!-- Stage 3: Flowering (Mes 7-9) -->
+                                    <g id="platano-stage-flower" class="platano-svg-group hidden">
+                                        <path d="M 100 180 L 100 85" stroke="#7a8d6e" stroke-width="8" stroke-linecap="round" fill="none"/>
+                                        <path d="M 100 85 C 65 62, 42 85, 36 102" stroke="#2d6a4f" stroke-width="5" stroke-linecap="round" fill="none"/>
+                                        <path d="M 100 85 C 135 62, 158 85, 164 102" stroke="#2d6a4f" stroke-width="5" stroke-linecap="round" fill="none"/>
+                                        <path d="M 100 115 C 72 95, 55 110, 50 122" stroke="#52b788" stroke-width="4" stroke-linecap="round" fill="none"/>
+                                        <path d="M 100 115 C 128 95, 145 110, 150 122" stroke="#52b788" stroke-width="4" stroke-linecap="round" fill="none"/>
+                                        <!-- Purple Bellota (flower) hanging -->
+                                        <path d="M 88 100 Q 82 110 80 115" stroke="#7a8d6e" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+                                        <path d="M 80 115 C 72 118, 75 130, 80 135 C 85 130, 88 118, 80 115" fill="#581845" stroke="#3c1030" stroke-width="1"/>
+                                    </g>
+                                    
+                                    <!-- Stage 4: Harvest (Mes 10-12) -->
+                                    <g id="platano-stage-harvest" class="platano-svg-group hidden">
+                                        <path d="M 100 180 L 100 85" stroke="#7a8d6e" stroke-width="8" stroke-linecap="round" fill="none"/>
+                                        <path d="M 100 85 C 65 62, 32 78, 26 95" stroke="#2d6a4f" stroke-width="5" stroke-linecap="round" fill="none"/>
+                                        <path d="M 100 85 C 135 62, 168 78, 174 95" stroke="#2d6a4f" stroke-width="5" stroke-linecap="round" fill="none"/>
+                                        <path d="M 100 115 C 70 95, 48 110, 42 125" stroke="#2d6a4f" stroke-width="4.5" stroke-linecap="round" fill="none"/>
+                                        <path d="M 100 115 C 130 95, 152 110, 158 125" stroke="#2d6a4f" stroke-width="4.5" stroke-linecap="round" fill="none"/>
+                                        <!-- Bunch of yellow/green bananas -->
+                                        <path d="M 90 102 Q 80 112 78 120" stroke="#7a8d6e" stroke-width="3" stroke-linecap="round" fill="none"/>
+                                        <path d="M 78 120 Q 70 128 64 133" stroke="#ffb703" stroke-width="4" stroke-linecap="round" fill="none"/>
+                                        <path d="M 80 123 Q 74 131 69 136" stroke="#ffb703" stroke-width="4" stroke-linecap="round" fill="none"/>
+                                        <path d="M 76 127 Q 85 133 90 136" stroke="#ffb703" stroke-width="4" stroke-linecap="round" fill="none"/>
+                                        <path d="M 73 131 Q 81 137 85 140" stroke="#ffb703" stroke-width="4" stroke-linecap="round" fill="none"/>
+                                    </g>
+                                </svg>
+                            </div>
+                            <div class="stage-info">
+                                <h4 id="platano-timeline-title">Fase 1: Enraizamiento y Brotación</h4>
+                                <p id="platano-timeline-desc">Los colinos jóvenes (bebés) se establecen. Echan sus primeras raíces en el suelo y comienzan a abrir sus primeras hojas.</p>
+                                <div class="alert alert-info" id="platano-stage-alert">
+                                    <i data-lucide="alert-circle"></i>
+                                    <span id="platano-stage-alert-text">Muy sensible a la sequía. Monitorear lluvia o regar de inmediato.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tab 3: Decálogo Agroecológico -->
+        <section id="decalogo" class="tab-panel">
+            <div class="section-header">
+                <h2>Decálogo de la Finca Agroecológica Yagua</h2>
+                <p>Diez principios fundamentales que explican por qué apostar por el compostaje, los procesos orgánicos y la agricultura ecológica en nuestro suelo de Yagua.</p>
+            </div>
+
+            <div class="decalogo-grid">
+                <!-- Card 1 -->
+                <div class="decalogo-card card">
+                    <div class="decalogo-num">01</div>
+                    <div class="decalogo-icon"><i data-lucide="database"></i></div>
+                    <h3>Regeneración Viva del Suelo</h3>
+                    <p>El compost aporta humus, materia orgánica y miles de millones de microorganismos benéficos que desbloquean los nutrientes de forma natural para las plantas.</p>
+                </div>
+                <!-- Card 2 -->
+                <div class="decalogo-card card">
+                    <div class="decalogo-num">02</div>
+                    <div class="decalogo-icon"><i data-lucide="droplet"></i></div>
+                    <h3>Retención Hídrica Masiva</h3>
+                    <p>El humus retiene hasta 5 veces más agua que los suelos arcillosos secos. Esto optimiza el riego localizado y reduce la dependencia energética de bombas de agua.</p>
+                </div>
+                <!-- Card 3 -->
+                <div class="decalogo-card card">
+                    <div class="decalogo-num">03</div>
+                    <div class="decalogo-icon"><i data-lucide="wind"></i></div>
+                    <h3>Estructura y Aireación</h3>
+                    <p>La materia orgánica enmienda la compactación del suelo, abriendo microporos que permiten un flujo constante de oxígeno a las raíces de mangos, mamón y moringa.</p>
+                </div>
+                <!-- Card 4 -->
+                <div class="decalogo-card card">
+                    <div class="decalogo-num">04</div>
+                    <div class="decalogo-icon"><i data-lucide="refresh-cw"></i></div>
+                    <h3>Cierre del Ciclo de Nutrientes</h3>
+                    <p>Transformar localmente la hojarasca y ramas caídas devuelve al suelo el Nitrógeno, Potasio y microelementos que los árboles extrajeron del subsuelo profundo.</p>
+                </div>
+                <!-- Card 5 -->
+                <div class="decalogo-card card">
+                    <div class="decalogo-num">05</div>
+                    <div class="decalogo-icon"><i data-lucide="shield-alert"></i></div>
+                    <h3>Sin Insumos Sintéticos</h3>
+                    <p>Los fertilizantes químicos de síntesis queman el humus y acidifican la microflora. El abono orgánico estabiliza el pH en el rango ideal de 6.3 a 6.8.</p>
+                </div>
+                <!-- Card 6 -->
+                <div class="decalogo-card card">
+                    <div class="decalogo-num">06</div>
+                    <div class="decalogo-icon"><i data-lucide="shield"></i></div>
+                    <h3>Control Ecológico de Plagas</h3>
+                    <p>El uso continuo de insecticidas comerciales destruye la fauna benéfica y crea plagas superresistentes. La agricultura ecológica prescinde de químicos agresivos.</p>
+                </div>
+                <!-- Card 7 -->
+                <div class="decalogo-card card">
+                    <div class="decalogo-num">07</div>
+                    <div class="decalogo-icon"><i data-lucide="heart-pulse"></i></div>
+                    <h3>Inmunidad Vegetal</h3>
+                    <p>Una planta nutrida orgánicamente desarrolla paredes celulares más gruesas. El exceso de nitrógeno sintético aguanta agua en las células haciéndolas presa fácil de insectos.</p>
+                </div>
+                <!-- Card 8 -->
+                <div class="decalogo-card card">
+                    <div class="decalogo-num">08</div>
+                    <div class="decalogo-icon"><i data-lucide="flower"></i></div>
+                    <h3>Biodiversidad Asociada</h3>
+                    <p>Las aromáticas (orégano y albahaca) brindan alimento (néctar/polen) a mariquitas, avispas benéficas y crisopas, que son los depredadores naturales de las plagas.</p>
+                </div>
+                <!-- Card 9 -->
+                <div class="decalogo-card card">
+                    <div class="decalogo-num">09</div>
+                    <div class="decalogo-icon"><i data-lucide="trees"></i></div>
+                    <h3>Microclima y Corredores</h3>
+                    <p>Los grandes frutales amortiguan los vientos y la radiación solar directa, protegiendo las plantas aromáticas inferiores y creando un microclima estable y húmedo.</p>
+                </div>
+                <!-- Card 10 -->
+                <div class="decalogo-card card">
+                    <div class="decalogo-num">10</div>
+                    <div class="decalogo-icon"><i data-lucide="smile"></i></div>
+                    <h3>Salud y Comodato Ético</h3>
+                    <p>Asegura la producción de cosechas libres de venenos, protegiendo la salud de los habitantes y respetando el valor y la fertilidad de la tierra.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tab 4: Inventario -->
+        <section id="inventario" class="tab-panel">
+            <div class="section-header">
+                <h2>Inventario de Bienes Recibidos</h2>
+                <p>Gestiona el inventario de entrega física del inmueble y los artefactos eléctricos de la casa de habitación.</p>
+            </div>
+
+            <div class="inventory-card card">
+                <div class="inventory-header">
+                    <h3>Monitoreo de Bienes Entregados (Anexo A)</h3>
+                    <div class="search-box">
+                        <i data-lucide="search"></i>
+                        <input type="text" id="inventory-search" placeholder="Buscar elemento del inventario...">
+                    </div>
+                </div>
+
+                <div class="table-container">
+                    <table class="inventory-table" id="inventory-table">
+                        <thead>
+                            <tr>
+                                <th>Área / Elemento</th>
+                                <th>Descripción en Contrato</th>
+                                <th>Estado de Funcionamiento</th>
+                                <th>Higiene y Limpieza</th>
+                            </tr>
+                        </thead>
+                        <tbody id="inventory-tbody">
+                            <tr>
+                                <td><strong>Nevera</strong></td>
+                                <td>Operativa, de dos puertas, color gris.</td>
+                                <td><span class="badge badge-success">Operativa</span></td>
+                                <td><span class="badge badge-success">Excelente / Limpia</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Cocina</strong></td>
+                                <td>Cocina a gas de 4 hornillas y horno, acero inoxidable.</td>
+                                <td><span class="badge badge-success">Operativa</span></td>
+                                <td><span class="badge badge-success">Excelente / Sin Grasa</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Patio (3,500 m²)</strong></td>
+                                <td>Área externa verde de la finca.</td>
+                                <td><span class="badge badge-neutral">N/A</span></td>
+                                <td><span class="badge badge-warning">Requiere poda / Control maleza</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Paredes Internas</strong></td>
+                                <td>Pintura general en color blanco.</td>
+                                <td><span class="badge badge-neutral">N/A</span></td>
+                                <td><span class="badge badge-success">Limpias sin manchas</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Baños</strong></td>
+                                <td>Piezas sanitarias, duchas y grifería completa.</td>
+                                <td><span class="badge badge-success">Operativo sin botes</span></td>
+                                <td><span class="badge badge-success">Desinfectado</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Instalaciones Eléctricas</strong></td>
+                                <td>Bombillos, interruptores y cableado general.</td>
+                                <td><span class="badge badge-success">Todo operativo</span></td>
+                                <td><span class="badge badge-neutral">N/A</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tab 5: Bitácora de Actividades -->
+        <section id="bitacora" class="tab-panel">
+            <div class="section-header">
+                <h2>Bitácora y Diario de Labores</h2>
+                <p>Registra las tareas públicas de mantenimiento y accede de forma segura a tu diario agroecológico privado.</p>
+            </div>
+
+            <!-- Sub Nav -->
+            <div class="sub-nav">
+                <button class="sub-nav-btn active" data-subtab="bitacora-publica-tab">
+                    <i data-lucide="globe"></i> <span>Bitácora Pública</span>
+                </button>
+                <button class="sub-nav-btn" data-subtab="diario-privado-tab">
+                    <i data-lucide="lock"></i> <span>Diario Privado</span>
+                </button>
+            </div>
+
+            <!-- Subtab 1: Bitacora Publica -->
+            <div id="bitacora-publica-tab" class="subtab-panel active">
+                <div class="bitacora-layout">
+                    <!-- Log Entry Form (Public) -->
+                    <div class="log-form-card card">
+                        <h3>Registrar Nueva Tarea Pública</h3>
+                        <form id="bitacora-form">
+                            <div class="form-group">
+                                <label for="log-date">Fecha</label>
+                                <input type="date" id="log-date" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="log-category">Categoría</label>
+                                <select id="log-category" required>
+                                    <option value="compost">Compost / Paca Digestora</option>
+                                    <option value="riego">Autoriego / Aromáticas</option>
+                                    <option value="limpieza">Limpieza de Casa (Nevera/Cocina)</option>
+                                    <option value="poda">Poda de Patio / Maleza</option>
+                                    <option value="servicio">Pago de Servicios Públicos</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="log-title">Actividad / Tarea</label>
+                                <input type="text" id="log-title" placeholder="Ej: Iniciada construcción de Paca Digestora #2" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="log-details">Notas Detalladas</label>
+                                <textarea id="log-details" rows="3" placeholder="Detalla cantidades de hojas, estado de humedad, mantenimiento de la cocina..." required></textarea>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary"><i data-lucide="plus"></i> Registrar en Historial</button>
+                        </form>
+                    </div>
+
+                    <!-- Timeline (Public) -->
+                    <div class="log-history-card card">
+                        <div class="history-header">
+                            <h3>Historial de Actividades Públicas</h3>
+                            <button class="btn btn-secondary btn-sm" id="btn-clear-logs"><i data-lucide="trash-2"></i> Limpiar Local</button>
+                        </div>
+
+                        <div class="timeline" id="log-timeline">
+                            <!-- Entries populated via JS -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Subtab 2: Diario Privado -->
+            <div id="diario-privado-tab" class="subtab-panel hidden">
+                <!-- Login View (Visible when locked) -->
+                <div id="private-lock-view" class="private-auth-card card" style="max-width: 450px; margin: 40px auto; text-align: center;">
+                    <i data-lucide="lock" class="pulse-icon" style="width: 50px; height: 50px; color: var(--accent-gold); margin-bottom: 16px; display: inline-block;"></i>
+                    <h3 id="auth-title">Acceso al Diario Privado</h3>
+                    <p class="helper-text" id="auth-desc">Introduce tu contraseña de seguridad para desencriptar y ver tus notas personales.</p>
+                    
+                    <div class="form-group" style="margin-top: 20px;">
+                        <input type="password" id="private-password-input" placeholder="Introduce la contraseña" style="text-align: center;">
+                        <p class="error-text hidden" id="auth-error-msg" style="color: #ef233c; font-size: 0.8rem; margin-top: 8px;">Contraseña incorrecta. Inténtalo de nuevo.</p>
+                    </div>
+                    
+                    <button id="btn-unlock-private" class="btn btn-primary" style="width: 100%; margin-top: 10px;">
+                        <i data-lucide="key-round"></i> Desbloquear Diario
+                    </button>
+                </div>
+
+                <!-- Unlocked View (Visible when authenticated) -->
+                <div id="private-unlocked-view" class="bitacora-layout hidden">
+                    <!-- Private Form -->
+                    <div class="log-form-card card">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                            <h3>Nueva Entrada Privada</h3>
+                            <button id="btn-lock-private" class="btn btn-secondary btn-sm"><i data-lucide="log-out"></i> Bloquear</button>
+                        </div>
+                        <form id="private-diary-form">
+                            <div class="form-group">
+                                <label for="priv-date">Fecha</label>
+                                <input type="date" id="priv-date" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="priv-category">Categoría</label>
+                                <select id="priv-category" required>
+                                    <option value="priv-nota">Nota de Campo</option>
+                                    <option value="priv-gasto">Gasto / Compra</option>
+                                    <option value="priv-riego">Observación Riego</option>
+                                    <option value="priv-personal">Mantenimiento Crítico</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="priv-title">Título de la Entrada</label>
+                                <input type="text" id="priv-title" placeholder="Ej: Compra de tubería de 1/2 pulgada" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="priv-details">Detalles Privados (Cifrados)</label>
+                                <textarea id="priv-details" rows="4" placeholder="Escribe aquí tus observaciones privadas (costos, incidentes, etc.). Esta información se guardará encriptada." required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary" style="background-color: var(--accent-gold); color: var(--bg-darkest);"><i data-lucide="lock"></i> Guardar Encriptado</button>
+                        </form>
+                    </div>
+
+                    <!-- Private Timeline -->
+                    <div class="log-history-card card">
+                        <div class="history-header">
+                            <h3>Diario Privado (Cifrado Local)</h3>
+                            <button class="btn btn-secondary btn-sm" id="btn-clear-private-logs"><i data-lucide="trash-2"></i> Limpiar Todo</button>
+                        </div>
+                        <div class="timeline" id="private-timeline">
+                            <!-- Populated dynamically via JS -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+    </main>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+        <p>© 2026 Finca Virtual de Yagua. Desarrollado con enfoque agroecológico.</p>
+        <p class="footer-small">Los datos de bitácora y simulaciones se guardan localmente en el navegador.</p>
+    </footer>
+
+    <!-- JS Application Scripts -->
+    <script src="app.js"></script>
+</body>
+</html>
