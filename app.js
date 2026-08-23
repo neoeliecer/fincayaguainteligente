@@ -77,57 +77,34 @@ document.addEventListener('DOMContentLoaded', () => {
     const realMicrobeText = document.getElementById('real-paca-microbe-text');
 
     function updateRealPacaTimer() {
-        const now = new Date();
-        const elapsedMs = now - pacaStartDate;
-        const totalMs = pacaHarvestDate - pacaStartDate;
-        const remainingMs = pacaHarvestDate - now;
-
-        const percent = Math.min(100, Math.max(0, (elapsedMs / totalMs) * 100));
+        // Paca 1 - Fase actual: Llenado (10% - Primera capa de hojas secas)
+        const pacaProgress = 10;
         
-        if (realPercent) realPercent.textContent = `${percent.toFixed(2)}%`;
-        if (realProgress) realProgress.style.width = `${percent}%`;
-
-        const daysElapsed = Math.floor(elapsedMs / (1000 * 60 * 60 * 24));
-        if (realDaysElapsed) realDaysElapsed.textContent = `Día ${daysElapsed} transcurrido`;
-
+        if (realPercent) realPercent.textContent = `${pacaProgress}%`;
+        if (realProgress) realProgress.style.width = `${pacaProgress}%`;
+        if (realDaysElapsed) realDaysElapsed.textContent = 'Proceso de llenado activo';
+        
+        // Fase de llenado - capas de hojarasca
+        if (realStageTitle) realStageTitle.textContent = 'Fase Actual: Llenado de Paca Digestora';
+        if (realTemp) realTemp.textContent = 'Temperatura ambiente (~28°C)';
+        if (realMicrobeText) realMicrobeText.textContent = 'Primera capa de hojas secas colocada. La paca esta en proceso de construccion. Se continuan agregando capas de material verde y marron.';
+        
+        // Countdown para la paca 1
+        const remainingMs = pacaHarvestDate - new Date();
         if (remainingMs <= 0) {
             if (cdDays) cdDays.textContent = '0';
             if (cdHours) cdHours.textContent = '0';
             if (cdMin) cdMin.textContent = '0';
             if (cdSec) cdSec.textContent = '0';
-            
-            if (realStageTitle) realStageTitle.textContent = 'Cosecha: Humus Maduro Listo';
-            if (realTemp) realTemp.textContent = 'Temperatura Ambiente (~25°C)';
-            if (realMicrobeText) realMicrobeText.textContent = 'El humus está totalmente maduro, estable y cargado de bioflora benéfica listo para ser cosechado.';
-            return;
-        }
-
-        const d = Math.floor(remainingMs / (1000 * 60 * 60 * 24));
-        const h = Math.floor((remainingMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const m = Math.floor((remainingMs % (1000 * 60 * 60)) / (1000 * 60));
-        const s = Math.floor((remainingMs % (1000 * 60)) / 1000);
-
-        if (cdDays) cdDays.textContent = d;
-        if (cdHours) cdHours.textContent = h;
-        if (cdMin) cdMin.textContent = m;
-        if (cdSec) cdSec.textContent = s;
-
-        if (daysElapsed <= 7) {
-            if (realStageTitle) realStageTitle.textContent = 'Actividad Biológica: Fase Térmica Temprana (Compactación)';
-            if (realTemp) realTemp.textContent = `~${45 + Math.min(5, daysElapsed)}°C (Calentamiento activo)`;
-            if (realMicrobeText) realMicrobeText.textContent = 'Bacterias anaeróbicas y termófilas comienzan a multiplicarse y digerir azúcares simples en condiciones densas sin oxígeno.';
-        } else if (daysElapsed <= 45) {
-            if (realStageTitle) realStageTitle.textContent = 'Actividad Biológica: Fase Termófila Activa';
-            if (realTemp) realTemp.textContent = '~60°C (Sanitización biológica)';
-            if (realMicrobeText) realMicrobeText.textContent = 'El calor extremo inactiva patógenos y semillas de malezas. Microorganismos especializados degradan celulosa.';
-        } else if (daysElapsed <= 120) {
-            if (realStageTitle) realStageTitle.textContent = 'Actividad Biológica: Fase Fúngica Mesófila (Enfriamiento)';
-            if (realTemp) realTemp.textContent = `~${35 + Math.max(0, 10 - (daysElapsed - 45))}°C (Colonización de hongos)`;
-            if (realMicrobeText) realMicrobeText.textContent = 'Hongos benéficos del suelo (micelio blanco) colonizan la paca desde los bordes para romper la celulosa leñosa dura.';
         } else {
-            if (realStageTitle) realStageTitle.textContent = 'Actividad Biológica: Maduración y Humificación';
-            if (realTemp) realTemp.textContent = 'Temperatura Ambiente (~25°C)';
-            if (realMicrobeText) realMicrobeText.textContent = 'Lombrices e insectos benéficos del suelo terminan de digerir la biomasa foliar, convirtiéndola en humus rico y mineralizado.';
+            const d = Math.floor(remainingMs / (1000 * 60 * 60 * 24));
+            const h = Math.floor((remainingMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const m = Math.floor((remainingMs % (1000 * 60 * 60)) / (1000 * 60));
+            const s = Math.floor((remainingMs % (1000 * 60)) / 1000);
+            if (cdDays) cdDays.textContent = d;
+            if (cdHours) cdHours.textContent = h;
+            if (cdMin) cdMin.textContent = m;
+            if (cdSec) cdSec.textContent = s;
         }
     }
 
