@@ -2226,6 +2226,193 @@ input[type="range"]::-webkit-slider-thumb:hover {
     to { opacity: 1; transform: translateY(0); }
 }
 
+/* ============================
+   Multimedia Resources
+   ============================ */
+
+/* Video Container */
+.video-container {
+    position: relative;
+    width: 100%;
+    max-width: 720px;
+    margin: 0 auto;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--border-light);
+    background: #000;
+}
+
+.video-container video {
+    width: 100%;
+    height: auto;
+    display: block;
+    max-height: 420px;
+}
+
+/* Audio Player */
+.audio-player {
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--border-light);
+    border-radius: 12px;
+    padding: 16px;
+    max-width: 500px;
+}
+
+.audio-player-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+.audio-player-info i {
+    width: 20px;
+    height: 20px;
+    color: var(--accent-green);
+}
+
+.audio-player audio {
+    width: 100%;
+    height: 36px;
+    border-radius: 8px;
+}
+
+/* Resource Cards Grid */
+.resource-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 16px;
+}
+
+.resource-card {
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--border-light);
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    transition: border-color var(--transition-fast), transform var(--transition-fast);
+}
+
+.resource-card:hover {
+    border-color: var(--border-glow);
+    transform: translateY(-2px);
+}
+
+.resource-card-icon {
+    width: 48px;
+    height: 48px;
+    margin: 0 auto 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(239, 68, 68, 0.1);
+    border-radius: 50%;
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    color: #ef4444;
+}
+
+.resource-card-icon i {
+    width: 24px;
+    height: 24px;
+}
+
+.resource-card h5 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.95rem;
+    color: #fff;
+    margin-bottom: 6px;
+}
+
+.resource-card p {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+}
+
+.resource-card-actions {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+}
+
+/* Paca Digestora Resources */
+.paca-resources h4 {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #fff;
+    font-family: 'Outfit', sans-serif;
+}
+
+.paca-resources h4 i {
+    width: 20px;
+    height: 20px;
+    color: var(--accent-gold);
+}
+
+.paca-resource-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border-light);
+}
+
+.paca-resource-item:last-child {
+    border-bottom: none;
+}
+
+.paca-resource-icon {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(82, 183, 136, 0.1);
+    border-radius: 10px;
+    border: 1px solid rgba(82, 183, 136, 0.2);
+    color: var(--accent-green);
+}
+
+.paca-resource-icon i {
+    width: 18px;
+    height: 18px;
+}
+
+.paca-resource-info {
+    flex: 1;
+}
+
+.paca-resource-info strong {
+    display: block;
+    font-size: 0.9rem;
+    color: #fff;
+    margin-bottom: 2px;
+}
+
+.paca-resource-info span {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+.paca-resource-links {
+    display: flex;
+    gap: 6px;
+}
+
+.paca-audio-inline {
+    height: 32px;
+    min-width: 200px;
+    border-radius: 8px;
+}
+
+/* ============================
+   End Multimedia Resources
+   ============================ */
+
 .hidden {
     display: none !important;
 }
