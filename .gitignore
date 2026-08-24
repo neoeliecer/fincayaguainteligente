@@ -3,6 +3,7 @@ recursos/*.mp4
 recursos/*.m4a
 recursos/**/*.mp4
 recursos/**/*.m4a
+recursos/**/*.mp3
 recursos/Paca_Digestora_Silva.pdf
 
 # PDFs pesados excluidos (mantener solo local)
