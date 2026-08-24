@@ -1,6 +1,8 @@
 # Archivos multimedia pesados (mantener solo local)
 recursos/*.mp4
 recursos/*.m4a
+recursos/**/*.mp4
+recursos/**/*.m4a
 recursos/Paca_Digestora_Silva.pdf
 
 # PDFs pesados excluidos (mantener solo local)
