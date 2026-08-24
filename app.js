@@ -30,6 +30,11 @@ document.addEventListener('DOMContentLoaded', () => {
             if (targetPanel) {
                 targetPanel.classList.add('active');
             }
+
+            // Actualizar fecha al abrir Bitacora
+            if (tabId === 'bitacora') {
+                setTodayDates();
+            }
         });
     });
 
@@ -54,6 +59,11 @@ document.addEventListener('DOMContentLoaded', () => {
             if (targetSubPanel) {
                 targetSubPanel.classList.remove('hidden');
                 targetSubPanel.classList.add('active');
+            }
+
+            // Actualizar fecha al cambiar de sub-pestana en Bitacora
+            if (subtabId === 'bitacora-publica-tab' || subtabId === 'diario-privado-tab') {
+                setTodayDates();
             }
         });
     });
