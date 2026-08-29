@@ -2958,6 +2958,100 @@ input[type="range"]::-webkit-slider-thumb:hover {
    End Blog
    ============================ */
 
+/* ============================
+   Bitacora Login
+   ============================ */
+
+.bitacora-login {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 60vh;
+    padding: 20px;
+}
+
+.login-card {
+    width: 100%;
+    max-width: 420px;
+    padding: 40px 32px;
+    text-align: center;
+    border-radius: 20px;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--border-light);
+}
+
+.login-icon {
+    width: 72px;
+    height: 72px;
+    margin: 0 auto 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(234, 179, 8, 0.1);
+    border-radius: 50%;
+    border: 2px solid rgba(234, 179, 8, 0.3);
+}
+
+.login-icon i {
+    width: 36px;
+    height: 36px;
+    color: var(--accent-gold);
+}
+
+.login-card h2 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.5rem;
+    color: #fff;
+    margin-bottom: 6px;
+}
+
+.login-subtitle {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 24px;
+}
+
+.login-error {
+    padding: 10px 14px;
+    border-radius: 8px;
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    color: #ef4444;
+    font-size: 0.85rem;
+    margin-bottom: 16px;
+    text-align: left;
+}
+
+.login-divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 24px 0;
+    color: var(--text-muted);
+    font-size: 0.8rem;
+}
+
+.login-divider::before,
+.login-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border-light);
+}
+
+.btn-block {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px;
+}
+
+/* ============================
+   End Bitacora Login
+   ============================ */
+
 .hidden {
     display: none !important;
 }

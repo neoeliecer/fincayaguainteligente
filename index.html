@@ -837,10 +837,71 @@
 
         <!-- Tab 5: Bitácora de Actividades -->
         <section id="bitacora" class="tab-panel">
-            <div class="section-header">
-                <h2>Bitácora y Diario de Labores</h2>
-                <p>Registra las tareas públicas de mantenimiento y accede de forma segura a tu diario agroecológico privado.</p>
+            <!-- Login Screen -->
+            <div id="bitacora-login" class="bitacora-login">
+                <div class="login-card card">
+                    <div class="login-icon">
+                        <i data-lucide="lock"></i>
+                    </div>
+                    <h2>Bitacora Privada</h2>
+                    <p class="login-subtitle">Ingresa tus credenciales para acceder</p>
+                    
+                    <!-- Login Form -->
+                    <form id="login-form">
+                        <div class="form-group">
+                            <label for="login-user">Usuario</label>
+                            <input type="text" id="login-user" placeholder="Tu usuario" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="login-pin">PIN (4-6 digitos)</label>
+                            <input type="password" id="login-pin" placeholder="Tu PIN" maxlength="6" pattern="[0-9]{4,6}" required>
+                        </div>
+                        <div id="login-error" class="login-error" style="display: none;"></div>
+                        <button type="submit" class="btn btn-primary btn-block">
+                            <i data-lucide="log-in"></i> Entrar
+                        </button>
+                    </form>
+
+                    <!-- Register Form (first time) -->
+                    <div id="register-section" style="display: none;">
+                        <div class="login-divider">
+                            <span>Primera vez?</span>
+                        </div>
+                        <form id="register-form">
+                            <div class="form-group">
+                                <label for="reg-user">Crear Usuario</label>
+                                <input type="text" id="reg-user" placeholder="Elige un usuario" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="reg-pin">Crear PIN (4-6 digitos)</label>
+                                <input type="password" id="reg-pin" placeholder="Elige un PIN" maxlength="6" pattern="[0-9]{4,6}" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="reg-pin-confirm">Confirmar PIN</label>
+                                <input type="password" id="reg-pin-confirm" placeholder="Confirma tu PIN" maxlength="6" pattern="[0-9]{4,6}" required>
+                            </div>
+                            <div id="register-error" class="login-error" style="display: none;"></div>
+                            <button type="submit" class="btn btn-secondary btn-block">
+                                <i data-lucide="user-plus"></i> Crear Cuenta
+                            </button>
+                        </form>
+                    </div>
+                </div>
             </div>
+
+            <!-- Bitacora Content (hidden until login) -->
+            <div id="bitacora-content" style="display: none;">
+                <div class="section-header">
+                    <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
+                        <div>
+                            <h2>Bitacora y Diario de Labores</h2>
+                            <p>Registra las tareas de mantenimiento y observaciones de la finca.</p>
+                        </div>
+                        <button class="btn btn-secondary btn-sm" id="btn-logout">
+                            <i data-lucide="log-out"></i> Cerrar Sesion
+                        </button>
+                    </div>
+                </div>
 
             <!-- Sub Nav -->
             <div class="sub-nav">
@@ -968,6 +1029,7 @@
                     </div>
                 </div>
             </div>
+            </div> <!-- fin bitacora-content -->
         </section>
 
         <!-- Tab 6: Semillero (Vivero de Plantulas) -->

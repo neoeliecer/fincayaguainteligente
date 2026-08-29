@@ -1641,3 +1641,159 @@ function initBlog() {
     // Initial render
     renderPublicPosts();
 }
+
+// ---------------------------------------------------------
+// 15. Bitacora Authentication (Usuario + PIN)
+// ---------------------------------------------------------
+const AUTH_USER_KEY = 'yagua_auth_user';
+const AUTH_PIN_KEY = 'yagua_auth_pin';
+const SESSION_KEY = 'yagua_session';
+const SESSION_TIMEOUT = 15 * 60 * 1000; // 15 minutos
+
+function initBitacoraAuth() {
+    const loginForm = document.getElementById('login-form');
+    const registerForm = document.getElementById('register-form');
+    const registerSection = document.getElementById('register-section');
+    const loginError = document.getElementById('login-error');
+    const registerError = document.getElementById('register-error');
+    const bitacoraLogin = document.getElementById('bitacora-login');
+    const bitacoraContent = document.getElementById('bitacora-content');
+    const btnLogout = document.getElementById('btn-logout');
+
+    // Verificar si hay credenciales guardadas
+    const storedUser = localStorage.getItem(AUTH_USER_KEY);
+    const storedPin = localStorage.getItem(AUTH_PIN_KEY);
+
+    if (!storedUser || !storedPin) {
+        // Primera vez - mostrar registro
+        registerSection.style.display = 'block';
+    }
+
+    // Verificar sesion activa
+    if (checkSession()) {
+        showBitacora();
+    }
+
+    // Login
+    if (loginForm) {
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const user = document.getElementById('login-user').value.trim();
+            const pin = document.getElementById('login-pin').value;
+
+            const savedUser = localStorage.getItem(AUTH_USER_KEY);
+            const savedPin = localStorage.getItem(AUTH_PIN_KEY);
+
+            if (user === savedUser && pin === savedPin) {
+                createSession();
+                showBitacora();
+                loginError.style.display = 'none';
+            } else {
+                loginError.textContent = 'Usuario o PIN incorrectos';
+                loginError.style.display = 'block';
+            }
+        });
+    }
+
+    // Registro
+    if (registerForm) {
+        registerForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const user = document.getElementById('reg-user').value.trim();
+            const pin = document.getElementById('reg-pin').value;
+            const pinConfirm = document.getElementById('reg-pin-confirm').value;
+
+            if (pin !== pinConfirm) {
+                registerError.textContent = 'Los PINs no coinciden';
+                registerError.style.display = 'block';
+                return;
+            }
+
+            if (pin.length < 4 || pin.length > 6) {
+                registerError.textContent = 'El PIN debe tener 4-6 digitos';
+                registerError.style.display = 'block';
+                return;
+            }
+
+            localStorage.setItem(AUTH_USER_KEY, user);
+            localStorage.setItem(AUTH_PIN_KEY, pin);
+            registerSection.style.display = 'none';
+            registerError.style.display = 'none';
+            loginError.textContent = 'Cuenta creada. Ahora inicia sesion.';
+            loginError.style.display = 'block';
+            loginError.style.color = '#22c55e';
+        });
+    }
+
+    // Logout
+    if (btnLogout) {
+        btnLogout.addEventListener('click', () => {
+            sessionStorage.removeItem(SESSION_KEY);
+            sessionStorage.removeItem(SESSION_KEY + '_time');
+            showLogin();
+        });
+    }
+
+    function checkSession() {
+        const session = sessionStorage.getItem(SESSION_KEY);
+        const sessionTime = sessionStorage.getItem(SESSION_KEY + '_time');
+        
+        if (!session || !sessionTime) return false;
+        
+        const elapsed = Date.now() - parseInt(sessionTime);
+        if (elapsed > SESSION_TIMEOUT) {
+            sessionStorage.removeItem(SESSION_KEY);
+            sessionStorage.removeItem(SESSION_KEY + '_time');
+            return false;
+        }
+        
+        // Refresh timeout
+        sessionStorage.setItem(SESSION_KEY + '_time', Date.now().toString());
+        return true;
+    }
+
+    function createSession() {
+        sessionStorage.setItem(SESSION_KEY, 'active');
+        sessionStorage.setItem(SESSION_KEY + '_time', Date.now().toString());
+    }
+
+    function showBitacora() {
+        bitacoraLogin.style.display = 'none';
+        bitacoraContent.style.display = 'block';
+        lucide.createIcons();
+    }
+
+    function showLogin() {
+        bitacoraLogin.style.display = 'flex';
+        bitacoraContent.style.display = 'none';
+        document.getElementById('login-user').value = '';
+        document.getElementById('login-pin').value = '';
+        lucide.createIcons();
+    }
+
+    // Timeout por inactividad
+    let inactivityTimer;
+    function resetInactivityTimer() {
+        clearTimeout(inactivityTimer);
+        inactivityTimer = setTimeout(() => {
+            if (checkSession()) {
+                sessionStorage.removeItem(SESSION_KEY);
+                sessionStorage.removeItem(SESSION_KEY + '_time');
+                showLogin();
+                alert('Sesion expirada por inactividad (15 minutos)');
+            }
+        }, SESSION_TIMEOUT);
+    }
+
+    // Detectar actividad del usuario
+    ['mousemove', 'keypress', 'click', 'touchstart'].forEach(event => {
+        document.addEventListener(event, () => {
+            if (checkSession()) resetInactivityTimer();
+        });
+    });
+}
+
+// Inicializar auth cuando el DOM este listo
+document.addEventListener('DOMContentLoaded', () => {
+    initBitacoraAuth();
+});
