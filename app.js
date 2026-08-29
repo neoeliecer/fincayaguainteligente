@@ -1317,4 +1317,327 @@ document.addEventListener('DOMContentLoaded', () => {
     renderSeedlingCards();
     renderSemilleroTimeline();
     updateSeedDates();
+    initBlog();
 });
+
+// ---------------------------------------------------------
+// 14. Blog - Public Posts with Cloudinary Image Upload
+// ---------------------------------------------------------
+const BLOG_KEY = 'yagua_blog';
+const CLOUDINARY_CLOUD = 'decqj4zhj';
+const CLOUDINARY_UPLOAD_PRESET = 'blog_upload';
+
+function initBlog() {
+    const blogGrid = document.getElementById('blog-grid');
+    const blogEmpty = document.getElementById('blog-empty');
+    const blogForm = document.getElementById('blog-post-form');
+    const blogDashboard = document.getElementById('blog-dashboard');
+    const blogPublicView = document.getElementById('blog-public-view');
+    const btnToggle = document.getElementById('btn-toggle-dashboard');
+    const btnCloseDash = document.getElementById('btn-close-dashboard');
+    const btnCancelEdit = document.getElementById('btn-cancel-edit');
+    const imageInput = document.getElementById('blog-post-image');
+    const imagePreview = document.getElementById('blog-image-preview');
+    const blogModal = document.getElementById('blog-modal');
+    const blogModalClose = document.getElementById('blog-modal-close');
+    const blogModalBody = document.getElementById('blog-modal-body');
+    const blogPostsAdmin = document.getElementById('blog-posts-admin');
+    const filterBtns = document.querySelectorAll('.blog-filter-btn');
+
+    let currentFilter = 'all';
+    let editingId = null;
+    let uploadedImageUrl = null;
+
+    // Toggle Dashboard
+    if (btnToggle) {
+        btnToggle.addEventListener('click', () => {
+            blogPublicView.style.display = 'none';
+            blogDashboard.style.display = 'block';
+            btnToggle.style.display = 'none';
+            renderAdminPosts();
+        });
+    }
+
+    if (btnCloseDash) {
+        btnCloseDash.addEventListener('click', () => {
+            blogDashboard.style.display = 'none';
+            blogPublicView.style.display = 'block';
+            btnToggle.style.display = 'inline-flex';
+            resetForm();
+            renderPublicPosts();
+        });
+    }
+
+    // Filter buttons
+    filterBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            filterBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            currentFilter = btn.getAttribute('data-filter');
+            renderPublicPosts();
+        });
+    });
+
+    // Image preview & upload
+    if (imageInput) {
+        imageInput.addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            imagePreview.innerHTML = '<span>Subiendo imagen...</span>';
+
+            try {
+                const formData = new FormData();
+                formData.append('file', file);
+                formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+
+                const response = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD}/image/upload`, {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+                if (data.secure_url) {
+                    uploadedImageUrl = data.secure_url;
+                    imagePreview.innerHTML = `<img src="${data.secure_url}" alt="Preview">`;
+                } else {
+                    throw new Error('Error en la subida');
+                }
+            } catch (err) {
+                imagePreview.innerHTML = '<i data-lucide="image"></i><span>Error al subir. Intenta de nuevo.</span>';
+                lucide.createIcons();
+            }
+        });
+    }
+
+    // Form submit
+    if (blogForm) {
+        blogForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const title = document.getElementById('blog-post-title').value;
+            const category = document.getElementById('blog-post-category').value;
+            const content = document.getElementById('blog-post-content').value;
+
+            const posts = getBlogPosts();
+
+            if (editingId) {
+                const idx = posts.findIndex(p => p.id === editingId);
+                if (idx !== -1) {
+                    posts[idx].title = title;
+                    posts[idx].category = category;
+                    posts[idx].content = content;
+                    if (uploadedImageUrl) posts[idx].image = uploadedImageUrl;
+                }
+            } else {
+                const newPost = {
+                    id: Date.now().toString(),
+                    title,
+                    category,
+                    content,
+                    image: uploadedImageUrl || null,
+                    date: new Date().toISOString(),
+                    author: 'Finca Yagua'
+                };
+                posts.unshift(newPost);
+            }
+
+            localStorage.setItem(BLOG_KEY, JSON.stringify(posts));
+            resetForm();
+            renderAdminPosts();
+        });
+    }
+
+    if (btnCancelEdit) {
+        btnCancelEdit.addEventListener('click', resetForm);
+    }
+
+    // Modal close
+    if (blogModalClose) {
+        blogModalClose.addEventListener('click', () => {
+            blogModal.style.display = 'none';
+        });
+    }
+
+    if (blogModal) {
+        blogModal.addEventListener('click', (e) => {
+            if (e.target === blogModal) blogModal.style.display = 'none';
+        });
+    }
+
+    function getBlogPosts() {
+        const stored = localStorage.getItem(BLOG_KEY);
+        return stored ? JSON.parse(stored) : [];
+    }
+
+    function resetForm() {
+        editingId = null;
+        uploadedImageUrl = null;
+        blogForm.reset();
+        document.getElementById('blog-edit-id').value = '';
+        document.getElementById('blog-form-title').innerHTML = '<i data-lucide="plus-circle"></i> Nuevo Post';
+        document.getElementById('blog-submit-btn').innerHTML = '<i data-lucide="send"></i> Publicar';
+        btnCancelEdit.style.display = 'none';
+        imagePreview.innerHTML = '<i data-lucide="image"></i><span>Selecciona una imagen</span>';
+        lucide.createIcons();
+    }
+
+    function renderPublicPosts() {
+        if (!blogGrid) return;
+        const posts = getBlogPosts();
+        const filtered = currentFilter === 'all' ? posts : posts.filter(p => p.category === currentFilter);
+
+        if (filtered.length === 0) {
+            blogGrid.style.display = 'none';
+            blogEmpty.style.display = 'block';
+            return;
+        }
+
+        blogGrid.style.display = 'grid';
+        blogEmpty.style.display = 'none';
+
+        blogGrid.innerHTML = filtered.map(post => {
+            const date = new Date(post.date);
+            const dateStr = date.toLocaleDateString('es-VE', { day: 'numeric', month: 'long', year: 'numeric' });
+            const categoryClass = `cat-${post.category}`;
+            const categoryLabel = post.category === 'siembra' ? 'Siembra' : post.category === 'cosecha' ? 'Cosecha' : 'Paca Digestora';
+            const categoryIcon = post.category === 'siembra' ? 'sprout' : post.category === 'cosecha' ? 'apple' : 'recycle';
+            const excerpt = post.content.substring(0, 150) + (post.content.length > 150 ? '...' : '');
+
+            const imageHtml = post.image
+                ? `<img src="${post.image}" alt="${post.title}" class="blog-card-image">`
+                : `<div class="blog-card-image-placeholder"><i data-lucide="image"></i></div>`;
+
+            return `
+                <div class="blog-card" data-id="${post.id}">
+                    ${imageHtml}
+                    <div class="blog-card-body">
+                        <span class="blog-card-category ${categoryClass}"><i data-lucide="${categoryIcon}"></i> ${categoryLabel}</span>
+                        <h3 class="blog-card-title">${post.title}</h3>
+                        <p class="blog-card-excerpt">${excerpt}</p>
+                        <div class="blog-card-meta">
+                            <span><i data-lucide="calendar"></i> ${dateStr}</span>
+                            <span><i data-lucide="user"></i> ${post.author}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+
+        lucide.createIcons();
+
+        // Click to open modal
+        blogGrid.querySelectorAll('.blog-card').forEach(card => {
+            card.addEventListener('click', () => {
+                const id = card.getAttribute('data-id');
+                const post = posts.find(p => p.id === id);
+                if (post) openPostModal(post);
+            });
+        });
+    }
+
+    function openPostModal(post) {
+        const date = new Date(post.date);
+        const dateStr = date.toLocaleDateString('es-VE', { day: 'numeric', month: 'long', year: 'numeric' });
+        const categoryClass = `cat-${post.category}`;
+        const categoryLabel = post.category === 'siembra' ? 'Siembra' : post.category === 'cosecha' ? 'Cosecha' : 'Paca Digestora';
+
+        const imageHtml = post.image
+            ? `<img src="${post.image}" alt="${post.title}" class="blog-modal-image">`
+            : '';
+
+        blogModalBody.innerHTML = `
+            ${imageHtml}
+            <div class="blog-modal-body">
+                <span class="blog-modal-category blog-card-category ${categoryClass}">${categoryLabel}</span>
+                <h2 class="blog-modal-title">${post.title}</h2>
+                <div class="blog-modal-meta">
+                    <span><i data-lucide="calendar"></i> ${dateStr}</span>
+                    <span><i data-lucide="user"></i> ${post.author}</span>
+                </div>
+                <div class="blog-modal-content-text">${post.content}</div>
+            </div>
+        `;
+
+        blogModal.style.display = 'flex';
+        lucide.createIcons();
+    }
+
+    function renderAdminPosts() {
+        if (!blogPostsAdmin) return;
+        const posts = getBlogPosts();
+
+        if (posts.length === 0) {
+            blogPostsAdmin.innerHTML = '<p style="color: var(--text-muted);">No hay posts creados aun.</p>';
+            return;
+        }
+
+        blogPostsAdmin.innerHTML = posts.map(post => {
+            const date = new Date(post.date);
+            const dateStr = date.toLocaleDateString('es-VE');
+            const categoryLabel = post.category === 'siembra' ? 'Siembra' : post.category === 'cosecha' ? 'Cosecha' : 'Paca Digestora';
+
+            const thumbHtml = post.image
+                ? `<div class="blog-post-admin-thumb"><img src="${post.image}" alt=""></div>`
+                : `<div class="blog-post-admin-thumb"><i data-lucide="image"></i></div>`;
+
+            return `
+                <div class="blog-post-admin-item">
+                    ${thumbHtml}
+                    <div class="blog-post-admin-info">
+                        <h5>${post.title}</h5>
+                        <span>${categoryLabel} - ${dateStr}</span>
+                    </div>
+                    <div class="blog-post-admin-actions">
+                        <button class="btn btn-sm btn-secondary blog-edit-btn" data-id="${post.id}">
+                            <i data-lucide="pencil"></i>
+                        </button>
+                        <button class="btn btn-sm btn-secondary blog-delete-btn" data-id="${post.id}" style="color: #ef4444;">
+                            <i data-lucide="trash-2"></i>
+                        </button>
+                    </div>
+                </div>
+            `;
+        }).join('');
+
+        lucide.createIcons();
+
+        // Edit buttons
+        blogPostsAdmin.querySelectorAll('.blog-edit-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const id = btn.getAttribute('data-id');
+                const post = posts.find(p => p.id === id);
+                if (post) {
+                    editingId = id;
+                    document.getElementById('blog-post-title').value = post.title;
+                    document.getElementById('blog-post-category').value = post.category;
+                    document.getElementById('blog-post-content').value = post.content;
+                    document.getElementById('blog-form-title').innerHTML = '<i data-lucide="pencil"></i> Editar Post';
+                    document.getElementById('blog-submit-btn').innerHTML = '<i data-lucide="save"></i> Actualizar';
+                    btnCancelEdit.style.display = 'inline-flex';
+                    if (post.image) {
+                        uploadedImageUrl = post.image;
+                        imagePreview.innerHTML = `<img src="${post.image}" alt="Preview">`;
+                    }
+                    lucide.createIcons();
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+            });
+        });
+
+        // Delete buttons
+        blogPostsAdmin.querySelectorAll('.blog-delete-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const id = btn.getAttribute('data-id');
+                if (confirm('¿Eliminar este post?')) {
+                    const updated = posts.filter(p => p.id !== id);
+                    localStorage.setItem(BLOG_KEY, JSON.stringify(updated));
+                    renderAdminPosts();
+                }
+            });
+        });
+    }
+
+    // Initial render
+    renderPublicPosts();
+}

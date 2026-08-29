@@ -60,6 +60,9 @@
         <button class="nav-btn" data-tab="biblioteca">
             <i data-lucide="book-open"></i> <span>Biblioteca</span>
         </button>
+        <button class="nav-btn" data-tab="blog">
+            <i data-lucide="pen-line"></i> <span>Blog</span>
+        </button>
     </nav>
 
     <!-- Main Content Container -->
@@ -1873,6 +1876,125 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tab 8: Blog -->
+        <section id="blog" class="tab-panel">
+            <div class="section-header">
+                <h2>Blog de la Finca</h2>
+                <p>Noticias, experiencias y conocimientos sobre agricultura ecologica y vida en la finca.</p>
+                <button class="btn btn-primary" id="btn-toggle-dashboard" style="margin-top: 12px;">
+                    <i data-lucide="layout-dashboard"></i> Dashboard
+                </button>
+            </div>
+
+            <!-- Vista Publica del Blog -->
+            <div id="blog-public-view">
+                <!-- Filtros -->
+                <div class="blog-filters">
+                    <button class="blog-filter-btn active" data-filter="all">
+                        <i data-lucide="layers"></i> Todos
+                    </button>
+                    <button class="blog-filter-btn" data-filter="siembra">
+                        <i data-lucide="sprout"></i> Siembra
+                    </button>
+                    <button class="blog-filter-btn" data-filter="cosecha">
+                        <i data-lucide="apple"></i> Cosecha
+                    </button>
+                    <button class="blog-filter-btn" data-filter="paca">
+                        <i data-lucide="recycle"></i> Paca Digestora
+                    </button>
+                </div>
+
+                <!-- Grid de Posts -->
+                <div id="blog-grid" class="blog-grid">
+                    <!-- Posts se cargan dinamicamente -->
+                </div>
+
+                <!-- Mensaje si no hay posts -->
+                <div id="blog-empty" class="blog-empty" style="display: none;">
+                    <i data-lucide="pen-line"></i>
+                    <h3>No hay publicaciones aun</h3>
+                    <p>Pronto compartiremos noticias y experiencias de la finca.</p>
+                </div>
+            </div>
+
+            <!-- Dashboard del Blog -->
+            <div id="blog-dashboard" style="display: none;">
+                <div class="blog-dashboard-header">
+                    <h3><i data-lucide="layout-dashboard"></i> Dashboard del Blog</h3>
+                    <button class="btn btn-secondary" id="btn-close-dashboard">
+                        <i data-lucide="x"></i> Cerrar
+                    </button>
+                </div>
+
+                <!-- Formulario de Creacion/Edicion -->
+                <div class="blog-form-card card">
+                    <h4 id="blog-form-title"><i data-lucide="plus-circle"></i> Nuevo Post</h4>
+                    <form id="blog-post-form">
+                        <input type="hidden" id="blog-edit-id" value="">
+                        
+                        <div class="form-group">
+                            <label for="blog-post-title">Titulo</label>
+                            <input type="text" id="blog-post-title" placeholder="Ej: Siembra de yuca en el bancale sur" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="blog-post-category">Categoria</label>
+                            <select id="blog-post-category" required>
+                                <option value="siembra">Siembra</option>
+                                <option value="cosecha">Cosecha</option>
+                                <option value="paca">Paca Digestora</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="blog-post-image">Imagen (opcional)</label>
+                            <div class="blog-image-upload">
+                                <input type="file" id="blog-post-image" accept="image/*">
+                                <div id="blog-image-preview" class="blog-image-preview">
+                                    <i data-lucide="image"></i>
+                                    <span>Selecciona una imagen</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="blog-post-content">Contenido</label>
+                            <textarea id="blog-post-content" rows="8" placeholder="Escribe tu articulo aqui..." required></textarea>
+                        </div>
+
+                        <div class="blog-form-actions">
+                            <button type="submit" class="btn btn-primary" id="blog-submit-btn">
+                                <i data-lucide="send"></i> Publicar
+                            </button>
+                            <button type="button" class="btn btn-secondary" id="blog-cancel-edit" style="display: none;">
+                                <i data-lucide="x"></i> Cancelar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Lista de Posts Existentes -->
+                <div class="blog-posts-list">
+                    <h4><i data-lucide="list"></i> Posts Existentes</h4>
+                    <div id="blog-posts-admin" class="blog-posts-admin">
+                        <!-- Posts se cargan dinamicamente -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal para Ver Post Completo -->
+            <div id="blog-modal" class="blog-modal" style="display: none;">
+                <div class="blog-modal-content">
+                    <button class="blog-modal-close" id="blog-modal-close">
+                        <i data-lucide="x"></i>
+                    </button>
+                    <div id="blog-modal-body">
+                        <!-- Contenido del post -->
                     </div>
                 </div>
             </div>
