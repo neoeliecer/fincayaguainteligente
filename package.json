@@ -1,0 +1,9 @@
+{
+  "name": "finca-yagua-inteligente",
+  "version": "1.0.0",
+  "description": "Finca Virtual de Yagua - Sitio web agroecologico",
+  "private": true,
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
