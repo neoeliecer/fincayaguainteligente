@@ -574,6 +574,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const TELEGRAM_BOT_WORKER = 'https://lucky-smoke-0314.matrixpaginas.workers.dev';
 
+    async function syncToWorker(type, data) {
+        try {
+            await fetch(TELEGRAM_BOT_WORKER + '/api/sync', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ type, data })
+            });
+        } catch (e) {
+            console.log('Sync to worker failed:', e);
+        }
+    }
+
     function getLogs() {
         const stored = localStorage.getItem('yagua_logs_v6');
         if (stored) {
@@ -668,6 +680,7 @@ document.addEventListener('DOMContentLoaded', () => {
             logs.push(newLog);
             
             localStorage.setItem('yagua_logs_v6', JSON.stringify(logs));
+            syncToWorker('logs', [{ date, category, title, details }]);
             bitacoraForm.reset();
             setTodayDates();
             renderLogs();
@@ -685,7 +698,9 @@ document.addEventListener('DOMContentLoaded', () => {
         btnClearLogs.addEventListener('click', () => {
             if (confirm('¿Estás seguro de que deseas limpiar la bitácora pública? Esto borrará tus registros públicos locales.')) {
                 localStorage.removeItem('yagua_logs_v6');
-                renderLogs();
+    renderLogs();
+    syncToWorker('semillero', getSeedlings());
+    syncToWorker('logs', getLogs());
             }
         });
     }
@@ -1235,6 +1250,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (confirm('¿Eliminar esta plantula del semillero?')) {
                     const seeds = getSeedlings().filter(s => s.id !== id);
                     localStorage.setItem(SEMILLERO_KEY, JSON.stringify(seeds));
+                    syncToWorker('semillero', seeds);
                     renderSeedlingCards();
                     renderSemilleroTimeline();
                 }
@@ -1331,6 +1347,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const seedlings = getSeedlings();
             seedlings.push(newSeedling);
             localStorage.setItem(SEMILLERO_KEY, JSON.stringify(seedlings));
+            syncToWorker('semillero', seedlings);
 
             semilleroForm.reset();
             updateSeedDates();
