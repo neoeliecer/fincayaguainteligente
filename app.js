@@ -572,6 +572,8 @@ document.addEventListener('DOMContentLoaded', () => {
         'siembra': 'Siembra'
     };
 
+    const TELEGRAM_BOT_WORKER = 'https://lucky-smoke-0314.matrixpaginas.workers.dev';
+
     function getLogs() {
         const stored = localStorage.getItem('yagua_logs_v6');
         if (stored) {
@@ -581,8 +583,47 @@ document.addEventListener('DOMContentLoaded', () => {
         return seedLogs;
     }
 
-    function renderLogs() {
+    async function syncTelegramLogs() {
+        try {
+            const res = await fetch(TELEGRAM_BOT_WORKER + '/api/logs');
+            if (!res.ok) return;
+            const telegramEntries = await res.json();
+            if (!telegramEntries || telegramEntries.length === 0) return;
+
+            const logs = getLogs();
+            const existingKeys = new Set(logs.map(l => l.date + l.title));
+
+            telegramEntries.forEach(entry => {
+                const catMap = {
+                    'Compost': 'compost', 'Siembra': 'siembra',
+                    'Limpieza': 'limpieza', 'Poda': 'poda',
+                    'Riego': 'riego', 'Mantenimiento': 'mantenimiento',
+                    'General': 'general'
+                };
+                const category = catMap[entry.category] || 'general';
+                const dateStr = entry.date.split('/').reverse().join('-');
+                const key = dateStr + entry.note;
+
+                if (!existingKeys.has(key)) {
+                    logs.push({
+                        date: dateStr,
+                        category: category,
+                        title: entry.note,
+                        details: 'Registrado desde Telegram por ' + (entry.user || 'Bot') + ' a las ' + entry.time
+                    });
+                    existingKeys.add(key);
+                }
+            });
+
+            localStorage.setItem('yagua_logs_v6', JSON.stringify(logs));
+        } catch (e) {
+            console.log('Sync Telegram logs failed:', e);
+        }
+    }
+
+    async function renderLogs() {
         if (!logTimeline) return;
+        await syncTelegramLogs();
         const logs = getLogs();
         
         logs.sort((a, b) => new Date(b.date) - new Date(a.date));
