@@ -42,8 +42,8 @@
         <button class="nav-btn active" data-tab="mapa">
             <i data-lucide="map"></i> <span>Mapa Finca</span>
         </button>
-        <button class="nav-btn" data-tab="simulador">
-            <i data-lucide="calculator"></i> <span>Simulador Paca</span>
+                <button class="nav-btn" data-tab="simulador">
+                    <i data-lucide="calculator"></i> <span>Simuladores</span>
         </button>
         <button class="nav-btn" data-tab="decalogo">
             <i data-lucide="book-open"></i> <span>Decálogo</span>
@@ -450,10 +450,19 @@
             <!-- Sub Navigation for Simulators -->
             <div class="sub-nav">
                 <button class="sub-nav-btn active" data-subtab="sim-paca-tab">
-                    <i data-lucide="box"></i> <span>Simulador Paca Silva</span>
+                    <i data-lucide="box"></i> <span>Paca Silva</span>
                 </button>
                 <button class="sub-nav-btn" data-subtab="sim-platano-tab">
-                    <i data-lucide="leaf"></i> <span>Simulador Platanal</span>
+                    <i data-lucide="leaf"></i> <span>Platanal</span>
+                </button>
+                <button class="sub-nav-btn" data-subtab="sim-aji-tab">
+                    <i data-lucide="flame"></i> <span>Aji</span>
+                </button>
+                <button class="sub-nav-btn" data-subtab="sim-pan-tab">
+                    <i data-lucide="trees"></i> <span>Pan de Palo</span>
+                </button>
+                <button class="sub-nav-btn" data-subtab="sim-mango-tab">
+                    <i data-lucide="apple"></i> <span>Mangos Ingertos</span>
                 </button>
             </div>
 
@@ -683,6 +692,351 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Subtab 3: Simulador de Aji -->
+            <div id="sim-aji-tab" class="subtab-panel hidden">
+                <div class="simulator-layout">
+                    <div class="sim-controls-card card">
+                        <h3>Simulador de Crecimiento - Aji</h3>
+                        <p class="helper-text">Estima la fecha de cosecha segun la variedad y fecha de siembra.</p>
+
+                        <div class="control-group">
+                            <div class="control-label">
+                                <span><i data-lucide="calendar"></i> Fecha de Siembra</span>
+                            </div>
+                            <input type="date" id="aji-fecha-siembra" value="2026-08-29">
+                        </div>
+
+                        <div class="control-group">
+                            <div class="control-label">
+                                <span><i data-lucide="flower-2"></i> Variedad de Aji</span>
+                            </div>
+                            <select id="aji-variedad">
+                                <option value="dulce">Aji Dulce (90-120 dias)</option>
+                                <option value="picante">Aji Picante (100-130 dias)</option>
+                                <option value="jalapeno">Jalapeno (80-100 dias)</option>
+                                <option value="habanero">Habanero (100-120 dias)</option>
+                            </select>
+                        </div>
+
+                        <div class="control-group">
+                            <div class="control-label">
+                                <span><i data-lucide="map-pin"></i> Ubicacion en la Finca</span>
+                            </div>
+                            <select id="aji-ubicacion">
+                                <option value="patio">Patio trasero</option>
+                                <option value="cerca-norte">Cerca norte</option>
+                                <option value="cerca-sur">Cerca sur</option>
+                                <option value="jardin">Jardin aromatico</option>
+                            </select>
+                        </div>
+
+                        <div class="timeline-slider-wrapper">
+                            <input type="range" id="aji-timeline-slider" min="0" max="130" step="1" value="0">
+                            <div class="timeline-markers" id="aji-timeline-markers">
+                                <span class="marker active" data-day="0">Siembra</span>
+                                <span class="marker" data-day="14">Brote</span>
+                                <span class="marker" data-day="45">Crecimiento</span>
+                                <span class="marker" data-day="80">Floracion</span>
+                                <span class="marker" data-day="110">Fruto</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="sim-results-card card">
+                        <h3>Estado del Cultivo de Aji</h3>
+
+                        <div class="metrics-grid">
+                            <div class="metric-card">
+                                <span class="metric-title">Dias Transcurridos</span>
+                                <span class="metric-value" id="aji-dias">0</span>
+                                <span class="metric-status" id="aji-dias-status">Semilla</span>
+                            </div>
+                            <div class="metric-card">
+                                <span class="metric-title">Cosecha Estimada</span>
+                                <span class="metric-value" id="aji-cosecha">--</span>
+                                <span class="metric-subtext" id="aji-cosecha-dias">-- dias restantes</span>
+                            </div>
+                        </div>
+
+                        <div class="metrics-grid" style="margin-top: 1rem;">
+                            <div class="metric-card">
+                                <span class="metric-title">Fase Actual</span>
+                                <span class="metric-value" id="aji-fase" style="font-size: 1rem;">Semilla en suelo</span>
+                            </div>
+                            <div class="metric-card">
+                                <span class="metric-title">Altura Estimada</span>
+                                <span class="metric-value" id="aji-altura">0 cm</span>
+                            </div>
+                        </div>
+
+                        <div class="timeline-visual-preview" style="margin-top: 1rem;">
+                            <div class="stage-info">
+                                <h4 id="aji-stage-title">Fase 1: Germinacion</h4>
+                                <p id="aji-stage-desc">La semilla germina bajo tierra. Se necesita humedad constante y temperatura entre 20-30C.</p>
+                                <div class="alert alert-info" id="aji-stage-alert">
+                                    <i data-lucide="alert-circle"></i>
+                                    <span id="aji-stage-alert-text">Mantener el suelo humedo pero no encharcado.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Subtab 4: Simulador de Pan de Palo -->
+            <div id="sim-pan-tab" class="subtab-panel hidden">
+                <div class="simulator-layout">
+                    <div class="sim-controls-card card">
+                        <h3>Simulador de Crecimiento - Pan de Palo</h3>
+                        <p class="helper-text">El Pan de Palo (Artocarpus camansi) tarda 18-24 meses en producir frutos. Simula el ciclo completo.</p>
+
+                        <div class="control-group">
+                            <div class="control-label">
+                                <span><i data-lucide="calendar"></i> Fecha de Siembra</span>
+                            </div>
+                            <input type="date" id="pan-fecha-siembra" value="2026-08-01">
+                        </div>
+
+                        <div class="control-group">
+                            <div class="control-label">
+                                <span><i data-lucide="thermometer"></i> Temperatura Promedio (C)</span>
+                                <span class="value-display" id="val-pan-temp">27 C</span>
+                            </div>
+                            <input type="range" id="input-pan-temp" min="18" max="35" step="1" value="27">
+                        </div>
+
+                        <div class="control-group">
+                            <div class="control-label">
+                                <span><i data-lucide="droplet"></i> Riego (veces/semana)</span>
+                                <span class="value-display" id="val-pan-riego">3</span>
+                            </div>
+                            <input type="range" id="input-pan-riego" min="0" max="7" step="1" value="3">
+                        </div>
+
+                        <div class="timeline-slider-wrapper">
+                            <input type="range" id="pan-timeline-slider" min="0" max="24" step="1" value="0">
+                            <div class="timeline-markers">
+                                <span class="marker active" data-month="0">Siembra</span>
+                                <span class="marker" data-month="1">Germina</span>
+                                <span class="marker" data-month="3">Plantula</span>
+                                <span class="marker" data-month="6">Trasplante</span>
+                                <span class="marker" data-month="12">Crecimiento</span>
+                                <span class="marker" data-month="18">Madurez</span>
+                                <span class="marker" data-month="24">Cosecha</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="sim-results-card card">
+                        <h3>Estado del Arbol - Pan de Palo</h3>
+
+                        <div class="metrics-grid">
+                            <div class="metric-card">
+                                <span class="metric-title">Meses Transcurridos</span>
+                                <span class="metric-value" id="pan-meses">0</span>
+                                <span class="metric-status" id="pan-meses-status">Semilla</span>
+                            </div>
+                            <div class="metric-card">
+                                <span class="metric-title">Primera Cosecha</span>
+                                <span class="metric-value" id="pan-cosecha">--</span>
+                                <span class="metric-subtext" id="pan-cosecha-dias">-- meses restantes</span>
+                            </div>
+                        </div>
+
+                        <div class="metrics-grid" style="margin-top: 1rem;">
+                            <div class="metric-card">
+                                <span class="metric-title">Fase Actual</span>
+                                <span class="metric-value" id="pan-fase" style="font-size: 1rem;">Semilla recien plantada</span>
+                            </div>
+                            <div class="metric-card">
+                                <span class="metric-title">Altura Estimada</span>
+                                <span class="metric-value" id="pan-altura">0 cm</span>
+                            </div>
+                        </div>
+
+                        <div class="timeline-visual-preview" style="margin-top: 1rem;">
+                            <div class="stage-info">
+                                <h4 id="pan-stage-title">Fase 1: Germinacion (Mes 1)</h4>
+                                <p id="pan-stage-desc">La semilla germina lentamente. Requiere suelo humedo y sombra parcial al 45%.</p>
+                                <div class="alert alert-info" id="pan-stage-alert">
+                                    <i data-lucide="alert-circle"></i>
+                                    <span id="pan-stage-alert-text">Las semillas son recalcitrantes - sembrar inmediatamente tras extraer del fruto.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Subtab 5: Simulador de Mangos Ingertos -->
+            <div id="sim-mango-tab" class="subtab-panel hidden">
+                <div class="section-header" style="margin-bottom: 1.5rem;">
+                    <h2>Mangos Ingertos - Cosecha y Produccion</h2>
+                    <p>Monitorea las 3 matas de mango ingerto. Cuenta regresiva para cosecha y estimacion de produccion.</p>
+                </div>
+
+                <div id="mango-trees-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+                    <!-- Tree 1 -->
+                    <div class="card" style="padding: 1.5rem;" id="mango-tree-1">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                            <h3 style="margin: 0;"><i data-lucide="tree-palm"></i> Mango 1</h3>
+                            <span class="seed-status-badge" style="background: rgba(34,197,94,0.2); color: #22c55e; border-color: rgba(34,197,94,0.4);">Activo</span>
+                        </div>
+                        <div class="metrics-grid" style="grid-template-columns: 1fr 1fr;">
+                            <div class="metric-card">
+                                <span class="metric-title">Cosecha en</span>
+                                <span class="metric-value" style="font-size: 1.8rem; color: var(--accent-gold);" id="mango1-countdown">--</span>
+                                <span class="metric-subtext" id="mango1-countdown-label">dias</span>
+                            </div>
+                            <div class="metric-card">
+                                <span class="metric-title">KG Esperados</span>
+                                <span class="metric-value" style="font-size: 1.8rem; color: var(--accent-green);" id="mango1-kg">--</span>
+                                <span class="metric-subtext">kg estimados</span>
+                            </div>
+                        </div>
+                        <div class="control-group" style="margin-top: 1rem;">
+                            <div class="control-label"><span>Variedad</span></div>
+                            <select id="mango1-variedad" onchange="updateMangoTree(1)">
+                                <option value="haden">Haden (Jun-Ago)</option>
+                                <option value="tommy">Tommy Atkins (Jul-Sep)</option>
+                                <option value="keitt">Keitt (Ago-Oct)</option>
+                                <option value="kent">Kent (Jul-Sep)</option>
+                            </select>
+                        </div>
+                        <div class="control-group">
+                            <div class="control-label"><span>Ultima Cosecha</span></div>
+                            <input type="date" id="mango1-ultima-cosecha" value="2026-06-15" onchange="updateMangoTree(1)">
+                        </div>
+                        <div class="control-group">
+                            <div class="control-label"><span>Tamano del Arbol</span> <span class="value-display" id="val-mango1-tamano">Grande</span></div>
+                            <input type="range" id="mango1-tamano" min="1" max="3" step="1" value="3" oninput="updateMangoTree(1)">
+                        </div>
+                        <div style="margin-top: 1rem; padding: 1rem; background: rgba(255,255,255,0.05); border-radius: 8px;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                                <span style="color: rgba(255,255,255,0.6); font-size: 0.85rem;">Fase Actual</span>
+                                <span id="mango1-fase" style="font-weight: 600; font-size: 0.85rem;">Carga</span>
+                            </div>
+                            <div class="progress-bar" style="height: 8px; background: rgba(255,255,255,0.1); border-radius: 4px; overflow: hidden;">
+                                <div id="mango1-progress" style="height: 100%; background: linear-gradient(90deg, var(--accent-green), var(--accent-gold)); border-radius: 4px; width: 50%; transition: width 0.5s;"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tree 2 -->
+                    <div class="card" style="padding: 1.5rem;" id="mango-tree-2">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                            <h3 style="margin: 0;"><i data-lucide="tree-palm"></i> Mango 2</h3>
+                            <span class="seed-status-badge" style="background: rgba(34,197,94,0.2); color: #22c55e; border-color: rgba(34,197,94,0.4);">Activo</span>
+                        </div>
+                        <div class="metrics-grid" style="grid-template-columns: 1fr 1fr;">
+                            <div class="metric-card">
+                                <span class="metric-title">Cosecha en</span>
+                                <span class="metric-value" style="font-size: 1.8rem; color: var(--accent-gold);" id="mango2-countdown">--</span>
+                                <span class="metric-subtext" id="mango2-countdown-label">dias</span>
+                            </div>
+                            <div class="metric-card">
+                                <span class="metric-title">KG Esperados</span>
+                                <span class="metric-value" style="font-size: 1.8rem; color: var(--accent-green);" id="mango2-kg">--</span>
+                                <span class="metric-subtext">kg estimados</span>
+                            </div>
+                        </div>
+                        <div class="control-group" style="margin-top: 1rem;">
+                            <div class="control-label"><span>Variedad</span></div>
+                            <select id="mango2-variedad" onchange="updateMangoTree(2)">
+                                <option value="haden">Haden (Jun-Ago)</option>
+                                <option value="tommy">Tommy Atkins (Jul-Sep)</option>
+                                <option value="keitt">Keitt (Ago-Oct)</option>
+                                <option value="kent">Kent (Jul-Sep)</option>
+                            </select>
+                        </div>
+                        <div class="control-group">
+                            <div class="control-label"><span>Ultima Cosecha</span></div>
+                            <input type="date" id="mango2-ultima-cosecha" value="2026-06-20" onchange="updateMangoTree(2)">
+                        </div>
+                        <div class="control-group">
+                            <div class="control-label"><span>Tamano del Arbol</span> <span class="value-display" id="val-mango2-tamano">Grande</span></div>
+                            <input type="range" id="mango2-tamano" min="1" max="3" step="1" value="3" oninput="updateMangoTree(2)">
+                        </div>
+                        <div style="margin-top: 1rem; padding: 1rem; background: rgba(255,255,255,0.05); border-radius: 8px;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                                <span style="color: rgba(255,255,255,0.6); font-size: 0.85rem;">Fase Actual</span>
+                                <span id="mango2-fase" style="font-weight: 600; font-size: 0.85rem;">Carga</span>
+                            </div>
+                            <div class="progress-bar" style="height: 8px; background: rgba(255,255,255,0.1); border-radius: 4px; overflow: hidden;">
+                                <div id="mango2-progress" style="height: 100%; background: linear-gradient(90deg, var(--accent-green), var(--accent-gold)); border-radius: 4px; width: 50%; transition: width 0.5s;"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tree 3 -->
+                    <div class="card" style="padding: 1.5rem;" id="mango-tree-3">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                            <h3 style="margin: 0;"><i data-lucide="tree-palm"></i> Mango 3</h3>
+                            <span class="seed-status-badge" style="background: rgba(34,197,94,0.2); color: #22c55e; border-color: rgba(34,197,94,0.4);">Activo</span>
+                        </div>
+                        <div class="metrics-grid" style="grid-template-columns: 1fr 1fr;">
+                            <div class="metric-card">
+                                <span class="metric-title">Cosecha en</span>
+                                <span class="metric-value" style="font-size: 1.8rem; color: var(--accent-gold);" id="mango3-countdown">--</span>
+                                <span class="metric-subtext" id="mango3-countdown-label">dias</span>
+                            </div>
+                            <div class="metric-card">
+                                <span class="metric-title">KG Esperados</span>
+                                <span class="metric-value" style="font-size: 1.8rem; color: var(--accent-green);" id="mango3-kg">--</span>
+                                <span class="metric-subtext">kg estimados</span>
+                            </div>
+                        </div>
+                        <div class="control-group" style="margin-top: 1rem;">
+                            <div class="control-label"><span>Variedad</span></div>
+                            <select id="mango3-variedad" onchange="updateMangoTree(3)">
+                                <option value="haden">Haden (Jun-Ago)</option>
+                                <option value="tommy">Tommy Atkins (Jul-Sep)</option>
+                                <option value="keitt">Keitt (Ago-Oct)</option>
+                                <option value="kent">Kent (Jul-Sep)</option>
+                            </select>
+                        </div>
+                        <div class="control-group">
+                            <div class="control-label"><span>Ultima Cosecha</span></div>
+                            <input type="date" id="mango3-ultima-cosecha" value="2026-06-25" onchange="updateMangoTree(3)">
+                        </div>
+                        <div class="control-group">
+                            <div class="control-label"><span>Tamano del Arbol</span> <span class="value-display" id="val-mango3-tamano">Grande</span></div>
+                            <input type="range" id="mango3-tamano" min="1" max="3" step="1" value="3" oninput="updateMangoTree(3)">
+                        </div>
+                        <div style="margin-top: 1rem; padding: 1rem; background: rgba(255,255,255,0.05); border-radius: 8px;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                                <span style="color: rgba(255,255,255,0.6); font-size: 0.85rem;">Fase Actual</span>
+                                <span id="mango3-fase" style="font-weight: 600; font-size: 0.85rem;">Carga</span>
+                            </div>
+                            <div class="progress-bar" style="height: 8px; background: rgba(255,255,255,0.1); border-radius: 4px; overflow: hidden;">
+                                <div id="mango3-progress" style="height: 100%; background: linear-gradient(90deg, var(--accent-green), var(--accent-gold)); border-radius: 4px; width: 50%; transition: width 0.5s;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Total Production Summary -->
+                <div class="card" style="padding: 1.5rem; margin-top: 1.5rem;">
+                    <h3 style="margin-bottom: 1rem;">Resumen de Produccion Mangos</h3>
+                    <div class="metrics-grid" style="grid-template-columns: repeat(3, 1fr);">
+                        <div class="metric-card">
+                            <span class="metric-title">Total KG Esperados</span>
+                            <span class="metric-value" style="color: var(--accent-green);" id="mango-total-kg">--</span>
+                        </div>
+                        <div class="metric-card">
+                            <span class="metric-title">Proximo a Cosechar</span>
+                            <span class="metric-value" id="mango-next-tree">--</span>
+                            <span class="metric-subtext" id="mango-next-dias">-- dias</span>
+                        </div>
+                        <div class="metric-card">
+                            <span class="metric-title">Temporada</span>
+                            <span class="metric-value" id="mango-temporada">--</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </section>
 
         <!-- Tab 3: Decálogo Agroecológico -->
@@ -862,30 +1216,7 @@
                         </button>
                     </form>
 
-                    <!-- Register Form (first time) -->
-                    <div id="register-section" style="display: none;">
-                        <div class="login-divider">
-                            <span>Primera vez?</span>
-                        </div>
-                        <form id="register-form">
-                            <div class="form-group">
-                                <label for="reg-user">Crear Usuario</label>
-                                <input type="text" id="reg-user" placeholder="Elige un usuario" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="reg-pin">Crear PIN (4-6 digitos)</label>
-                                <input type="password" id="reg-pin" placeholder="Elige un PIN" maxlength="6" pattern="[0-9]{4,6}" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="reg-pin-confirm">Confirmar PIN</label>
-                                <input type="password" id="reg-pin-confirm" placeholder="Confirma tu PIN" maxlength="6" pattern="[0-9]{4,6}" required>
-                            </div>
-                            <div id="register-error" class="login-error" style="display: none;"></div>
-                            <button type="submit" class="btn btn-secondary btn-block">
-                                <i data-lucide="user-plus"></i> Crear Cuenta
-                            </button>
-                        </form>
-                    </div>
+                    <p id="login-error" class="login-error" style="display: none;"></p>
                 </div>
             </div>
 
@@ -900,6 +1231,34 @@
                         <button class="btn btn-secondary btn-sm" id="btn-logout">
                             <i data-lucide="log-out"></i> Cerrar Sesion
                         </button>
+                    </div>
+                </div>
+
+                <!-- Admin Section - Solo visible para master -->
+                <div id="admin-users-section" style="display:none; margin: 1rem 0;">
+                    <div class="card" style="padding: 1.5rem;">
+                        <h3 style="margin-bottom: 1rem;"><i data-lucide="shield"></i> Administrar Usuarios</h3>
+                        <p style="color: rgba(255,255,255,0.6); margin-bottom: 1rem; font-size: 0.9rem;">Solo el administrador puede crear y eliminar usuarios autorizados.</p>
+                        <div id="admin-users-list"></div>
+                        <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.1);">
+                            <h4 style="margin-bottom: 0.75rem; font-size: 0.9rem;">Crear Nuevo Usuario</h4>
+                            <form id="register-form" style="display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: flex-end;">
+                                <div class="form-group" style="flex:1; min-width:120px;">
+                                    <label for="reg-user">Usuario</label>
+                                    <input type="text" id="reg-user" placeholder="Nombre" required>
+                                </div>
+                                <div class="form-group" style="flex:1; min-width:100px;">
+                                    <label for="reg-pin">PIN</label>
+                                    <input type="password" id="reg-pin" placeholder="4-6 digitos" maxlength="6" required>
+                                </div>
+                                <div class="form-group" style="flex:1; min-width:100px;">
+                                    <label for="reg-pin-confirm">Confirmar PIN</label>
+                                    <input type="password" id="reg-pin-confirm" placeholder="Repetir PIN" maxlength="6" required>
+                                </div>
+                                <button type="submit" class="btn btn-primary" style="height: fit-content;">Crear</button>
+                            </form>
+                            <p id="register-error" class="form-error" style="display:none;"></p>
+                        </div>
                     </div>
                 </div>
 

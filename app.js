@@ -1099,6 +1099,311 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // ---------------------------------------------------------
+    // 10b. Simulador de Aji
+    // ---------------------------------------------------------
+    const ajiFechaSiembra = document.getElementById('aji-fecha-siembra');
+    const ajiVariedad = document.getElementById('aji-variedad');
+    const ajiTimelineSlider = document.getElementById('aji-timeline-slider');
+    const ajiTimelineMarkers = document.querySelectorAll('#aji-timeline-markers .marker');
+
+    const ajiVariedades = {
+        'dulce': { name: 'Aji Dulce', min: 90, max: 120, maxHeight: 60 },
+        'picante': { name: 'Aji Picante', min: 100, max: 130, maxHeight: 80 },
+        'jalapeno': { name: 'Jalapeno', min: 80, max: 100, maxHeight: 70 },
+        'habanero': { name: 'Habanero', min: 100, max: 120, maxHeight: 50 }
+    };
+
+    const ajiFases = [
+        { maxDay: 7, title: 'Germinacion', desc: 'La semilla absorbe agua y rompe la testa. El embrion consume las reservas del cotiledon.', alert: 'Mantener suelo humedo. Temperatura ideal: 25-30C.', height: 0 },
+        { maxDay: 21, title: 'Brote y Primeras Hojas', desc: 'El brote emerge del suelo y abre sus primeras hojas verdaderas. Fotosintesis activa.', alert: 'Luz indirecta. No exponer al sol directo aun.', height: 5 },
+        { maxDay: 45, title: 'Crecimiento Vegetativo', desc: 'La planta crece vigorosamente. Se desarrollan ramas y hojas. Forma la estructura base.', alert: 'Fertilizar con compost. Riego regular 2-3 veces/semana.', height: 25 },
+        { maxDay: 80, title: 'Floracion', desc: 'Aparecen las primeras flores blancas. Polinizacion por viento o insectos.', alert: 'No mover la planta. Proteger de vientos fuertes.', height: 45 },
+        { maxDay: 110, title: 'Frutacion', desc: 'Los frutos se forman y crecen. Cambian de verde a su color final.', alert: 'Riego constante. Los frutos necesitan agua para crecer.', height: 55 },
+        { maxDay: 999, title: 'Cosecha', desc: 'Frutos maduros listos para recoleccion. Color uniforme y textura firme.', alert: 'Cosechar con cuidado. Cada planta produce 1-3 kg.', height: 60 }
+    ];
+
+    function updateAjiSimulator() {
+        if (!ajiFechaSiembra || !ajiTimelineSlider) return;
+
+        const siembra = new Date(ajiFechaSiembra.value);
+        const hoy = new Date();
+        const diasTranscurridos = Math.max(0, Math.floor((hoy - siembra) / 86400000));
+        const variedad = ajiVariedades[ajiVariedad.value] || ajiVariedades['dulce'];
+        const diasSlider = parseInt(ajiTimelineSlider.value);
+
+        const diasDisplay = Math.max(diasTranscurridos, diasSlider);
+        const cosechaMin = new Date(siembra);
+        cosechaMin.setDate(cosechaMin.getDate() + variedad.min);
+        const cosechaMax = new Date(siembra);
+        cosechaMax.setDate(cosechaMax.getDate() + variedad.max);
+        const diasRestantes = Math.max(0, variedad.max - diasDisplay);
+
+        let faseIdx = 0;
+        for (let i = 0; i < ajiFases.length; i++) {
+            if (diasDisplay >= ajiFases[i].maxDay && i < ajiFases.length - 1) {
+                faseIdx = i + 1;
+            } else if (diasDisplay < ajiFases[i].maxDay) {
+                faseIdx = i;
+                break;
+            }
+        }
+
+        const fase = ajiFases[faseIdx];
+        const altura = Math.min(variedad.maxHeight, Math.floor((diasDisplay / 120) * variedad.maxHeight));
+        const progreso = Math.min(100, (diasDisplay / variedad.max) * 100);
+
+        document.getElementById('aji-dias').textContent = diasDisplay;
+        document.getElementById('aji-dias-status').textContent = fase.title;
+        document.getElementById('aji-dias-status').className = 'metric-status ' + (progreso >= 100 ? 'status-good' : 'status-warn');
+        document.getElementById('aji-cosecha').textContent = cosechaMax.toLocaleDateString('es-VE', { day: '2-digit', month: 'short', year: 'numeric' });
+        document.getElementById('aji-cosecha-dias').textContent = diasRestantes > 0 ? diasRestantes + ' dias restantes' : '¡Lista para cosecha!';
+        document.getElementById('aji-fase').textContent = fase.title;
+        document.getElementById('aji-altura').textContent = altura + ' cm';
+        document.getElementById('aji-stage-title').textContent = 'Fase ' + (faseIdx + 1) + ': ' + fase.title;
+        document.getElementById('aji-stage-desc').textContent = fase.desc;
+        document.getElementById('aji-stage-alert-text').textContent = fase.alert;
+
+        ajiTimelineMarkers.forEach(marker => {
+            const markerDay = parseInt(marker.getAttribute('data-day'));
+            marker.classList.toggle('active', markerDay <= diasDisplay);
+        });
+    }
+
+    if (ajiFechaSiembra) ajiFechaSiembra.addEventListener('change', updateAjiSimulator);
+    if (ajiVariedad) ajiVariedad.addEventListener('change', updateAjiSimulator);
+    if (ajiTimelineSlider) ajiTimelineSlider.addEventListener('input', updateAjiSimulator);
+    updateAjiSimulator();
+
+    // ---------------------------------------------------------
+    // 10c. Simulador de Pan de Palo
+    // ---------------------------------------------------------
+    const panFechaSiembra = document.getElementById('pan-fecha-siembra');
+    const panTemp = document.getElementById('input-pan-temp');
+    const panRiego = document.getElementById('input-pan-riego');
+    const panTimelineSlider = document.getElementById('pan-timeline-slider');
+    const panTimelineMarkers = document.querySelectorAll('#sim-pan-tab .timeline-markers .marker');
+
+    const panFases = [
+        { maxMonth: 0.5, title: 'Germinacion', desc: 'La semilla recien plantada absorbe agua. El embrion se activa y la radicula emerge.', alert: 'Semillas recalcitrantes: sembrar inmediatamente. No dejar secar.', height: 0 },
+        { maxMonth: 2, title: 'Plantula', desc: 'El brote emerge con los cotiledones subterraneos. Primeras hojas verdaderas.', alert: 'Sombra 45%. Riego suave por neblina. No trasplantar.', height: 10 },
+        { maxMonth: 4, title: 'Crecimiento Inicial', desc: 'La planta crece hojas grandes y fortalece el tallo. Sistema radicular se expande.', alert: 'No exponer al sol directo. Mantener humedad alta.', height: 25 },
+        { maxMonth: 7, title: 'Trasplante (6 meses)', desc: 'Listo para trasplantar al suelo definitivo. Altura minima recomendada: 40cm.', alert: 'Cavar hoyo 40x40x40cm. Mantener cepellon intacto.', height: 45 },
+        { maxMonth: 12, title: 'Crecimiento Activo', desc: 'El arbol crece rapidamente. Copa se expande. Raices penetran el suelo.', alert: 'Abonar con compost de paca. Riego sistematizado.', height: 120 },
+        { maxMonth: 18, title: 'Madurez Vegetativa', desc: 'El arbol alcanza su forma adulta. Comienza a producir flores.', alert: 'Poda de conduccion. Proteger de vientos.', height: 200 },
+        { maxMonth: 24, title: 'Primera Cosecha', desc: 'Frutos maduros con semillas viables. Cada arbol produce 50-100 frutos.', alert: 'Recolectar frutos sobremaduros para semillas.', height: 300 }
+    ];
+
+    function updatePanSimulator() {
+        if (!panFechaSiembra || !panTimelineSlider) return;
+
+        const siembra = new Date(panFechaSiembra.value);
+        const hoy = new Date();
+        const mesesTranscurridos = (hoy - siembra) / (86400000 * 30);
+        const mesesSlider = parseInt(panTimelineSlider.value);
+        const mesesDisplay = Math.max(mesesTranscurridos, mesesSlider);
+
+        const temp = parseInt(panTemp?.value || 27);
+        const riego = parseInt(panRiego?.value || 3);
+        const tempBonus = temp >= 25 && temp <= 30 ? 1.1 : temp >= 20 && temp <= 35 ? 1.0 : 0.85;
+        const riegoBonus = riego >= 3 ? 1.1 : riego >= 2 ? 1.0 : 0.9;
+        const factorCrecimiento = tempBonus * riegoBonus;
+
+        const cosechaDate = new Date(siembra);
+        cosechaDate.setMonth(cosechaDate.getMonth() + 24);
+        const mesesRestantes = Math.max(0, 24 - mesesDisplay);
+
+        let faseIdx = 0;
+        for (let i = 0; i < panFases.length; i++) {
+            if (mesesDisplay >= panFases[i].maxMonth && i < panFases.length - 1) {
+                faseIdx = i + 1;
+            } else if (mesesDisplay < panFases[i].maxMonth) {
+                faseIdx = i;
+                break;
+            }
+        }
+
+        const fase = panFases[faseIdx];
+        const altura = Math.min(300, Math.floor(fase.height * factorCrecimiento));
+        const progreso = Math.min(100, (mesesDisplay / 24) * 100);
+
+        if (document.getElementById('val-pan-temp')) document.getElementById('val-pan-temp').textContent = temp + ' C';
+        if (document.getElementById('val-pan-riego')) document.getElementById('val-pan-riego').textContent = riego;
+
+        document.getElementById('pan-meses').textContent = Math.floor(mesesDisplay);
+        document.getElementById('pan-meses-status').textContent = fase.title;
+        document.getElementById('pan-meses-status').className = 'metric-status ' + (progreso >= 100 ? 'status-good' : 'status-warn');
+        document.getElementById('pan-cosecha').textContent = cosechaDate.toLocaleDateString('es-VE', { month: 'short', year: 'numeric' });
+        document.getElementById('pan-cosecha-dias').textContent = mesesRestantes > 0 ? mesesRestantes + ' meses restantes' : '¡Listo para cosecha!';
+        document.getElementById('pan-fase').textContent = fase.title;
+        document.getElementById('pan-altura').textContent = altura + ' cm';
+        document.getElementById('pan-stage-title').textContent = 'Fase ' + (faseIdx + 1) + ': ' + fase.title;
+        document.getElementById('pan-stage-desc').textContent = fase.desc;
+        document.getElementById('pan-stage-alert-text').textContent = fase.alert;
+
+        if (panTimelineMarkers) {
+            panTimelineMarkers.forEach(marker => {
+                const markerMonth = parseInt(marker.getAttribute('data-month'));
+                marker.classList.toggle('active', markerMonth <= mesesDisplay);
+            });
+        }
+    }
+
+    if (panFechaSiembra) panFechaSiembra.addEventListener('change', updatePanSimulator);
+    if (panTemp) panTemp.addEventListener('input', updatePanSimulator);
+    if (panRiego) panRiego.addEventListener('input', updatePanSimulator);
+    if (panTimelineSlider) panTimelineSlider.addEventListener('input', updatePanSimulator);
+    updatePanSimulator();
+
+    // ---------------------------------------------------------
+    // 10d. Simulador de Mangos Ingertos
+    // ---------------------------------------------------------
+    const mangoData = {
+        haden: { name: 'Haden', months: [6, 7, 8], baseYield: { small: 80, medium: 150, large: 250 } },
+        tommy: { name: 'Tommy Atkins', months: [7, 8, 9], baseYield: { small: 70, medium: 130, large: 220 } },
+        keitt: { name: 'Keitt', months: [8, 9, 10], baseYield: { small: 90, medium: 160, large: 280 } },
+        kent: { name: 'Kent', months: [7, 8, 9], baseYield: { small: 85, medium: 155, large: 260 } }
+    };
+
+    const mangoFases = [
+        { name: 'Reposo', desc: 'El arbol en reposo. Acumula energia para la proxima floracion.', color: '#74c69d' },
+        { name: 'Floracion', desc: 'Aparecen las panojas de flores. Polinizacion por abejas y viento.', color: '#f9c74f' },
+        { name: 'Cuajado', desc: 'Los frutos jovenes se forman. Necesita agua y nutrientes.', color: '#f8961e' },
+        { name: 'Crecimiento', desc: 'Los mangos crecen y engordan. Ellaboracion de azucares activa.', color: '#f3722c' },
+        { name: 'Maduracion', desc: 'El fruto cambia de color. Acumula azucares y aroma. Casi listo.', color: '#e63946' },
+        { name: 'Cosecha', desc: 'Momento ideal de recoleccion. Color uniforme, textura firme.', color: '#22c55e' }
+    ];
+
+    function updateMangoTree(treeNum) {
+        const variedad = document.getElementById('mango' + treeNum + '-variedad');
+        const ultimaCosecha = document.getElementById('mango' + treeNum + '-ultima-cosecha');
+        const tamanoSlider = document.getElementById('mango' + treeNum + '-tamano');
+        const countdown = document.getElementById('mango' + treeNum + '-countdown');
+        const countdownLabel = document.getElementById('mango' + treeNum + '-countdown-label');
+        const kgEl = document.getElementById('mango' + treeNum + '-kg');
+        const faseEl = document.getElementById('mango' + treeNum + '-fase');
+        const progressEl = document.getElementById('mango' + treeNum + '-progress');
+        const tamanoLabel = document.getElementById('val-mango' + treeNum + '-tamano');
+
+        if (!variedad || !ultimaCosecha) return;
+
+        const varKey = variedad.value;
+        const varData = mangoData[varKey];
+        const hoy = new Date();
+        const ultimaDate = new Date(ultimaCosecha.value);
+
+        const tamanoNames = { 1: 'Pequeno', 2: 'Mediano', 3: 'Grande' };
+        const tamanoKeys = { 1: 'small', 2: 'medium', 3: 'large' };
+        const tamano = parseInt(tamanoSlider.value);
+        if (tamanoLabel) tamanoLabel.textContent = tamanoNames[tamano];
+
+        // Calculate next harvest date (always this year or next)
+        let harvestMonth = varData.months[1]; // Middle of season
+        let harvestYear = hoy.getFullYear();
+        const nextHarvest = new Date(harvestYear, harvestMonth, 15);
+        if (nextHarvest < hoy) {
+            harvestYear++;
+            nextHarvest.setFullYear(harvestYear);
+        }
+
+        // Calculate days remaining
+        const diasRestantes = Math.max(0, Math.ceil((nextHarvest - hoy) / 86400000));
+        const diasDesdeCosecha = Math.floor((hoy - ultimaDate) / 86400000);
+
+        // Determine phase based on month
+        const currentMonth = hoy.getMonth() + 1;
+        let faseIdx = 0;
+        if (varData.months.includes(currentMonth)) {
+            faseIdx = 5; // Harvest
+        } else if (varData.months[0] - 1 === currentMonth || varData.months[0] - 2 === currentMonth) {
+            faseIdx = 4; // Maduracion
+        } else if (varData.months[0] - 3 === currentMonth) {
+            faseIdx = 3; // Crecimiento
+        } else if (varData.months[0] - 4 === currentMonth) {
+            faseIdx = 2; // Cuajado
+        } else if (varData.months[0] - 5 === currentMonth || varData.months[0] - 6 === currentMonth) {
+            faseIdx = 1; // Floracion
+        } else {
+            faseIdx = 0; // Reposo
+        }
+
+        const fase = mangoFases[faseIdx];
+        const yieldKey = tamanoKeys[tamano];
+        const kg = varData.baseYield[yieldKey];
+
+        // Progress: how far along in the annual cycle
+        const cycleStart = varData.months[0] - 6;
+        const monthsInCycle = ((currentMonth - cycleStart + 12) % 12);
+        const progress = Math.min(100, (monthsInCycle / 12) * 100);
+
+        // Update UI
+        if (diasRestantes > 0) {
+            countdown.textContent = diasRestantes;
+            countdownLabel.textContent = 'dias restantes';
+        } else if (faseIdx === 5) {
+            countdown.textContent = '!';
+            countdownLabel.textContent = 'Cosecha lista!';
+        } else {
+            countdown.textContent = '~365';
+            countdownLabel.textContent = 'dias para prox. cosecha';
+        }
+
+        kgEl.textContent = kg + ' kg';
+        faseEl.textContent = fase.name;
+        faseEl.style.color = fase.color;
+        if (progressEl) progressEl.style.width = progress + '%';
+
+        // Update total summary
+        updateMangoTotal();
+    }
+
+    function updateMangoTotal() {
+        let totalKg = 0;
+        let nextTree = '';
+        let nextDias = 999;
+
+        for (let i = 1; i <= 3; i++) {
+            const kgEl = document.getElementById('mango' + i + '-kg');
+            const countdownEl = document.getElementById('mango' + i + '-countdown');
+            if (kgEl) {
+                const kg = parseInt(kgEl.textContent) || 0;
+                totalKg += kg;
+            }
+            if (countdownEl) {
+                const dias = parseInt(countdownEl.textContent) || 999;
+                if (dias < nextDias) {
+                    nextDias = dias;
+                    nextTree = 'Mango ' + i;
+                }
+            }
+        }
+
+        const totalEl = document.getElementById('mango-total-kg');
+        const nextTreeEl = document.getElementById('mango-next-tree');
+        const nextDiasEl = document.getElementById('mango-next-dias');
+        const temporadaEl = document.getElementById('mango-temporada');
+
+        if (totalEl) totalEl.textContent = totalKg + ' kg';
+        if (nextTreeEl) nextTreeEl.textContent = nextTree;
+        if (nextDiasEl) nextDiasEl.textContent = nextDias + ' dias';
+        if (temporadaEl) {
+            const mes = new Date().getMonth() + 1;
+            if (mes >= 6 && mes <= 10) temporadaEl.textContent = 'En curso';
+            else if (mes >= 11 || mes <= 2) temporadaEl.textContent = 'Reposo';
+            else temporadaEl.textContent = 'Preparacion';
+        }
+    }
+
+    // Init all 3 trees
+    for (let i = 1; i <= 3; i++) {
+        updateMangoTree(i);
+    }
+
+    // Auto-update countdown every hour
+    setInterval(() => {
+        for (let i = 1; i <= 3; i++) updateMangoTree(i);
+    }, 3600000);
+
     function setTodayDates() {
         const publicDateInput = document.getElementById('log-date');
         const privateDateInput = document.getElementById('priv-date');
@@ -1701,12 +2006,31 @@ function initBlog() {
 }
 
 // ---------------------------------------------------------
-// 15. Bitacora Authentication (Usuario + PIN)
+// 15. Bitacora Authentication (Master User + Authorization)
 // ---------------------------------------------------------
-const AUTH_USER_KEY = 'yagua_auth_user';
-const AUTH_PIN_KEY = 'yagua_auth_pin';
+const AUTH_MASTER_USER = 'neoeliecer';
+const AUTH_MASTER_PIN = '1981';
+const AUTH_USERS_KEY = 'yagua_authorized_users';
+const AUTH_CURRENT_KEY = 'yagua_current_user';
 const SESSION_KEY = 'yagua_session';
-const SESSION_TIMEOUT = 15 * 60 * 1000; // 15 minutos
+const SESSION_TIMEOUT = 30 * 60 * 1000;
+
+function getAuthorizedUsers() {
+    const stored = localStorage.getItem(AUTH_USERS_KEY);
+    if (stored) return JSON.parse(stored);
+    const defaults = [{ user: AUTH_MASTER_USER, pin: AUTH_MASTER_PIN, role: 'master', created: '2026-08-30' }];
+    localStorage.setItem(AUTH_USERS_KEY, JSON.stringify(defaults));
+    return defaults;
+}
+
+function isMaster(user) {
+    return user === AUTH_MASTER_USER;
+}
+
+function isAuthorized(user, pin) {
+    const users = getAuthorizedUsers();
+    return users.find(u => u.user === user && u.pin === pin);
+}
 
 function initBitacoraAuth() {
     const loginForm = document.getElementById('login-form');
@@ -1717,77 +2041,77 @@ function initBitacoraAuth() {
     const bitacoraLogin = document.getElementById('bitacora-login');
     const bitacoraContent = document.getElementById('bitacora-content');
     const btnLogout = document.getElementById('btn-logout');
+    const adminSection = document.getElementById('admin-users-section');
 
-    // Verificar si hay credenciales guardadas
-    const storedUser = localStorage.getItem(AUTH_USER_KEY);
-    const storedPin = localStorage.getItem(AUTH_PIN_KEY);
+    getAuthorizedUsers();
 
-    if (!storedUser || !storedPin) {
-        // Primera vez - mostrar registro
-        registerSection.style.display = 'block';
-    }
-
-    // Verificar sesion activa
     if (checkSession()) {
         showBitacora();
     }
 
-    // Login
     if (loginForm) {
         loginForm.addEventListener('submit', (e) => {
             e.preventDefault();
             const user = document.getElementById('login-user').value.trim();
             const pin = document.getElementById('login-pin').value;
-
-            const savedUser = localStorage.getItem(AUTH_USER_KEY);
-            const savedPin = localStorage.getItem(AUTH_PIN_KEY);
-
-            if (user === savedUser && pin === savedPin) {
+            const found = isAuthorized(user, pin);
+            if (found) {
+                localStorage.setItem(AUTH_CURRENT_KEY, user);
                 createSession();
                 showBitacora();
                 loginError.style.display = 'none';
             } else {
-                loginError.textContent = 'Usuario o PIN incorrectos';
+                loginError.textContent = 'Usuario o PIN incorrectos, o usuario no autorizado';
                 loginError.style.display = 'block';
+                loginError.style.color = '#ef4444';
             }
         });
     }
 
-    // Registro
     if (registerForm) {
         registerForm.addEventListener('submit', (e) => {
             e.preventDefault();
-            const user = document.getElementById('reg-user').value.trim();
-            const pin = document.getElementById('reg-pin').value;
+            const currentUser = localStorage.getItem(AUTH_CURRENT_KEY);
+            if (!isMaster(currentUser)) {
+                registerError.textContent = 'Solo el administrador puede crear usuarios';
+                registerError.style.display = 'block';
+                return;
+            }
+            const newUser = document.getElementById('reg-user').value.trim();
+            const newPin = document.getElementById('reg-pin').value;
             const pinConfirm = document.getElementById('reg-pin-confirm').value;
-
-            if (pin !== pinConfirm) {
+            if (newPin !== pinConfirm) {
                 registerError.textContent = 'Los PINs no coinciden';
                 registerError.style.display = 'block';
                 return;
             }
-
-            if (pin.length < 4 || pin.length > 6) {
+            if (newPin.length < 4 || newPin.length > 6) {
                 registerError.textContent = 'El PIN debe tener 4-6 digitos';
                 registerError.style.display = 'block';
                 return;
             }
-
-            localStorage.setItem(AUTH_USER_KEY, user);
-            localStorage.setItem(AUTH_PIN_KEY, pin);
+            const users = getAuthorizedUsers();
+            if (users.find(u => u.user === newUser)) {
+                registerError.textContent = 'Este usuario ya existe';
+                registerError.style.display = 'block';
+                return;
+            }
+            users.push({ user: newUser, pin: newPin, role: 'user', created: new Date().toISOString().split('T')[0] });
+            localStorage.setItem(AUTH_USERS_KEY, JSON.stringify(users));
             registerSection.style.display = 'none';
             registerError.style.display = 'none';
-            loginError.textContent = 'Cuenta creada. Ahora inicia sesion.';
+            loginError.textContent = 'Usuario ' + newUser + ' creado exitosamente.';
             loginError.style.display = 'block';
             loginError.style.color = '#22c55e';
+            if (adminSection) renderAdminUsers();
         });
     }
 
-    // Logout
     if (btnLogout) {
         btnLogout.addEventListener('click', () => {
             sessionStorage.removeItem(SESSION_KEY);
             sessionStorage.removeItem(SESSION_KEY + '_time');
+            localStorage.removeItem(AUTH_CURRENT_KEY);
             showLogin();
         });
     }
@@ -1795,17 +2119,13 @@ function initBitacoraAuth() {
     function checkSession() {
         const session = sessionStorage.getItem(SESSION_KEY);
         const sessionTime = sessionStorage.getItem(SESSION_KEY + '_time');
-        
         if (!session || !sessionTime) return false;
-        
         const elapsed = Date.now() - parseInt(sessionTime);
         if (elapsed > SESSION_TIMEOUT) {
             sessionStorage.removeItem(SESSION_KEY);
             sessionStorage.removeItem(SESSION_KEY + '_time');
             return false;
         }
-        
-        // Refresh timeout
         sessionStorage.setItem(SESSION_KEY + '_time', Date.now().toString());
         return true;
     }
@@ -1818,7 +2138,12 @@ function initBitacoraAuth() {
     function showBitacora() {
         bitacoraLogin.style.display = 'none';
         bitacoraContent.style.display = 'block';
-        lucide.createIcons();
+        const currentUser = localStorage.getItem(AUTH_CURRENT_KEY);
+        if (adminSection) {
+            adminSection.style.display = isMaster(currentUser) ? 'block' : 'none';
+            if (isMaster(currentUser)) renderAdminUsers();
+        }
+        if (typeof lucide !== 'undefined') lucide.createIcons();
     }
 
     function showLogin() {
@@ -1826,10 +2151,9 @@ function initBitacoraAuth() {
         bitacoraContent.style.display = 'none';
         document.getElementById('login-user').value = '';
         document.getElementById('login-pin').value = '';
-        lucide.createIcons();
+        if (typeof lucide !== 'undefined') lucide.createIcons();
     }
 
-    // Timeout por inactividad
     let inactivityTimer;
     function resetInactivityTimer() {
         clearTimeout(inactivityTimer);
@@ -1838,12 +2162,10 @@ function initBitacoraAuth() {
                 sessionStorage.removeItem(SESSION_KEY);
                 sessionStorage.removeItem(SESSION_KEY + '_time');
                 showLogin();
-                alert('Sesion expirada por inactividad (15 minutos)');
             }
         }, SESSION_TIMEOUT);
     }
 
-    // Detectar actividad del usuario
     ['mousemove', 'keypress', 'click', 'touchstart'].forEach(event => {
         document.addEventListener(event, () => {
             if (checkSession()) resetInactivityTimer();
@@ -1851,7 +2173,29 @@ function initBitacoraAuth() {
     });
 }
 
-// Inicializar auth cuando el DOM este listo
-document.addEventListener('DOMContentLoaded', () => {
-    initBitacoraAuth();
-});
+function renderAdminUsers() {
+    const container = document.getElementById('admin-users-list');
+    if (!container) return;
+    const users = getAuthorizedUsers();
+    container.innerHTML = '';
+    users.forEach(u => {
+        const div = document.createElement('div');
+        div.className = 'admin-user-item';
+        div.style.cssText = 'display:flex;align-items:center;gap:1rem;padding:0.75rem;border-bottom:1px solid rgba(255,255,255,0.1);';
+        div.innerHTML = '<span style="flex:1;font-weight:600;">' + u.user + '</span>' +
+            '<span style="color:' + (u.role === 'master' ? 'var(--accent-gold)' : 'var(--accent-green)') + ';font-size:0.8rem;">' + (u.role === 'master' ? 'Admin' : 'Usuario') + '</span>' +
+            '<span style="color:rgba(255,255,255,0.4);font-size:0.75rem;">' + u.created + '</span>' +
+            (u.role !== 'master' ? '<button class="btn btn-sm" style="color:#ef4444;background:none;border:1px solid #ef4444;" onclick="removeUser(\'' + u.user + '\')">X</button>' : '<span style="width:40px;"></span>');
+        container.appendChild(div);
+    });
+}
+
+function removeUser(user) {
+    if (user === AUTH_MASTER_USER) return;
+    if (!confirm('Eliminar usuario ' + user + '?')) return;
+    const users = getAuthorizedUsers().filter(u => u.user !== user);
+    localStorage.setItem(AUTH_USERS_KEY, JSON.stringify(users));
+    renderAdminUsers();
+}
+
+document.addEventListener('DOMContentLoaded', initBitacoraAuth);
