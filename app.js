@@ -1262,7 +1262,9 @@ document.addEventListener('DOMContentLoaded', () => {
         haden: { name: 'Haden', months: [6, 7, 8], baseYield: { small: 80, medium: 150, large: 250 } },
         tommy: { name: 'Tommy Atkins', months: [7, 8, 9], baseYield: { small: 70, medium: 130, large: 220 } },
         keitt: { name: 'Keitt', months: [8, 9, 10], baseYield: { small: 90, medium: 160, large: 280 } },
-        kent: { name: 'Kent', months: [7, 8, 9], baseYield: { small: 85, medium: 155, large: 260 } }
+        kent: { name: 'Kent', months: [7, 8, 9], baseYield: { small: 85, medium: 155, large: 260 } },
+        hilacha: { name: 'Mango Hilacha', months: [7, 8, 9], baseYield: { small: 60, medium: 110, large: 180 } },
+        mamon: { name: 'Mamon (Memiso)', months: [6, 7, 8, 9], baseYield: { small: 80, medium: 140, large: 200 } }
     };
 
     const mangoFases = [
@@ -1362,6 +1364,7 @@ document.addEventListener('DOMContentLoaded', () => {
         let nextTree = '';
         let nextDias = 999;
 
+        // Original 3 mango trees
         for (let i = 1; i <= 3; i++) {
             const kgEl = document.getElementById('mango' + i + '-kg');
             const countdownEl = document.getElementById('mango' + i + '-countdown');
@@ -1375,6 +1378,30 @@ document.addEventListener('DOMContentLoaded', () => {
                     nextDias = dias;
                     nextTree = 'Mango ' + i;
                 }
+            }
+        }
+
+        // Mamon
+        const mamonKg = document.getElementById('mamon-kg');
+        const mamonCountdown = document.getElementById('mamon-countdown');
+        if (mamonKg) totalKg += parseInt(mamonKg.textContent) || 0;
+        if (mamonCountdown) {
+            const dias = parseInt(mamonCountdown.textContent) || 999;
+            if (dias < nextDias) {
+                nextDias = dias;
+                nextTree = 'Mamón';
+            }
+        }
+
+        // Hilacha (5 trees)
+        const hilachaTotal = document.getElementById('hilacha-total-kg');
+        const hilachaCountdown = document.getElementById('hilacha-countdown');
+        if (hilachaTotal) totalKg += parseInt(hilachaTotal.textContent) || 0;
+        if (hilachaCountdown) {
+            const dias = parseInt(hilachaCountdown.textContent) || 999;
+            if (dias < nextDias) {
+                nextDias = dias;
+                nextTree = 'Hilacha x5';
             }
         }
 
@@ -1402,7 +1429,160 @@ document.addEventListener('DOMContentLoaded', () => {
     // Auto-update countdown every hour
     setInterval(() => {
         for (let i = 1; i <= 3; i++) updateMangoTree(i);
+        updateMamonTree();
+        updateHilachaTree();
     }, 3600000);
+
+    // ---------------------------------------------------------
+    // 10e. Simulador de Mamón
+    // ---------------------------------------------------------
+    function updateMamonTree() {
+        const ultimaCosecha = document.getElementById('mamon-ultima-cosecha');
+        const countdown = document.getElementById('mamon-countdown');
+        const countdownLabel = document.getElementById('mamon-countdown-label');
+        const kgEl = document.getElementById('mamon-kg');
+        const faseEl = document.getElementById('mamon-fase');
+        const progressEl = document.getElementById('mamon-progress');
+
+        if (!ultimaCosecha) return;
+
+        const varData = mangoData.mamon;
+        const hoy = new Date();
+        const ultimaDate = new Date(ultimaCosecha.value);
+
+        let harvestMonth = 7;
+        let harvestYear = hoy.getFullYear();
+        const nextHarvest = new Date(harvestYear, harvestMonth, 15);
+        if (nextHarvest < hoy) {
+            harvestYear++;
+            nextHarvest.setFullYear(harvestYear);
+        }
+
+        const diasRestantes = Math.max(0, Math.ceil((nextHarvest - hoy) / 86400000));
+        const currentMonth = hoy.getMonth() + 1;
+
+        let faseIdx = 0;
+        if (varData.months.includes(currentMonth)) {
+            faseIdx = 5;
+        } else if (currentMonth >= varData.months[0] - 2 && currentMonth < varData.months[0]) {
+            faseIdx = 4;
+        } else if (currentMonth >= varData.months[0] - 4 && currentMonth < varData.months[0] - 2) {
+            faseIdx = 3;
+        } else if (currentMonth >= varData.months[0] - 5 && currentMonth < varData.months[0] - 4) {
+            faseIdx = 2;
+        } else if (currentMonth >= varData.months[0] - 6 && currentMonth < varData.months[0] - 5) {
+            faseIdx = 1;
+        } else {
+            faseIdx = 0;
+        }
+
+        const fase = mangoFases[faseIdx];
+        const kg = varData.baseYield.large;
+
+        if (diasRestantes > 0) {
+            countdown.textContent = diasRestantes;
+            countdownLabel.textContent = 'dias restantes';
+        } else if (faseIdx === 5) {
+            countdown.textContent = '!';
+            countdownLabel.textContent = 'Cosecha lista!';
+        } else {
+            countdown.textContent = '~365';
+            countdownLabel.textContent = 'dias para prox. cosecha';
+        }
+
+        kgEl.textContent = kg + ' kg';
+        faseEl.textContent = fase.name;
+        faseEl.style.color = fase.color;
+
+        const cycleStart = varData.months[0] - 6;
+        const monthsInCycle = ((currentMonth - cycleStart + 12) % 12);
+        const progress = Math.min(100, (monthsInCycle / 12) * 100);
+        if (progressEl) progressEl.style.width = progress + '%';
+
+        updateMangoTotal();
+    }
+
+    // ---------------------------------------------------------
+    // 10f. Simulador de Mango Hilacha (5 árboles)
+    // ---------------------------------------------------------
+    function updateHilachaTree() {
+        const ultimaCosecha = document.getElementById('hilacha-ultima-cosecha');
+        const tamanoSlider = document.getElementById('hilacha-tamano');
+        const countdown = document.getElementById('hilacha-countdown');
+        const countdownLabel = document.getElementById('hilacha-countdown-label');
+        const kgEl = document.getElementById('hilacha-kg');
+        const totalKgEl = document.getElementById('hilacha-total-kg');
+        const faseEl = document.getElementById('hilacha-fase');
+        const progressEl = document.getElementById('hilacha-progress');
+        const tamanoLabel = document.getElementById('val-hilacha-tamano');
+
+        if (!ultimaCosecha) return;
+
+        const varData = mangoData.hilacha;
+        const hoy = new Date();
+        const ultimaDate = new Date(ultimaCosecha.value);
+
+        const tamanoNames = { 1: 'Pequeño', 2: 'Mediano', 3: 'Grande' };
+        const tamanoKeys = { 1: 'small', 2: 'medium', 3: 'large' };
+        const tamano = parseInt(tamanoSlider.value);
+        if (tamanoLabel) tamanoLabel.textContent = tamanoNames[tamano];
+
+        let harvestMonth = varData.months[1];
+        let harvestYear = hoy.getFullYear();
+        const nextHarvest = new Date(harvestYear, harvestMonth, 15);
+        if (nextHarvest < hoy) {
+            harvestYear++;
+            nextHarvest.setFullYear(harvestYear);
+        }
+
+        const diasRestantes = Math.max(0, Math.ceil((nextHarvest - hoy) / 86400000));
+        const currentMonth = hoy.getMonth() + 1;
+
+        let faseIdx = 0;
+        if (varData.months.includes(currentMonth)) {
+            faseIdx = 5;
+        } else if (currentMonth >= varData.months[0] - 2 && currentMonth < varData.months[0]) {
+            faseIdx = 4;
+        } else if (currentMonth >= varData.months[0] - 4 && currentMonth < varData.months[0] - 2) {
+            faseIdx = 3;
+        } else if (currentMonth >= varData.months[0] - 5 && currentMonth < varData.months[0] - 4) {
+            faseIdx = 2;
+        } else if (currentMonth >= varData.months[0] - 6 && currentMonth < varData.months[0] - 5) {
+            faseIdx = 1;
+        } else {
+            faseIdx = 0;
+        }
+
+        const fase = mangoFases[faseIdx];
+        const kg = varData.baseYield[tamanoKeys[tamano]];
+        const totalKg = kg * 5;
+
+        if (diasRestantes > 0) {
+            countdown.textContent = diasRestantes;
+            countdownLabel.textContent = 'dias restantes';
+        } else if (faseIdx === 5) {
+            countdown.textContent = '!';
+            countdownLabel.textContent = 'Cosecha lista!';
+        } else {
+            countdown.textContent = '~365';
+            countdownLabel.textContent = 'dias para prox. cosecha';
+        }
+
+        kgEl.textContent = kg + ' kg';
+        totalKgEl.textContent = totalKg + ' kg';
+        faseEl.textContent = fase.name;
+        faseEl.style.color = fase.color;
+
+        const cycleStart = varData.months[0] - 6;
+        const monthsInCycle = ((currentMonth - cycleStart + 12) % 12);
+        const progress = Math.min(100, (monthsInCycle / 12) * 100);
+        if (progressEl) progressEl.style.width = progress + '%';
+
+        updateMangoTotal();
+    }
+
+    updateMamonTree();
+    updateHilachaTree();
 
     function setTodayDates() {
         const publicDateInput = document.getElementById('log-date');
