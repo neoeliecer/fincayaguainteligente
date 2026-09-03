@@ -15,6 +15,46 @@ export default {
 
         // GET - API endpoints for website
         if (request.method === 'GET') {
+            if (url.pathname === '/api/check-status') {
+                const now = new Date();
+                const day = now.getDate();
+                const alerts = [];
+
+                // Monthly paca alert (1st of each month)
+                if (day === 1) {
+                    const p0 = new Date('2026-09-03');
+                    const p1 = new Date('2027-03-03');
+                    const pp = Math.min(100, Math.max(0, ((now - p0) / (p1 - p0)) * 100));
+                    const pr = Math.ceil((p1 - now) / 86400000);
+                    const monthsLeft = Math.ceil(pr / 30);
+                    alerts.push('Paca Venezuela: ' + pp.toFixed(1) + '% completado. Quedan ~' + monthsLeft + ' meses (' + pr + ' dias) para cosecha.');
+                }
+
+                // Weather alert
+                try {
+                    const wRes = await fetch('https://api.open-meteo.com/v1/forecast?latitude=8.5&longitude=-67.0&current=weather_code,precipitation&daily=precipitation_probability_max&timezone=America/Caracas&forecast_days=1');
+                    const w = await wRes.json();
+                    if (w.current && w.current.weather_code >= 95) {
+                        alerts.push('Tormenta electrica detectada en Yagua.');
+                    }
+                    if (w.daily && w.daily.precipitation_probability_max && w.daily.precipitation_probability_max[0] >= 80) {
+                        alerts.push('Alta probabilidad de lluvia hoy: ' + w.daily.precipitation_probability_max[0] + '%.');
+                    }
+                } catch (e) {}
+
+                // Send alerts if any
+                if (alerts.length > 0) {
+                    const message = 'Notificaciones de Rancho Amelia\n\n' + alerts.map(a => '- ' + a).join('\n\n');
+                    await fetch('https://api.telegram.org/bot' + env.BOT_TOKEN + '/sendMessage', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ chat_id: env.CHAT_ID, text: message })
+                    });
+                }
+
+                return new Response(JSON.stringify({ ok: true, alerts: alerts.length }), { headers: { 'Content-Type': 'application/json', ...corsHeaders } });
+            }
+
             if (url.pathname === '/api/logs') {
                 const entries = await env.BITACORA.get('entries', { type: 'json' }) || [];
                 return new Response(JSON.stringify(entries), { headers: { 'Content-Type': 'application/json', ...corsHeaders } });
@@ -97,24 +137,26 @@ export default {
 
             } else if (textLower === '/status') {
                 var now = new Date();
-                var s0 = new Date('2026-07-28');
-                var s1 = new Date('2027-01-28');
+                var s0 = new Date('2026-09-03');
+                var s1 = new Date('2027-03-03');
                 var pct = Math.min(100, Math.max(0, ((now - s0) / (s1 - s0)) * 100));
                 var rem = Math.ceil((s1 - now) / 86400000);
                 var semillero = await env.BITACORA.get('semillero', { type: 'json' }) || [];
-                r = 'Estado de Rancho Amelia\n\nPaca 1: ' + pct.toFixed(1) + '% (' + rem + ' dias)\nFase: Llenado\nSemillero: ' + semillero.length + ' plantulas\nBlog: Activo';
+                r = 'Estado de Rancho Amelia\n\nPaca Venezuela: ' + pct.toFixed(1) + '% (' + rem + ' dias)\nSemillero: ' + semillero.length + ' plantulas\nBlog: Activo';
 
             } else if (textLower === '/paca') {
                 var now = new Date();
-                var p0 = new Date('2026-07-28');
-                var p1 = new Date('2027-01-28');
+                var p0 = new Date('2026-09-03');
+                var p1 = new Date('2027-03-03');
                 var pp = Math.min(100, Math.max(0, ((now - p0) / (p1 - p0)) * 100));
                 var pr = Math.ceil((p1 - now) / 86400000);
                 var ph = 'Compactacion y Llenado';
-                if (pp >= 30 && pp < 50) ph = 'Fase Termica Activa (~70C)';
+                if (pp >= 15 && pp < 30) ph = 'Fase Termica Temprana';
+                else if (pp >= 30 && pp < 50) ph = 'Fase Termica Activa (~70C)';
                 else if (pp >= 50 && pp < 75) ph = 'Enfriamiento y Maduracion';
-                else if (pp >= 75) ph = 'Maduracion Final';
-                r = 'Paca Digestora Silva #1\n\nProgreso: ' + pp.toFixed(1) + '%\nFase: ' + ph + '\nDias: ~' + pr + '\nCosecha: 28 Enero 2027\n\nUbicacion: Extremo de la cerca norte';
+                else if (pp >= 75 && pp < 100) ph = 'Maduracion Final';
+                else if (pp >= 100) ph = 'LISTA PARA COSECHA';
+                r = 'Paca Venezuela\n\nProgreso: ' + pp.toFixed(1) + '%\nFase: ' + ph + '\nDias restantes: ~' + pr + '\nCosecha: 3 Marzo 2027\n\nUbicacion: Finca Yagua';
 
             } else if (textLower === '/clima') {
                 try {

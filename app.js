@@ -71,7 +71,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // ---------------------------------------------------------
     // 3. Real-Time Active Paca #1 Monitor & Countdown
     // ---------------------------------------------------------
-    const pacaStartDate = new Date('2026-07-28T00:00:00');
+    const pacaStartDate = new Date('2026-09-03T00:00:00');
     const pacaHarvestDate = new Date(pacaStartDate);
     pacaHarvestDate.setMonth(pacaHarvestDate.getMonth() + 6);
 
@@ -87,15 +87,25 @@ document.addEventListener('DOMContentLoaded', () => {
     const realMicrobeText = document.getElementById('real-paca-microbe-text');
 
     function updateRealPacaTimer() {
-        // Paca 1 - Fase actual: Llenado (10% - Primera capa de hojas secas)
-        const pacaProgress = 10;
+        const now = new Date();
+        const elapsed = now - pacaStartDate;
+        const total = pacaHarvestDate - pacaStartDate;
+        const pacaProgress = Math.min(100, Math.max(0, (elapsed / total) * 100));
         
-        if (realPercent) realPercent.textContent = `${pacaProgress}%`;
+        if (realPercent) realPercent.textContent = `${pacaProgress.toFixed(1)}%`;
         if (realProgress) realProgress.style.width = `${pacaProgress}%`;
-        if (realDaysElapsed) realDaysElapsed.textContent = 'Proceso de llenado activo';
         
-        // Fase de llenado - capas de hojarasca
-        if (realStageTitle) realStageTitle.textContent = 'Fase Actual: Llenado de Paca Digestora';
+        const daysElapsed = Math.floor(elapsed / 86400000);
+        if (realDaysElapsed) realDaysElapsed.textContent = `Dia ${daysElapsed} transcurrido`;
+        
+        let phase = 'Fase de Llenado';
+        if (pacaProgress >= 15 && pacaProgress < 30) phase = 'Fase Termica Temprana (~48C)';
+        else if (pacaProgress >= 30 && pacaProgress < 50) phase = 'Fase Termica Activa (~70C)';
+        else if (pacaProgress >= 50 && pacaProgress < 75) phase = 'Enfriamiento y Maduracion';
+        else if (pacaProgress >= 75 && pacaProgress < 100) phase = 'Maduracion Final';
+        else if (pacaProgress >= 100) phase = '¡COSECHA LISTA!';
+        
+        if (realStageTitle) realStageTitle.textContent = 'Fase Actual: ' + phase;
         if (realTemp) realTemp.textContent = 'Temperatura ambiente (~28°C)';
         if (realMicrobeText) realMicrobeText.textContent = 'Primera capa de hojas secas colocada. La paca esta en proceso de construccion. Se continuan agregando capas de material verde y marron.';
         
