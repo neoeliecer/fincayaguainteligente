@@ -75,11 +75,11 @@ export default {
             }
             if (url.pathname === '/api/paca') {
                 const now = new Date();
-                const p0 = new Date('2026-07-28');
-                const p1 = new Date('2027-01-28');
+                const p0 = new Date('2026-09-03');
+                const p1 = new Date('2027-03-03');
                 const pct = Math.min(100, Math.max(0, ((now - p0) / (p1 - p0)) * 100));
                 const rem = Math.ceil((p1 - now) / 86400000);
-                return new Response(JSON.stringify({ percent: pct.toFixed(1), days_remaining: rem, harvest: '2027-01-28' }), { headers: { 'Content-Type': 'application/json', ...corsHeaders } });
+                return new Response(JSON.stringify({ name: 'Paca Venezuela', percent: pct.toFixed(1), days_remaining: rem, harvest: '2027-03-03' }), { headers: { 'Content-Type': 'application/json', ...corsHeaders } });
             }
             return new Response('Rancho Amelia Bot - OK', { status: 200 });
         }
