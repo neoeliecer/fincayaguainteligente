@@ -18,6 +18,7 @@ export default {
             if (url.pathname === '/api/check-status') {
                 const now = new Date();
                 const day = now.getDate();
+                const month = now.getMonth() + 1;
                 const alerts = [];
 
                 // Monthly paca alert (1st of each month)
@@ -28,6 +29,20 @@ export default {
                     const pr = Math.ceil((p1 - now) / 86400000);
                     const monthsLeft = Math.ceil(pr / 30);
                     alerts.push('Paca Venezuela: ' + pp.toFixed(1) + '% completado. Quedan ~' + monthsLeft + ' meses (' + pr + ' dias) para cosecha.');
+                }
+
+                // Mango harvest alerts (June 1 - August 31)
+                if (month >= 6 && month <= 8) {
+                    var mangoStatus = '';
+                    if (month === 6) mangoStatus = 'Mangos Haden y Mamon: empieza la cosecha. Vigilar frutos.';
+                    else if (month === 7) mangoStatus = 'Temporada alta de mangos. Haden, Tommy, Kent, Hilacha: cosecha activa.';
+                    else if (month === 8) mangoStatus = 'Cosecha de mangos Keitt y fin de temporada Haden. Ultimos frutos.';
+                    if (mangoStatus) alerts.push(mangoStatus);
+                }
+
+                // Pre-mango alert (May 15)
+                if (month === 5 && day >= 15) {
+                    alerts.push('Preparacion para temporada de mangos. Los arboles empiezan a florar en junio.');
                 }
 
                 // Weather alert
@@ -133,7 +148,7 @@ export default {
             let r = '';
 
             if (textLower === '/start' || textLower === '/help') {
-                r = 'Hola ' + firstName + '! Bot de Rancho Amelia\n\n/status - Estado general\n/paca - Paca digestora\n/clima - Clima en Yagua\n/semillero - Ver plantulas\n/inventario - Ver bienes\n/bitacora - Ver ultimas entradas\n/log [cat] [nota] - Guardar en bitacora\n\nCategorias: Compost, Siembra, Limpieza, Poda, Riego, Mantenimiento';
+                r = 'Hola ' + firstName + '! Bot de Rancho Amelia\n\n/status - Estado general\n/paca - Paca Venezuela\n/mangos - Estado cosecha mangos\n/clima - Clima en Yagua\n/semillero - Ver plantulas\n/inventario - Ver bienes\n/bitacora - Ver ultimas entradas\n/log [cat] [nota] - Guardar en bitacora\n\nCategorias: Compost, Siembra, Limpieza, Poda, Riego, Mantenimiento';
 
             } else if (textLower === '/status') {
                 var now = new Date();
@@ -157,6 +172,48 @@ export default {
                 else if (pp >= 75 && pp < 100) ph = 'Maduracion Final';
                 else if (pp >= 100) ph = 'LISTA PARA COSECHA';
                 r = 'Paca Venezuela\n\nProgreso: ' + pp.toFixed(1) + '%\nFase: ' + ph + '\nDias restantes: ~' + pr + '\nCosecha: 3 Marzo 2027\n\nUbicacion: Finca Yagua';
+
+            } else if (textLower === '/mangos') {
+                var now = new Date();
+                var month = now.getMonth() + 1;
+                var mangoInfo = '';
+
+                // Haden: Jun-Ago, Tommy: Jul-Sep, Keitt: Ago-Oct, Kent: Jul-Sep, Hilacha: Jul-Sep, Mamon: Jun-Sep
+                var trees = [
+                    { name: 'Mango 1 (Haden)', seasonStart: 6, seasonPeak: 7, seasonEnd: 8, kg: 250 },
+                    { name: 'Mango 2 (Haden)', seasonStart: 6, seasonPeak: 7, seasonEnd: 8, kg: 250 },
+                    { name: 'Mango 3 (Haden)', seasonStart: 6, seasonPeak: 7, seasonEnd: 8, kg: 250 },
+                    { name: 'Mamon (Memiso)', seasonStart: 6, seasonPeak: 7, seasonEnd: 9, kg: 200 },
+                    { name: 'Hilacha x5', seasonStart: 7, seasonPeak: 8, seasonEnd: 9, kg: 900 }
+                ];
+
+                var totalKg = 0;
+                var proximoCosecha = '';
+                var diasProximo = 999;
+
+                trees.forEach(function(tree) {
+                    var harvestDate = new Date(now.getFullYear(), tree.seasonPeak, 15);
+                    if (harvestDate < now) harvestDate.setFullYear(harvestDate.getFullYear() + 1);
+                    var dias = Math.ceil((harvestDate - now) / 86400000);
+
+                    var estado = 'Reposo';
+                    if (month >= tree.seasonStart && month <= tree.seasonEnd) {
+                        estado = 'En temporada';
+                        if (month === tree.seasonPeak) estado = 'Punto maximo';
+                    } else if (month === tree.seasonStart - 1) {
+                        estado = 'Preparacion';
+                    }
+
+                    totalKg += tree.kg;
+                    mangoInfo += '- ' + tree.name + ': ' + estado + ' (' + tree.kg + ' kg)\n';
+
+                    if (dias < diasProximo) {
+                        diasProximo = dias;
+                        proximoCosecha = tree.name;
+                    }
+                });
+
+                r = 'Mangos Ingertos - Rancho Amelia\n\n' + mangoInfo + '\nTotal estimado: ~' + totalKg + ' kg\nProximo a cosechar: ' + proximoCosecha + ' (~' + diasProximo + ' dias)';
 
             } else if (textLower === '/clima') {
                 try {
