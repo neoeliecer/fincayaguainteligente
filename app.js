@@ -1425,6 +1425,9 @@ document.addEventListener('DOMContentLoaded', () => {
         updateMangoTree(i);
     }
 
+    // Expose functions globally for HTML event handlers
+    window.updateMangoTree = updateMangoTree;
+
     // Auto-update countdown every hour
     setInterval(() => {
         for (let i = 1; i <= 3; i++) updateMangoTree(i);
@@ -1582,6 +1585,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     updateMamonTree();
     updateHilachaTree();
+
+    // Expose functions globally for HTML event handlers
+    window.updateMamonTree = updateMamonTree;
+    window.updateHilachaTree = updateHilachaTree;
 
     function setTodayDates() {
         const publicDateInput = document.getElementById('log-date');
