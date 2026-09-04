@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // ---------------------------------------------------------
-    // 3. Real-Time Active Paca #1 Monitor & Countdown
+    // 3. Real-Time Active Paca Venezuela Monitor & Countdown
     // ---------------------------------------------------------
     const pacaStartDate = new Date('2026-09-03T00:00:00');
     const pacaHarvestDate = new Date(pacaStartDate);
@@ -197,17 +197,21 @@ document.addEventListener('DOMContentLoaded', () => {
             { label: 'Humedad Suelo', value: 'Monitoreando por Clima...' }
         ],
         'elem-paca1': [
+            { label: 'Nombre', value: 'Paca Venezuela' },
             { label: 'Método', value: 'Paca Digestora Silva (Fermentación Prensada)' },
             { label: 'Dimensiones', value: '1 m x 1 m x 1 m (1,000 Litros)' },
-            { label: 'Ubicación', value: 'Extremo de la cerca norte' },
-            { label: 'Día de Inicio', value: '28 de Julio de 2026 (Hace 4 días)' },
-            { label: 'Estado actual', value: 'Fase Térmica Temprana (~48°C)' }
+            { label: 'Ubicación', value: 'Finca Yagua' },
+            { label: 'Día de Inicio', value: '3 de Septiembre 2026' },
+            { label: 'Cosecha Estimada', value: '3 de Marzo 2027 (6 meses)' },
+            { label: 'Estado actual', value: 'Compactación y Llenado' }
         ],
         'elem-paca2': [
+            { label: 'Nombre', value: 'Paca Venezuela' },
             { label: 'Método', value: 'Paca Digestora Silva' },
-            { label: 'Ubicación', value: 'Línea de cerca norte, continua a Paca 1' },
-            { label: 'Fase', value: 'Llenado y compactación progresiva' },
-            { label: 'Aporte de Biomasa', value: 'Recibiendo hojarasca diaria de mango' }
+            { label: 'Ubicación', value: 'Finca Yagua' },
+            { label: 'Fase', value: 'Compactación y Llenado' },
+            { label: 'Inicio', value: '3 Septiembre 2026' },
+            { label: 'Cosecha', value: '3 Marzo 2027' }
         ],
         'elem-aromaticas': [
             { label: 'Cultivos instalados', value: 'Albahaca y Orégano' },
@@ -548,10 +552,10 @@ document.addEventListener('DOMContentLoaded', () => {
             details: 'Se realiza desmalezamiento de las áreas cercanas a la casa de habitación. Se contabiliza el dosel forestal: 4 mangos, 1 mamón, 1 moringa y 10 matas de plátano.'
         },
         {
-            date: '2026-07-28',
+            date: '2026-09-03',
             category: 'compost',
-            title: 'Instalación de la Paca Digestora #1',
-            details: 'Se inicia la primera paca digestora de 1 m³ Silva en el extremo de la cerca perimetral norte. Cargada con 250 kg de hojas secas de los mangos y 150 kg de desechos verdes.'
+            title: 'Inicio de la Paca Venezuela',
+            details: 'Se inicia la Paca Venezuela de 1 m³ Silva en la finca Yagua. Inicio: 3 de Septiembre 2026. Cosecha estimada: 3 de Marzo 2027.'
         },
         {
             date: '2026-08-10',
