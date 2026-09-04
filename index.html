@@ -515,9 +515,27 @@
 
                     <!-- Simulation Results -->
                     <div class="sim-results-card card">
-                        <h3>Monitoreo Químico y Físico</h3>
+                        <h3>Monitoreo del Proceso Biológico</h3>
                         
-                        <div class="metrics-grid">
+                        <div class="metrics-grid" style="grid-template-columns: repeat(3, 1fr);">
+                            <div class="metric-card">
+                                <span class="metric-title">Temperatura Núcleo</span>
+                                <span class="metric-value" style="color: #f9c74f;" id="metric-temp">22.0°C</span>
+                                <span class="metric-status status-good" id="metric-temp-status">Reposo / Maduración</span>
+                            </div>
+                            <div class="metric-card">
+                                <span class="metric-title">pH Actual</span>
+                                <span class="metric-value" style="color: #f3722c;" id="metric-ph">6.5</span>
+                                <span class="metric-status" id="metric-ph-status">Neutro (estabilizado)</span>
+                            </div>
+                            <div class="metric-card">
+                                <span class="metric-title">Altura</span>
+                                <span class="metric-value" style="color: #22c55e;" id="metric-altura">100 cm</span>
+                                <span class="metric-subtext">Máximo 180 días: ~48 cm</span>
+                            </div>
+                        </div>
+
+                        <div class="metrics-grid" style="margin-top: 12px;">
                             <div class="metric-card">
                                 <span class="metric-title">Relación C:N Inicial</span>
                                 <span class="metric-value" id="metric-cn">28:1</span>
@@ -528,9 +546,15 @@
                             </div>
 
                             <div class="metric-card">
-                                <span class="metric-title">Humus Esperado (Compost final)</span>
+                                <span class="metric-title">Conversión / Descomposición</span>
+                                <span class="metric-value" style="color: #2d6a4f;" id="metric-conversion">0.0%</span>
+                                <span class="metric-subtext">Fórmula: X(t) = 100·(1-e^(-0.0154·t))</span>
+                            </div>
+
+                            <div class="metric-card">
+                                <span class="metric-title">Humus Esperado</span>
                                 <span class="metric-value" id="metric-humus">145 kg</span>
-                                <p class="metric-subtext">≈ 35% de biomasa inicial</p>
+                                <span class="metric-subtext">≈ 30% de biomasa inicial</span>
                             </div>
                         </div>
 

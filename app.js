@@ -350,7 +350,7 @@ document.addEventListener('DOMContentLoaded', () => {
     fetchLocalWeather();
 
     // ---------------------------------------------------------
-    // 6. Paca Digestora Silva Simulator
+    // 6. Simulador Paca Venezuela - Modelo Matematico
     // ---------------------------------------------------------
     const inputBrown = document.getElementById('input-brown');
     const inputGreen = document.getElementById('input-green');
@@ -368,64 +368,40 @@ document.addEventListener('DOMContentLoaded', () => {
     const stageTitle = document.getElementById('stage-title');
     const stageDesc = document.getElementById('stage-desc');
     const stageAlertText = document.getElementById('stage-alert-text');
-    
-    const stagesData = {
-        0: {
-            title: 'Fase 1: Compactación y Llenado (Día 1)',
-            desc: 'Se colocan capas alternas de hojarasca foliar y residuos orgánicos, apisonando intensamente con un molde de 1 m³ para expulsar el exceso de aire.',
-            alert: 'La alta compresión anaeróbica impide la putrefacción y malos olores.',
-            cubeClass: 'cube-day1',
-            text: 'Día 1 (1 m³)',
-            myceliumOpacity: 0
+
+    // Model metrics
+    const metricTemp = document.getElementById('metric-temp');
+    const metricTempStatus = document.getElementById('metric-temp-status');
+    const metricPH = document.getElementById('metric-ph');
+    const metricPHStatus = document.getElementById('metric-ph-status');
+    const metricAltura = document.getElementById('metric-altura');
+    const metricConversion = document.getElementById('metric-conversion');
+
+    // PACA DIGESTORA SILVA - MATHEMATICAL MODEL
+    // Based on: Cinética de primer orden, balance térmico, dinámica de pH
+    const PACA_MODEL = {
+        tempAmbiente: 22.0,  // °C base
+        k: 0.0154,           // Constante de velocidad (días^-1)
+        // Porcentaje de descomposición: X(t) = 100 * (1 - e^(-k*t))
+        conversion: (t) => 100 * (1 - Math.exp(-0.0154 * t)),
+        // Altura: H(t) = 100 - 52 * (X(t)/100)
+        altura: (t) => 100 - 52 * (PACA_MODEL.conversion(t) / 100),
+        // Temperatura: T(t) = Tamb + 42*(e^(-0.045*t) - e^(-0.25*t))
+        temperatura: (t) => PACA_MODEL.tempAmbiente + 42 * (Math.exp(-0.045 * t) - Math.exp(-0.25 * t)),
+        // pH dinámico: dos tramos
+        pH: (t) => {
+            if (t <= 10) return 6.5 - (3.3 * (t / 10));
+            return 3.2 + 4.0 * (1 - Math.exp(-0.018 * (t - 10)));
         },
-        30: {
-            title: 'Fase 2: Inicio de Fermentación (Mes 1)',
-            desc: 'Las bacterias anaeróbicas inician el desglose de los materiales húmedos. El bloque se asienta y compacta por gravedad. No hay presencia de moscas ni lixiviados.',
-            alert: 'La temperatura interna aumenta ligeramente debido a la actividad microbiana.',
-            cubeClass: 'cube-month1',
-            text: 'Mes 1 (~90cm)',
-            myceliumOpacity: 0.1
+        // Fase del proceso
+        fase: (t) => {
+            if (t <= 10) return { nombre: 'Fermentación Ácida Temprana', desc: 'Levaduras y bacterias anaeróbicas procesan azúcares. El pH cae a ~3.2. Se produce ácido acético y láctico.', color: '#f9c74f' };
+            if (t <= 30) return { nombre: 'Fase Termófila Moderada', desc: 'Actividad microbiana exotérmica. Temperatura sube a ~45°C pero se mantiene bajo 60°C. Nitrógeno retenido.', color: '#f8961e' };
+            if (t <= 60) return { nombre: 'Estabilización y Enfriamiento', desc: 'Se agotan carbohidratos simples. Hongos degradan celulosa y hemicelulosa. pH sube lentamente.', color: '#f3722c' };
+            return { nombre: 'Humificación y Maduración', desc: 'Formación de ácidos húmicos y fúlvicos. Color oscuro. pH se estabiliza entre 6.5-7.2. Madurez técnica.', color: '#22c55e' };
         },
-        60: {
-            title: 'Fase 2: Fermentación Estable (Mes 2)',
-            desc: 'La fermentación anaeróbica ácida descompone la materia blanda. Los olores son ácidos y controlados dentro de la estructura densa.',
-            alert: 'La acidez inhibe la germinación de semillas de malezas invasoras.',
-            cubeClass: 'cube-month1',
-            text: 'Mes 2 (~80cm)',
-            myceliumOpacity: 0.2
-        },
-        90: {
-            title: 'Fase 3: Colonización Fúngica (Mes 3)',
-            desc: 'Los hongos benéficos del suelo penetran el bloque. Aparece el micelio blanco degradando el material leñoso y la celulosa de las hojas de mango y mamón.',
-            alert: 'Los hongos del suelo (actinomicedas) transforman los polímeros complejos en humus.',
-            cubeClass: 'cube-month3',
-            text: 'Mes 3 (~75cm)',
-            myceliumOpacity: 0.7
-        },
-        120: {
-            title: 'Fase 4: Enfriamiento y Maduración (Mes 4)',
-            desc: 'La fermentación disminuye. La fauna del suelo (lombrices e insectos detrívoros) coloniza el compost desde la base del suelo.',
-            alert: 'Se estabilizan los nutrientes móviles como el amonio convirtiéndose en nitratos.',
-            cubeClass: 'cube-month5',
-            text: 'Mes 4 (~70cm)',
-            myceliumOpacity: 0.9
-        },
-        150: {
-            title: 'Fase 4: Estabilización Humificadora (Mes 5)',
-            desc: 'La biomasa original es irreconocible. Se forma una estructura granulada negra y rica. La paca ha reducido su volumen a casi la mitad.',
-            alert: 'Los hongos micorrícicos y benéficos alcanzan su pico biológico.',
-            cubeClass: 'cube-month5',
-            text: 'Mes 5 (~65cm)',
-            myceliumOpacity: 0.6
-        },
-        180: {
-            title: 'Fase 5: Cosecha de Humus Maduro (Mes 6)',
-            desc: 'Compost maduro listo con un olor característico a tierra de bosque húmedo. Relación C:N final balanceada (10:1 - 12:1). Listo para aplicar.',
-            alert: 'Este abono regenera el suelo de tus mangos y potencia tus aromáticas.',
-            cubeClass: 'cube-month6',
-            text: 'Cosecha (~60cm)',
-            myceliumOpacity: 0.2
-        }
+        // Rendimiento: 300 kg biosuelo por tonelada
+        rendimiento: (pesoTotal) => Math.round(pesoTotal * 0.30)
     };
 
     function updateSimulation() {
@@ -435,6 +411,7 @@ document.addEventListener('DOMContentLoaded', () => {
         valBrown.textContent = `${brownKg} kg`;
         valGreen.textContent = `${greenKg} kg`;
         
+        // C:N ratio
         const totalC = (brownKg * 0.26) + (greenKg * 0.08);
         const totalN = (brownKg * 0.002) + (greenKg * 0.015);
         const cnRatio = Math.round(totalC / totalN);
@@ -445,7 +422,7 @@ document.addEventListener('DOMContentLoaded', () => {
             statusText = 'Bajo (Riesgo de mal olor)';
             metricCNStatus.className = 'metric-status status-danger';
         } else if (cnRatio > 35) {
-            statusText = 'Alto (Descomposición muy lenta)';
+            statusText = 'Alto (Descomposición lenta)';
             metricCNStatus.className = 'metric-status status-warning';
         } else {
             statusText = 'Óptimo (Fermentación limpia)';
@@ -456,6 +433,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const pointerPos = Math.max(0, Math.min(100, ((cnRatio - 10) / 50) * 100));
         cnPointer.style.left = `${pointerPos}%`;
         
+        // Humus estimado
         const dryMatter = (brownKg * 0.85) + (greenKg * 0.20);
         const humusKg = Math.round(dryMatter * 0.70);
         metricHumus.textContent = `${humusKg} kg`;
@@ -473,24 +451,66 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
         
-        const stage = stagesData[days];
-        if (stage) {
-            stageTitle.textContent = stage.title;
-            stageDesc.textContent = stage.desc;
-            stageAlertText.textContent = stage.alert;
-            pacaText.textContent = stage.text;
-            pacaCube.className.baseVal = stage.cubeClass;
-            
-            const myceliumDots = document.querySelectorAll('.mycelium');
-            myceliumDots.forEach(dot => {
-                dot.style.opacity = stage.myceliumOpacity;
-                if (stage.myceliumOpacity > 0.5) {
-                    dot.style.animation = 'pulseWater 3s infinite ease-in-out';
-                } else {
-                    dot.style.animation = 'none';
-                }
-            });
+        // Calculate model values at this day
+        const t = days;
+        const conversion = PACA_MODEL.conversion(t);
+        const altura = PACA_MODEL.altura(t);
+        const temp = PACA_MODEL.temperatura(t);
+        const ph = PACA_MODEL.pH(t);
+        const fase = PACA_MODEL.fase(t);
+        
+        // Update stage info
+        stageTitle.textContent = `Día ${t}: ${fase.nombre}`;
+        stageDesc.textContent = fase.desc;
+        
+        // Show alerts based on model
+        let alertMsg = '';
+        if (t === 0) alertMsg = 'Paca prensada. Altura inicial: 100 cm. Volumen: 1 m³.';
+        else if (t <= 10) alertMsg = `pH: ${ph.toFixed(1)} (ácido). El etanol y ácidos desinfectan el material.`;
+        else if (t <= 15) alertMsg = `Temperatura pico: ${temp.toFixed(1)}°C. Bacterias termófilas activas.`;
+        else if (t <= 30) alertMsg = `Temperatura estable: ${temp.toFixed(1)}°C. Nitrógeno retenido (${cnRatio}:1 C:N).`;
+        else if (t <= 60) alertMsg = `Enfriamiento progresivo. pH subiendo a ${ph.toFixed(1)}. Hongos colonizando.`;
+        else if (t <= 120) alertMsg = `Humificación activa. Altura: ${altura.toFixed(0)} cm. Conversión: ${conversion.toFixed(1)}%.`;
+        else alertMsg = `Maduración tardía. Biosuelo formado. pH estable: ${ph.toFixed(1)}. Cosecha en 180 días.`;
+        stageAlertText.textContent = alertMsg;
+        
+        // Update visual cube
+        pacaText.textContent = `${altura.toFixed(0)} cm`;
+        if (pacaCube) {
+            if (days <= 10) pacaCube.className.baseVal = 'cube-day1';
+            else if (days <= 30) pacaCube.className.baseVal = 'cube-month1';
+            else if (days <= 60) pacaCube.className.baseVal = 'cube-month3';
+            else if (days <= 120) pacaCube.className.baseVal = 'cube-month5';
+            else pacaCube.className.baseVal = 'cube-month6';
         }
+        
+        // Update model metrics
+        if (metricTemp) metricTemp.textContent = `${temp.toFixed(1)}°C`;
+        if (metricTempStatus) {
+            if (temp > 40) metricTempStatus.textContent = 'Termófilo activo';
+            else if (temp > 25) metricTempStatus.textContent = 'Mesófilo estable';
+            else metricTempStatus.textContent = 'Reposo / Maduración';
+        }
+        if (metricPH) metricPH.textContent = ph.toFixed(1);
+        if (metricPHStatus) {
+            if (ph < 4) metricPHStatus.textContent = 'Ácido (fermentación)';
+            else if (ph < 6) metricPHStatus.textContent = 'Acidificación moderada';
+            else metricPHStatus.textContent = 'Neutro (estabilizado)';
+        }
+        if (metricAltura) metricAltura.textContent = `${altura.toFixed(0)} cm`;
+        if (metricConversion) metricConversion.textContent = `${conversion.toFixed(1)}%`;
+        
+        // Mycelium animation
+        const myceliumDots = document.querySelectorAll('.mycelium');
+        const myceliumOpacity = days > 60 ? Math.min(1, (days - 60) / 60) * 0.7 : 0;
+        myceliumDots.forEach(dot => {
+            dot.style.opacity = myceliumOpacity;
+            if (myceliumOpacity > 0.3) {
+                dot.style.animation = 'pulseWater 3s infinite ease-in-out';
+            } else {
+                dot.style.animation = 'none';
+            }
+        });
     }
 
     if (inputBrown) inputBrown.addEventListener('input', updateSimulation);
