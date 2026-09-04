@@ -1,7 +1,0 @@
-name = "rancho-amelia-bot"
-main = "worker.js"
-compatibility_date = "2024-01-01"
-
-[vars]
-BOT_TOKEN = "8624188875:AAECId2oLlDVY9YhYZwqKyhJWPqjF4ykcs0"
-CHAT_ID = "6049050670"
