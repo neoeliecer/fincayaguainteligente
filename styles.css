@@ -3361,4 +3361,186 @@ input[type="range"]::-webkit-slider-thumb:hover {
     .sale-price-amount {
         font-size: 2rem;
     }
+    
+    .advantages-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .tech-comparison-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Que es el producto */
+.sale-what-is {
+    background: linear-gradient(135deg, #f0fdf4, #dcfce7);
+    border: 1px solid #bbf7d0;
+    border-radius: 12px;
+    padding: 24px;
+    margin-top: 20px;
+}
+
+.sale-what-is h3 {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #166534;
+    margin-bottom: 12px;
+    font-size: 1.1rem;
+}
+
+.sale-what-is p {
+    color: #1e293b;
+    line-height: 1.6;
+    margin-bottom: 12px;
+}
+
+.sale-what-is p:last-child {
+    margin-bottom: 0;
+}
+
+/* Ventajas */
+.sale-advantages {
+    background: white;
+    border: 1px solid var(--border-light);
+    border-radius: 12px;
+    padding: 24px;
+    margin-top: 20px;
+}
+
+.sale-advantages h3 {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #2d6a4f;
+    margin-bottom: 20px;
+    font-size: 1.1rem;
+}
+
+.advantages-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+}
+
+.advantage-item {
+    display: flex;
+    gap: 12px;
+    padding: 16px;
+    background: #f8fafc;
+    border-radius: 10px;
+    border: 1px solid #e2e8f0;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.advantage-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.advantage-icon {
+    font-size: 1.5rem;
+    flex-shrink: 0;
+}
+
+.advantage-item strong {
+    display: block;
+    color: #1e293b;
+    margin-bottom: 4px;
+    font-size: 0.95rem;
+}
+
+.advantage-item span {
+    font-size: 0.85rem;
+    color: #64748b;
+    line-height: 1.4;
+}
+
+/* Comparativa tecnica */
+.sale-technical-comparison {
+    background: white;
+    border: 1px solid var(--border-light);
+    border-radius: 12px;
+    padding: 24px;
+    margin-top: 20px;
+}
+
+.sale-technical-comparison h3 {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #2d6a4f;
+    margin-bottom: 20px;
+    font-size: 1.1rem;
+}
+
+.tech-comparison-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.tech-comparison-item {
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.tech-comparison-item:first-child {
+    background: #f0fdf4;
+    border: 2px solid #2d6a4f;
+}
+
+.tech-comparison-item:last-child {
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+}
+
+.tech-comparison-item h4 {
+    margin-bottom: 16px;
+    font-size: 1rem;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+
+.tech-list {
+    list-style: none;
+    padding: 0;
+}
+
+.tech-list li {
+    padding: 8px 0;
+    font-size: 0.9rem;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+    position: relative;
+    padding-left: 24px;
+}
+
+.tech-list li:last-child {
+    border-bottom: none;
+}
+
+.tech-list-good li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    color: #2d6a4f;
+    font-weight: bold;
+}
+
+.tech-list-bad li::before {
+    content: '✗';
+    position: absolute;
+    left: 0;
+    color: #dc2626;
+    font-weight: bold;
+}
+
+.tech-conclusion {
+    margin-top: 20px;
+    padding: 16px;
+    background: #f0fdf4;
+    border-radius: 8px;
+    border-left: 4px solid #2d6a4f;
+    font-size: 0.95rem;
+    line-height: 1.6;
 }
