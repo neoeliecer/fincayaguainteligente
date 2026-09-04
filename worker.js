@@ -23,8 +23,8 @@ export default {
 
                 // Monthly paca alert (1st of each month)
                 if (day === 1) {
-                    const p0 = new Date('2026-09-03');
-                    const p1 = new Date('2027-03-03');
+                    const p0 = new Date('2026-09-02');
+                    const p1 = new Date('2027-03-02');
                     const pp = Math.min(100, Math.max(0, ((now - p0) / (p1 - p0)) * 100));
                     const pr = Math.ceil((p1 - now) / 86400000);
                     const monthsLeft = Math.ceil(pr / 30);
@@ -90,8 +90,8 @@ export default {
             }
             if (url.pathname === '/api/paca') {
                 const now = new Date();
-                const p0 = new Date('2026-09-03');
-                const p1 = new Date('2027-03-03');
+                const p0 = new Date('2026-09-02');
+                const p1 = new Date('2027-03-02');
                 const pct = Math.min(100, Math.max(0, ((now - p0) / (p1 - p0)) * 100));
                 const rem = Math.ceil((p1 - now) / 86400000);
                 return new Response(JSON.stringify({ name: 'Paca Venezuela', percent: pct.toFixed(1), days_remaining: rem, harvest: '2027-03-03' }), { headers: { 'Content-Type': 'application/json', ...corsHeaders } });
@@ -152,8 +152,8 @@ export default {
 
             } else if (textLower === '/status') {
                 var now = new Date();
-                var s0 = new Date('2026-09-03');
-                var s1 = new Date('2027-03-03');
+                var s0 = new Date('2026-09-02');
+                var s1 = new Date('2027-03-02');
                 var pct = Math.min(100, Math.max(0, ((now - s0) / (s1 - s0)) * 100));
                 var rem = Math.ceil((s1 - now) / 86400000);
                 var semillero = await env.BITACORA.get('semillero', { type: 'json' }) || [];
@@ -161,8 +161,8 @@ export default {
 
             } else if (textLower === '/paca') {
                 var now = new Date();
-                var p0 = new Date('2026-09-03');
-                var p1 = new Date('2027-03-03');
+                var p0 = new Date('2026-09-02');
+                var p1 = new Date('2027-03-02');
                 var pp = Math.min(100, Math.max(0, ((now - p0) / (p1 - p0)) * 100));
                 var pr = Math.ceil((p1 - now) / 86400000);
                 var ph = 'Compactacion y Llenado';
