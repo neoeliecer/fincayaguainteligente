@@ -6,8 +6,12 @@ recursos/**/*.m4a
 recursos/**/*.mp3
 recursos/Paca_Digestora_Silva.pdf
 
-# PDFs pesados excluidos (mantener solo local)
-# Los PDFs ligeros si se suben
+# Node modules
+node_modules/
+
+# Wrangler/Cloudflare
+.wrangler/
+.dev.vars
 
 # Archivos del sistema
 Thumbs.db
