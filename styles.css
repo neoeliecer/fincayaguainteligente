@@ -3055,3 +3055,310 @@ input[type="range"]::-webkit-slider-thumb:hover {
 .hidden {
     display: none !important;
 }
+
+/* ============================
+   Venta Temprana
+   ============================ */
+
+.nav-btn-sale {
+    background: linear-gradient(135deg, #2d6a4f, #40916c) !important;
+    color: white !important;
+    border-radius: 20px !important;
+    animation: pulse-glow 2s infinite;
+}
+
+@keyframes pulse-glow {
+    0%, 100% { box-shadow: 0 0 5px rgba(45, 106, 79, 0.3); }
+    50% { box-shadow: 0 0 15px rgba(45, 106, 79, 0.6); }
+}
+
+.sale-container {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.sale-product-card {
+    position: relative;
+    background: linear-gradient(135deg, #f0fdf4, #dcfce7);
+    border: 2px solid #2d6a4f;
+}
+
+.sale-badge {
+    position: absolute;
+    top: -10px;
+    right: 20px;
+    background: linear-gradient(135deg, #e63946, #d62828);
+    color: white;
+    padding: 4px 16px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.sale-subtitle {
+    color: var(--text-muted);
+    margin-bottom: 20px;
+}
+
+.sale-features {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin: 20px 0;
+}
+
+.sale-feature {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px;
+    background: white;
+    border-radius: 10px;
+    border: 1px solid var(--border-light);
+}
+
+.sale-feature i {
+    width: 36px;
+    height: 36px;
+    color: #2d6a4f;
+    flex-shrink: 0;
+}
+
+.sale-feature strong {
+    display: block;
+    font-size: 0.9rem;
+    color: var(--text-primary);
+}
+
+.sale-feature span {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+.sale-pricing {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    margin-top: 20px;
+    border: 1px solid var(--border-light);
+}
+
+.sale-price-old {
+    text-align: center;
+    color: var(--text-muted);
+    text-decoration: line-through;
+    margin-bottom: 8px;
+}
+
+.sale-price-new {
+    text-align: center;
+    margin: 16px 0;
+}
+
+.sale-price-label {
+    display: block;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+}
+
+.sale-price-amount {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: #2d6a4f;
+}
+
+.sale-price-amount small {
+    font-size: 1rem;
+    font-weight: 400;
+}
+
+.sale-bonus {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    justify-content: center;
+    padding: 12px;
+    background: #fef3c7;
+    border-radius: 8px;
+    color: #92400e;
+    font-size: 0.9rem;
+}
+
+.sale-form-card h3 {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.sale-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.sale-form .form-group label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 6px;
+}
+
+.sale-form input,
+.sale-form select {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid var(--border-light);
+    border-radius: 8px;
+    font-size: 0.9rem;
+    background: white;
+}
+
+.sale-form input:focus,
+.sale-form select:focus {
+    outline: none;
+    border-color: #2d6a4f;
+    box-shadow: 0 0 0 3px rgba(45, 106, 79, 0.1);
+}
+
+.btn-sale-submit {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(135deg, #2d6a4f, #40916c);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.btn-sale-submit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(45, 106, 79, 0.3);
+}
+
+.sale-success {
+    text-align: center;
+    padding: 30px;
+    color: #2d6a4f;
+}
+
+.sale-success i {
+    width: 60px;
+    height: 60px;
+    margin-bottom: 16px;
+}
+
+.sale-success h4 {
+    font-size: 1.3rem;
+    margin-bottom: 8px;
+}
+
+.sale-pricing-table table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+}
+
+.sale-pricing-table th,
+.sale-pricing-table td {
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 1px solid var(--border-light);
+}
+
+.sale-pricing-table th {
+    background: var(--bg-secondary);
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.sale-pricing-table tr:hover {
+    background: var(--bg-secondary);
+}
+
+.sale-highlight-row {
+    background: #f0fdf4 !important;
+}
+
+.sale-highlight-row td {
+    color: #2d6a4f;
+}
+
+.sale-note {
+    margin-top: 12px;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    font-style: italic;
+}
+
+.sale-comparison h3 {
+    margin-bottom: 20px;
+}
+
+.comparison-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.comparison-item {
+    padding: 20px;
+    border-radius: 12px;
+}
+
+.comparison-old {
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+}
+
+.comparison-new {
+    background: #f0fdf4;
+    border: 2px solid #2d6a4f;
+}
+
+.comparison-item h4 {
+    margin-bottom: 12px;
+    font-size: 1rem;
+}
+
+.comparison-item ul {
+    list-style: none;
+    padding: 0;
+}
+
+.comparison-item li {
+    padding: 6px 0;
+    font-size: 0.9rem;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+}
+
+.comparison-new li:last-child {
+    color: #2d6a4f;
+    font-weight: 700;
+    border-bottom: none;
+}
+
+@media (max-width: 768px) {
+    .comparison-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .sale-features {
+        grid-template-columns: 1fr;
+    }
+    
+    .sale-price-amount {
+        font-size: 2rem;
+    }
+}

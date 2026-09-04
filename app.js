@@ -1860,6 +1860,40 @@ document.addEventListener('DOMContentLoaded', () => {
     renderSemilleroTimeline();
     updateSeedDates();
     initBlog();
+
+    // ---------------------------------------------------------
+    // 15. Venta Temprana - Pre-order Form
+    // ---------------------------------------------------------
+    const preorderForm = document.getElementById('preorder-form');
+    if (preorderForm) {
+        preorderForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const name = document.getElementById('preorder-name').value.trim();
+            const phone = document.getElementById('preorder-phone').value.trim();
+            const qty = document.getElementById('preorder-qty').value;
+            const location = document.getElementById('preorder-location').value.trim();
+            const source = document.getElementById('preorder-source').value;
+
+            if (!name || !phone || !qty) {
+                alert('Por favor completa nombre, teléfono y cantidad.');
+                return;
+            }
+
+            const order = {
+                name, phone, qty, location, source,
+                date: new Date().toLocaleDateString('es-VE'),
+                status: 'pendiente'
+            };
+
+            let orders = JSON.parse(localStorage.getItem('yagua_preorders') || '[]');
+            orders.push(order);
+            localStorage.setItem('yagua_preorders', JSON.stringify(orders));
+
+            preorderForm.style.display = 'none';
+            document.getElementById('preorder-success').style.display = 'block';
+            if (typeof lucide !== 'undefined') lucide.createIcons();
+        });
+    }
 });
 
 // ---------------------------------------------------------

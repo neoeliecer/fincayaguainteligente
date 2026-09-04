@@ -63,6 +63,9 @@
         <button class="nav-btn" data-tab="blog">
             <i data-lucide="pen-line"></i> <span>Blog</span>
         </button>
+        <button class="nav-btn nav-btn-sale" data-tab="venta">
+            <i data-lucide="shopping-cart"></i> <span>Venta Temprana</span>
+        </button>
     </nav>
 
     <!-- Main Content Container -->
@@ -2490,6 +2493,192 @@
                     </button>
                     <div id="blog-modal-body">
                         <!-- Contenido del post -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tab: Venta Temprana -->
+        <section id="venta" class="tab-panel">
+            <div class="section-header">
+                <h2>Venta Temprana - Abono Fermentado</h2>
+                <p>Reserva tu abono orgánico fermentado de la Paca Venezuela. Precio especial por anticipado.</p>
+            </div>
+
+            <div class="sale-container">
+                <!-- Producto -->
+                <div class="card sale-product-card">
+                    <div class="sale-badge">LANZAMIENTO</div>
+                    <h3>Abono Fermentado Paca Venezuela</h3>
+                    <p class="sale-subtitle">Humus de alta calidad producido mediante fermentación anaeróbica - Sistema Paca Digestora Silva</p>
+                    
+                    <div class="sale-features">
+                        <div class="sale-feature">
+                            <i data-lucide="leaf"></i>
+                            <div>
+                                <strong>100% Orgánico</strong>
+                                <span>Sin químicos ni additives</span>
+                            </div>
+                        </div>
+                        <div class="sale-feature">
+                            <i data-lucide="flask-conical"></i>
+                            <div>
+                                <strong>Fermentado Anaeróbicamente</strong>
+                                <span>Mucho más nutrientes que compost común</span>
+                            </div>
+                        </div>
+                        <div class="sale-feature">
+                            <i data-lucide="calendar"></i>
+                            <div>
+                                <strong>6 Meses de Maduración</strong>
+                                <span>Cosecha: Marzo 2027</span>
+                            </div>
+                        </div>
+                        <div class="sale-feature">
+                            <i data-lucide="sprout"></i>
+                            <div>
+                                <strong>Microbiología Viva</strong>
+                                <span>Bacterias y hongos benéficos activos</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="sale-pricing">
+                        <div class="sale-price-old">
+                            <span>Precio regular: <strong>$0.50 - $0.65 / kg</strong></span>
+                        </div>
+                        <div class="sale-price-new">
+                            <span class="sale-price-label">Precio de Lanzamiento:</span>
+                            <span class="sale-price-amount">$0.35 <small>/kg</small></span>
+                        </div>
+                        <div class="sale-bonus">
+                            <i data-lucide="gift"></i>
+                            <span><strong>Bono:</strong> Primeros 20 clientes reciben 10% extra gratis</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Formulario Lista de Espera -->
+                <div class="card sale-form-card">
+                    <h3><i data-lucide="clipboard-list"></i> Lista de Espera</h3>
+                    <p>Regístrate para reservar tu abono al precio de lanzamiento. Sin compromiso de pago hasta que esté listo.</p>
+                    
+                    <form id="preorder-form" class="sale-form">
+                        <div class="form-group">
+                            <label>Nombre completo</label>
+                            <input type="text" id="preorder-name" placeholder="Tu nombre" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Teléfono / WhatsApp</label>
+                            <input type="tel" id="preorder-phone" placeholder="+58 4XX XXX XXXX" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Cantidad estimada (kg)</label>
+                            <select id="preorder-qty" required>
+                                <option value="">Selecciona...</option>
+                                <option value="5">5 kg - $1.75</option>
+                                <option value="10">10 kg - $3.50</option>
+                                <option value="20">20 kg - $7.00</option>
+                                <option value="30">30 kg - $10.50</option>
+                                <option value="50">50 kg (saco) - $17.50</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Ubicación de entrega</label>
+                            <input type="text" id="preorder-location" placeholder="Ej: El Toco, Yagua">
+                        </div>
+                        <div class="form-group">
+                            <label>¿Cómo te enteraste?</label>
+                            <select id="preorder-source">
+                                <option value="">Selecciona...</option>
+                                <option value="amigo">Recomendado por amigo</option>
+                                <option value="redes">Redes sociales</option>
+                                <option value="whatsapp">WhatsApp</option>
+                                <option value="otro">Otro</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn-sale-submit">
+                            <i data-lucide="check-circle"></i> Reservar mi Lote
+                        </button>
+                    </form>
+
+                    <div id="preorder-success" class="sale-success" style="display: none;">
+                        <i data-lucide="check-circle"></i>
+                        <h4>¡Reserva registrada!</h4>
+                        <p>Tu lote está reservado. Te contactaremos cuando el abono esté listo (Marzo 2027).</p>
+                    </div>
+                </div>
+
+                <!-- Tabla de Precios -->
+                <div class="card sale-pricing-table">
+                    <h3><i data-lucide="table"></i> Tabla de Precios</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Presentación</th>
+                                <th>Precio</th>
+                                <th>Por kg</th>
+                                <th>Ahorro</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Saco pequeño (5 kg)</td>
+                                <td>$1.75</td>
+                                <td>$0.35</td>
+                                <td>30% vs mercado</td>
+                            </tr>
+                            <tr>
+                                <td>Saco mediano (10-12 kg)</td>
+                                <td>$3.50</td>
+                                <td>$0.35</td>
+                                <td>30% vs mercado</td>
+                            </tr>
+                            <tr>
+                                <td>Saco grande (20 kg)</td>
+                                <td>$7.00</td>
+                                <td>$0.35</td>
+                                <td>30% vs mercado</td>
+                            </tr>
+                            <tr>
+                                <td>Saco industrial (50 kg)</td>
+                                <td>$17.50</td>
+                                <td>$0.35</td>
+                                <td>30% vs mercado</td>
+                            </tr>
+                            <tr class="sale-highlight-row">
+                                <td><strong>Venta temprana (20 kg)</strong></td>
+                                <td><strong>$6.30</strong></td>
+                                <td><strong>$0.315</strong></td>
+                                <td><strong>37% vs mercado</strong></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <p class="sale-note">* Precio de lanzamiento válido solo para los primeros 20 clientes en la lista de espera.</p>
+                </div>
+
+                <!-- Comparación -->
+                <div class="card sale-comparison">
+                    <h3><i data-lucide="bar-chart-3"></i> ¿Por qué nuestro abono?</h3>
+                    <div class="comparison-grid">
+                        <div class="comparison-item comparison-old">
+                            <h4>Tierra Abonada Común</h4>
+                            <ul>
+                                <li>Fermentación incompleta</li>
+                                <li>Pocos microorganismos</li>
+                                <li>Nutrientes limitados</li>
+                                <li>$2.00 - $4.20 / kg</li>
+                            </ul>
+                        </div>
+                        <div class="comparison-item comparison-new">
+                            <h4>Nuestro Abono Fermentado</h4>
+                            <ul>
+                                <li>Fermentación anaeróbica completa</li>
+                                <li>Microbiología diversa y activa</li>
+                                <li>Nutrientes biodisponibles</li>
+                                <li><strong>$0.35 / kg (lanzamiento)</strong></li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
