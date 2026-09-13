@@ -3776,3 +3776,56 @@ input[type="range"]::-webkit-slider-thumb:hover {
     from { opacity: 0; transform: translateX(-50%) translateY(20px); }
     to { opacity: 1; transform: translateX(-50%) translateY(0); }
 }
+
+/* ============================
+   Videoteca
+   ============================ */
+
+.videoteca-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.videoteca-card {
+    overflow: hidden;
+    padding: 0;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.videoteca-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+}
+
+.videoteca-embed {
+    position: relative;
+    padding-bottom: 56.25%;
+    height: 0;
+    overflow: hidden;
+}
+
+.videoteca-embed iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.videoteca-info {
+    padding: 16px;
+}
+
+.videoteca-info h4 {
+    font-size: 1rem;
+    color: var(--text-primary);
+    margin-bottom: 6px;
+}
+
+.videoteca-info p {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    margin-bottom: 12px;
+    line-height: 1.4;
+}
