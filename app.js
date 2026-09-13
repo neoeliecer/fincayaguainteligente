@@ -2439,3 +2439,51 @@ function removeUser(user) {
 }
 
 document.addEventListener('DOMContentLoaded', initBitacoraAuth);
+
+// ---------------------------------------------------------
+// Share Functions - Compartir en Redes Sociales
+// ---------------------------------------------------------
+function shareWhatsApp(text, url) {
+    const message = encodeURIComponent(text + '\n\n' + url);
+    window.open('https://wa.me/?text=' + message, '_blank');
+}
+
+function shareFacebook(url) {
+    window.open('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(url), '_blank');
+}
+
+function shareTwitter(text, url) {
+    const tweet = encodeURIComponent(text);
+    window.open('https://twitter.com/intent/tweet?text=' + tweet + '&url=' + encodeURIComponent(url), '_blank');
+}
+
+function copyLink(url) {
+    navigator.clipboard.writeText(url).then(() => {
+        showToast('Enlace copiado al portapapeles');
+    }).catch(() => {
+        // Fallback for older browsers
+        const input = document.createElement('input');
+        input.value = url;
+        document.body.appendChild(input);
+        input.select();
+        document.execCommand('copy');
+        document.body.removeChild(input);
+        showToast('Enlace copiado al portapapeles');
+    });
+}
+
+function showToast(message) {
+    const existing = document.querySelector('.share-toast');
+    if (existing) existing.remove();
+    
+    const toast = document.createElement('div');
+    toast.className = 'share-toast';
+    toast.textContent = message;
+    document.body.appendChild(toast);
+    
+    setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transition = 'opacity 0.3s';
+        setTimeout(() => toast.remove(), 300);
+    }, 2000);
+}
