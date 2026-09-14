@@ -2205,10 +2205,10 @@ document.addEventListener('DOMContentLoaded', () => {
         { id: 'mkt-7', name: 'Platano Bellaco', emoji: '🍌', category: 'frutales', price: 0.40, unit: 'lb', description: 'Platano mas dulce, ideal para platanutres y maduros. Disponible todo el ano.', availability: 'Disponible todo el ano', availClass: 'avail-now' },
         // Tuberculos
         { id: 'mkt-8', name: 'Niquinqui', emoji: '🥔', category: 'tuberculos', price: 1.00, unit: 'lb', description: 'Tuberculo criollo, textura harinosa y sabor terroso. Disponible todo el ano.', availability: 'Disponible todo el ano', availClass: 'avail-now' },
-        // Organicos (Biosuelo)
-        { id: 'mkt-9', name: 'Biosuelo (1 kg)', emoji: '🌱', category: 'organicos', price: 0.50, unit: 'paquete', description: 'Abono organico fermentado de la Paca Digestora. Rico en microorganismos.', availability: 'Disponible ahora', availClass: 'avail-now' },
-        { id: 'mkt-10', name: 'Biosuelo (5 kg)', emoji: '🌱', category: 'organicos', price: 2.00, unit: 'paquete', description: 'Abono organico fermentado. Paquete para huertos familiares.', availability: 'Disponible ahora', availClass: 'avail-now' },
-        { id: 'mkt-11', name: 'Biosuelo (10 kg)', emoji: '🌱', category: 'organicos', price: 3.50, unit: 'paquete', description: 'Abono organico fermentado. Paquete para cultivos grandes.', availability: 'Disponible ahora', availClass: 'avail-now' }
+        // Organicos (Abono Organico)
+        { id: 'mkt-9', name: 'Abono Organico (1 kg)', emoji: '🌱', category: 'organicos', price: 0.80, unit: 'kg', description: 'Abono organico fermentado de la Paca Digestora. Rico en microorganismos y nutrientes.', availability: 'Disponible ahora', availClass: 'avail-now' },
+        { id: 'mkt-10', name: 'Abono Organico (5 kg)', emoji: '🌱', category: 'organicos', price: 4.00, unit: 'kg', description: 'Abono organico fermentado. Paquete para huertos familiares.', availability: 'Disponible ahora', availClass: 'avail-now' },
+        { id: 'mkt-11', name: 'Abono Organico (10 kg)', emoji: '🌱', category: 'organicos', price: 8.00, unit: 'kg', description: 'Abono organico fermentado. Paquete para cultivos grandes.', availability: 'Disponible ahora', availClass: 'avail-now' }
     ];
 
     function getCart() {
@@ -2397,7 +2397,7 @@ document.addEventListener('DOMContentLoaded', () => {
             message += ' finca *Casa Yagua Inteligente* finca';
 
             // Build WhatsApp URL
-            const phone = '584143083934';
+            const phone = '584228789110';
             const encoded = encodeURIComponent(message);
             const whatsappUrl = `https://wa.me/${phone}?text=${encoded}`;
 
