@@ -1982,6 +1982,203 @@ document.addEventListener('DOMContentLoaded', () => {
     initBlog();
 
     // ---------------------------------------------------------
+    // 14b. Catalogo de la Finca
+    // ---------------------------------------------------------
+    const CATALOGO_KEY = 'yagua_catalogo';
+    let catalogoAdminMode = false;
+
+    const defaultCatalogo = [
+        // Arboles Frutales
+        { id: 'cat-1', nombre: 'Hilacha', categoria: 'Arboles Frutales', cantidad: 6, descripcion: 'Arboles grandes de mango hilacha, variedad criolla de fruta dulce y fibrosa.' },
+        { id: 'cat-2', nombre: 'Mamón (Memiso)', categoria: 'Arboles Frutales', cantidad: 2, descripcion: 'Arboles grandes de mamon, fruta acida ideal para jugos y dulces.' },
+        { id: 'cat-3', nombre: 'Mango Ingerto', categoria: 'Arboles Frutales', cantidad: 3, descripcion: 'Mangos ingertados con variedades mejoradas (Haden, Tommy, Keitt).' },
+        { id: 'cat-4', nombre: 'Níspero', categoria: 'Arboles Frutales', cantidad: 1, descripcion: 'Arbol grande de nispero, fruta dulce y aromatico.' },
+        // Plantas Medicinales
+        { id: 'cat-5', nombre: 'Sábila', categoria: 'Plantas Medicinales', cantidad: 2, descripcion: 'Aloe vera, planta medicinal para uso externo e interno.' },
+        { id: 'cat-6', nombre: 'Malojillo', categoria: 'Plantas Medicinales', cantidad: 1, descripcion: 'Hierba medicinal similar al limoncillo, uso culinario y medicinales.' },
+        { id: 'cat-7', nombre: 'Orégano Francés', categoria: 'Plantas Medicinales', cantidad: 2, descripcion: 'Hierba aromatica de sabor intenso, ideal para cocinar y remedios.' },
+        // Aromaticas
+        { id: 'cat-8', nombre: 'Albahaca', categoria: 'Aromaticas', cantidad: 1, descripcion: 'Hierba aromatica essential para cocina y repelente natural.' }
+    ];
+
+    function getCatalogo() {
+        const stored = localStorage.getItem(CATALOGO_KEY);
+        if (stored) return JSON.parse(stored);
+        localStorage.setItem(CATALOGO_KEY, JSON.stringify(defaultCatalogo));
+        return [...defaultCatalogo];
+    }
+
+    function saveCatalogo(items) {
+        localStorage.setItem(CATALOGO_KEY, JSON.stringify(items));
+        syncToWorker('catalogo', items);
+    }
+
+    function renderCatalogo() {
+        const items = getCatalogo();
+        const arboles = items.filter(i => i.categoria === 'Arboles Frutales');
+        const medicinales = items.filter(i => i.categoria === 'Plantas Medicinales');
+        const aromaticas = items.filter(i => i.categoria === 'Aromaticas');
+
+        renderCatalogoCategory('catalogo-arboles', arboles);
+        renderCatalogoCategory('catalogo-medicinales', medicinales);
+        renderCatalogoCategory('catalogo-aromaticas', aromaticas);
+    }
+
+    function renderCatalogoCategory(containerId, items) {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+        container.innerHTML = '';
+
+        if (items.length === 0) {
+            container.innerHTML = '<p class="panel-placeholder">No hay plantas en esta categoría.</p>';
+            return;
+        }
+
+        items.forEach(item => {
+            const card = document.createElement('div');
+            card.className = 'catalogo-card';
+            card.innerHTML = `
+                <span class="catalogo-card-qty">${item.cantidad} uds</span>
+                <h4>${item.nombre}</h4>
+                ${item.descripcion ? `<div class="catalogo-card-desc"><p>${item.descripcion}</p></div>` : ''}
+                ${catalogoAdminMode ? `
+                    <button class="catalogo-edit-btn" data-id="${item.id}" title="Editar">
+                        <i data-lucide="pencil" style="width:14px;height:14px;"></i>
+                    </button>
+                    <button class="catalogo-delete-btn" data-id="${item.id}" title="Eliminar">
+                        <i data-lucide="trash-2" style="width:14px;height:14px;"></i>
+                    </button>
+                ` : ''}
+            `;
+            container.appendChild(card);
+        });
+
+        // Admin button listeners
+        container.querySelectorAll('.catalogo-edit-btn').forEach(btn => {
+            btn.addEventListener('click', () => editCatalogoItem(btn.dataset.id));
+        });
+        container.querySelectorAll('.catalogo-delete-btn').forEach(btn => {
+            btn.addEventListener('click', () => deleteCatalogoItem(btn.dataset.id));
+        });
+
+        if (typeof lucide !== 'undefined') lucide.createIcons();
+    }
+
+    function editCatalogoItem(id) {
+        const items = getCatalogo();
+        const item = items.find(i => i.id === id);
+        if (!item) return;
+
+        document.getElementById('catalogo-edit-id').value = id;
+        document.getElementById('catalogo-nombre').value = item.nombre;
+        document.getElementById('catalogo-categoria').value = item.categoria;
+        document.getElementById('catalogo-cantidad').value = item.cantidad;
+        document.getElementById('catalogo-descripcion').value = item.descripcion || '';
+        document.getElementById('catalogo-form-title').textContent = 'Editar Planta';
+        document.getElementById('catalogo-form-modal').style.display = 'block';
+    }
+
+    function deleteCatalogoItem(id) {
+        if (!confirm('¿Eliminar esta planta del catálogo?')) return;
+        const items = getCatalogo().filter(i => i.id !== id);
+        saveCatalogo(items);
+        renderCatalogo();
+    }
+
+    // Catalogo admin login
+    const catalogoAdminBtn = document.getElementById('catalogo-admin-btn');
+    const catalogoAdminLogin = document.getElementById('catalogo-admin-login');
+    const catalogoAdminActions = document.getElementById('catalogo-admin-actions');
+    const catalogoLoginBtn = document.getElementById('catalogo-login-btn');
+    const catalogoCancelBtn = document.getElementById('catalogo-cancel-btn');
+    const catalogoAddBtn = document.getElementById('catalogo-add-btn');
+    const catalogoFormModal = document.getElementById('catalogo-form-modal');
+    const catalogoForm = document.getElementById('catalogo-form');
+    const catalogoFormCancel = document.getElementById('catalogo-form-cancel');
+
+    if (catalogoAdminBtn) {
+        catalogoAdminBtn.addEventListener('click', () => {
+            if (catalogoAdminMode) {
+                catalogoAdminMode = false;
+                catalogoAdminBtn.classList.remove('catalogo-admin-btn-active');
+                catalogoAdminBtn.innerHTML = '<i data-lucide="lock"></i> Modo Administrador';
+                catalogoAdminActions.style.display = 'none';
+                catalogoFormModal.style.display = 'none';
+                renderCatalogo();
+                if (typeof lucide !== 'undefined') lucide.createIcons();
+            } else {
+                catalogoAdminLogin.style.display = 'block';
+            }
+        });
+    }
+
+    if (catalogoLoginBtn) {
+        catalogoLoginBtn.addEventListener('click', () => {
+            const user = document.getElementById('catalogo-admin-user').value.trim();
+            const pin = document.getElementById('catalogo-admin-pin').value.trim();
+            if (user === 'neoeliecer' && pin === '1981') {
+                catalogoAdminMode = true;
+                catalogoAdminLogin.style.display = 'none';
+                catalogoAdminActions.style.display = 'block';
+                catalogoAdminBtn.classList.add('catalogo-admin-btn-active');
+                catalogoAdminBtn.innerHTML = '<i data-lucide="unlock"></i> Salir del Modo Admin';
+                renderCatalogo();
+                if (typeof lucide !== 'undefined') lucide.createIcons();
+            } else {
+                alert('Credenciales incorrectas.');
+            }
+        });
+    }
+
+    if (catalogoCancelBtn) {
+        catalogoCancelBtn.addEventListener('click', () => {
+            catalogoAdminLogin.style.display = 'none';
+        });
+    }
+
+    if (catalogoAddBtn) {
+        catalogoAddBtn.addEventListener('click', () => {
+            document.getElementById('catalogo-edit-id').value = '';
+            document.getElementById('catalogo-form').reset();
+            document.getElementById('catalogo-form-title').textContent = 'Agregar Planta al Catálogo';
+            document.getElementById('catalogo-cantidad').value = 1;
+            catalogoFormModal.style.display = 'block';
+        });
+    }
+
+    if (catalogoFormCancel) {
+        catalogoFormCancel.addEventListener('click', () => {
+            catalogoFormModal.style.display = 'none';
+        });
+    }
+
+    if (catalogoForm) {
+        catalogoForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const editId = document.getElementById('catalogo-edit-id').value;
+            const nombre = document.getElementById('catalogo-nombre').value.trim();
+            const categoria = document.getElementById('catalogo-categoria').value;
+            const cantidad = parseInt(document.getElementById('catalogo-cantidad').value) || 1;
+            const descripcion = document.getElementById('catalogo-descripcion').value.trim();
+
+            let items = getCatalogo();
+
+            if (editId) {
+                items = items.map(i => i.id === editId ? { ...i, nombre, categoria, cantidad, descripcion } : i);
+            } else {
+                items.push({ id: 'cat-' + Date.now(), nombre, categoria, cantidad, descripcion });
+            }
+
+            saveCatalogo(items);
+            catalogoFormModal.style.display = 'none';
+            renderCatalogo();
+        });
+    }
+
+    // Initial render
+    renderCatalogo();
+
+    // ---------------------------------------------------------
     // 15. Venta Temprana - Pre-order Form
     // ---------------------------------------------------------
     const preorderForm = document.getElementById('preorder-form');

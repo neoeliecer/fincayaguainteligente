@@ -3075,6 +3075,129 @@ input[type="range"]::-webkit-slider-thumb:hover {
 }
 
 /* ============================
+   Catalogo de la Finca
+   ============================ */
+
+.catalogo-category {
+    margin-bottom: 32px;
+}
+
+.catalogo-category h3 {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1.1rem;
+    color: var(--text-primary);
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--accent-green);
+}
+
+.catalogo-category h3 i {
+    width: 22px;
+    height: 22px;
+    color: var(--accent-green);
+}
+
+.catalogo-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 16px;
+}
+
+.catalogo-card {
+    position: relative;
+    padding: 16px;
+    border-radius: 12px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-light);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.catalogo-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+}
+
+.catalogo-card-qty {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: var(--accent-green);
+    color: #fff;
+    font-size: 0.8rem;
+    font-weight: 700;
+    padding: 2px 10px;
+    border-radius: 10px;
+}
+
+.catalogo-card h4 {
+    font-size: 1rem;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+    padding-right: 50px;
+}
+
+.catalogo-card p {
+    font-size: 0.82rem;
+    color: var(--text-secondary);
+    line-height: 1.4;
+    margin: 0;
+}
+
+.catalogo-card-desc {
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px solid var(--border-light);
+}
+
+.catalogo-admin-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.catalogo-edit-btn,
+.catalogo-delete-btn {
+    position: absolute;
+    bottom: 12px;
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+}
+
+.catalogo-edit-btn {
+    right: 40px;
+    background: rgba(59,130,246,0.1);
+    color: #3b82f6;
+}
+
+.catalogo-edit-btn:hover {
+    background: rgba(59,130,246,0.2);
+}
+
+.catalogo-delete-btn {
+    right: 8px;
+    background: rgba(239,68,68,0.1);
+    color: #ef4444;
+}
+
+.catalogo-delete-btn:hover {
+    background: rgba(239,68,68,0.2);
+}
+
+.catalogo-admin-btn-active {
+    background: var(--accent-green) !important;
+    color: #fff !important;
+}
+
+/* ============================
    Venta Temprana
    ============================ */
 

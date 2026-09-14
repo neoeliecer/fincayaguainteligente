@@ -57,6 +57,9 @@
         <button class="nav-btn" data-tab="semillero">
             <i data-lucide="sprout"></i> <span>Semillero</span>
         </button>
+        <button class="nav-btn" data-tab="catalogo">
+            <i data-lucide="trees"></i> <span>Catálogo</span>
+        </button>
         <button class="nav-btn" data-tab="biblioteca">
             <i data-lucide="book-open"></i> <span>Biblioteca</span>
         </button>
@@ -1633,6 +1636,93 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </section>
+
+        <!-- Tab: Catalogo de la Finca -->
+        <section id="catalogo" class="tab-panel">
+            <div class="section-header">
+                <h2>Catálogo de la Finca</h2>
+                <p>Inventario permanente de árboles frutales, plantas medicinales y aromáticas.</p>
+                <button class="btn btn-secondary btn-sm" id="catalogo-admin-btn" style="margin-top: 8px;">
+                    <i data-lucide="lock"></i> Modo Administrador
+                </button>
+            </div>
+
+            <!-- Admin Login Panel -->
+            <div id="catalogo-admin-login" class="card" style="display: none; max-width: 400px; margin: 0 auto 24px;">
+                <h4>Acceso Administrador</h4>
+                <div class="form-group">
+                    <label>Usuario</label>
+                    <input type="text" id="catalogo-admin-user" placeholder="Usuario master">
+                </div>
+                <div class="form-group">
+                    <label>PIN</label>
+                    <input type="password" id="catalogo-admin-pin" placeholder="PIN de 4 digitos">
+                </div>
+                <div style="display: flex; gap: 8px;">
+                    <button class="btn btn-primary" id="catalogo-login-btn">Entrar</button>
+                    <button class="btn btn-secondary" id="catalogo-cancel-btn">Cancelar</button>
+                </div>
+            </div>
+
+            <!-- Admin Add Button -->
+            <div id="catalogo-admin-actions" style="display: none; margin-bottom: 16px;">
+                <button class="btn btn-primary" id="catalogo-add-btn">
+                    <i data-lucide="plus"></i> Agregar Planta
+                </button>
+                <span style="font-size: 0.8rem; color: var(--text-muted); margin-left: 8px;">Modo edicion activo</span>
+            </div>
+
+            <!-- Add/Edit Form Modal -->
+            <div id="catalogo-form-modal" class="card" style="display: none; max-width: 500px; margin: 0 auto 24px;">
+                <h4 id="catalogo-form-title">Agregar Planta al Catálogo</h4>
+                <form id="catalogo-form">
+                    <input type="hidden" id="catalogo-edit-id">
+                    <div class="form-group">
+                        <label>Nombre</label>
+                        <input type="text" id="catalogo-nombre" placeholder="Ej: Mango Haden, Sábila..." required>
+                    </div>
+                    <div class="form-group">
+                        <label>Categoría</label>
+                        <select id="catalogo-categoria" required>
+                            <option value="Arboles Frutales">Árboles Frutales</option>
+                            <option value="Plantas Medicinales">Plantas Medicinales</option>
+                            <option value="Aromaticas">Aromáticas</option>
+                            <option value="Otros">Otros</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Cantidad</label>
+                        <input type="number" id="catalogo-cantidad" min="1" value="1" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Descripción</label>
+                        <textarea id="catalogo-descripcion" rows="2" placeholder="Detalles sobre la planta..."></textarea>
+                    </div>
+                    <div style="display: flex; gap: 8px;">
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                        <button type="button" class="btn btn-secondary" id="catalogo-form-cancel">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Category: Arboles Frutales -->
+            <div class="catalogo-category">
+                <h3><i data-lucide="trees"></i> Árboles Frutales</h3>
+                <div class="catalogo-grid" id="catalogo-arboles"></div>
+            </div>
+
+            <!-- Category: Plantas Medicinales -->
+            <div class="catalogo-category">
+                <h3><i data-lucide="heart-pulse"></i> Plantas Medicinales</h3>
+                <div class="catalogo-grid" id="catalogo-medicinales"></div>
+            </div>
+
+            <!-- Category: Aromaticas -->
+            <div class="catalogo-category">
+                <h3><i data-lucide="flower-2"></i> Aromáticas</h3>
+                <div class="catalogo-grid" id="catalogo-aromaticas"></div>
             </div>
         </section>
 
