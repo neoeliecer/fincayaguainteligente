@@ -69,6 +69,10 @@
         <button class="nav-btn" data-tab="blog">
             <i data-lucide="pen-line"></i> <span>Blog</span>
         </button>
+        <button class="nav-btn nav-btn-market" data-tab="mercado">
+            <i data-lucide="shopping-cart"></i> <span>Mercado</span>
+            <span class="cart-count-badge" id="cart-count" style="display: none;">0</span>
+        </button>
         <button class="nav-btn nav-btn-sale" data-tab="venta">
             <i data-lucide="shopping-cart"></i> <span>Venta Temprana</span>
         </button>
@@ -2940,6 +2944,55 @@
                     </div>
                 </div>
             </div>
+        </section>
+
+        <!-- Tab: Mercado Organico -->
+        <section id="mercado" class="tab-panel">
+            <div class="section-header">
+                <h2>Mercado Organico Ecologico</h2>
+                <p>Productos frescos directo de nuestra finca. Cosecha responsable y sustentable.</p>
+            </div>
+
+            <!-- Filtros de Categoria -->
+            <div class="market-filters">
+                <button class="market-filter-btn active" data-market-filter="all">Todos</button>
+                <button class="market-filter-btn" data-market-filter="frutales">Frutales</button>
+                <button class="market-filter-btn" data-market-filter="tuberculos">Tuberculos</button>
+                <button class="market-filter-btn" data-market-filter="organicos">Organicos</button>
+            </div>
+
+            <!-- Grid de Productos -->
+            <div class="market-grid" id="market-grid">
+                <!-- Se llena con JS -->
+            </div>
+
+            <!-- Carrito de Compras -->
+            <div class="cart-panel" id="cart-panel">
+                <div class="cart-header">
+                    <h3><i data-lucide="shopping-cart"></i> Mi Carrito</h3>
+                    <button class="cart-close-btn" id="cart-close-btn">
+                        <i data-lucide="x"></i>
+                    </button>
+                </div>
+                <div class="cart-items" id="cart-items">
+                    <p class="cart-empty">Tu carrito esta vacio</p>
+                </div>
+                <div class="cart-footer" id="cart-footer" style="display: none;">
+                    <div class="cart-total">
+                        <span>Total:</span>
+                        <span id="cart-total-price">$0.00</span>
+                    </div>
+                    <button class="btn btn-primary cart-checkout-btn" id="cart-checkout-btn">
+                        <i data-lucide="message-circle"></i> Pedir por WhatsApp
+                    </button>
+                </div>
+            </div>
+
+            <!-- Boton flotante del carrito (mobile) -->
+            <button class="cart-float-btn" id="cart-float-btn">
+                <i data-lucide="shopping-cart"></i>
+                <span class="cart-float-count" id="cart-float-count" style="display: none;">0</span>
+            </button>
         </section>
 
         <!-- Tab: Venta Temprana -->

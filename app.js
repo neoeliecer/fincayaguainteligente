@@ -2179,6 +2179,237 @@ document.addEventListener('DOMContentLoaded', () => {
     renderCatalogo();
 
     // ---------------------------------------------------------
+    // 14c. Mercado Organico - Tienda Virtual
+    // ---------------------------------------------------------
+    const CART_KEY = 'yagua_cart';
+    const marketGrid = document.getElementById('market-grid');
+    const cartPanel = document.getElementById('cart-panel');
+    const cartItems = document.getElementById('cart-items');
+    const cartFooter = document.getElementById('cart-footer');
+    const cartTotalPrice = document.getElementById('cart-total-price');
+    const cartCount = document.getElementById('cart-count');
+    const cartFloatCount = document.getElementById('cart-float-count');
+    const cartFloatBtn = document.getElementById('cart-float-btn');
+    const cartCloseBtn = document.getElementById('cart-close-btn');
+    const cartCheckoutBtn = document.getElementById('cart-checkout-btn');
+
+    // Productos del Mercado con disponibilidad estimada
+    const marketProducts = [
+        // Frutales
+        { id: 'mkt-1', name: 'Mango Hilacha', emoji: '🥭', category: 'frutales', price: 0.75, unit: 'lb', description: 'Mango criollo dulce y fibroso, sabor intenso. Cosecha jun-sep.', availability: 'Disponible jun-sep', availClass: 'avail-soon' },
+        { id: 'mkt-2', name: 'Mango Ingerto (Haden)', emoji: '🥭', category: 'frutales', price: 1.00, unit: 'lb', description: 'Mango ingerto de pulpa firme y sabor equilibrado. Cosecha jun-ago.', availability: 'Disponible jun-ago', availClass: 'avail-soon' },
+        { id: 'mkt-3', name: 'Mango Ingerto (Tommy)', emoji: '🥭', category: 'frutales', price: 1.00, unit: 'lb', description: 'Mango rojo brillante, jugoso y aromatico. Cosecha jul-sep.', availability: 'Disponible jul-sep', availClass: 'avail-soon' },
+        { id: 'mkt-4', name: 'Mango Ingerto (Keitt)', emoji: '🇲🇽', category: 'frutales', price: 1.00, unit: 'lb', description: 'Mango verde que madura a naranja, carnoso y dulce. Cosecha ago-oct.', availability: 'Disponible ago-oct', availClass: 'avail-later' },
+        { id: 'mkt-5', name: 'Mamon (Memiso)', emoji: '🔴', category: 'frutales', price: 0.50, unit: 'lb', description: 'Fruta acida y refrescante, ideal para jugos y dulces. Cosecha jun-sep.', availability: 'Disponible jun-sep', availClass: 'avail-soon' },
+        { id: 'mkt-6', name: 'Platano Grande', emoji: '🍌', category: 'frutales', price: 0.35, unit: 'lb', description: 'Platano de employment ideal para hervir, freir o asar. Disponible todo el ano.', availability: 'Disponible todo el ano', availClass: 'avail-now' },
+        { id: 'mkt-7', name: 'Platano Bellaco', emoji: '🍌', category: 'frutales', price: 0.40, unit: 'lb', description: 'Platano mas dulce, ideal para platanutres y maduros. Disponible todo el ano.', availability: 'Disponible todo el ano', availClass: 'avail-now' },
+        // Tuberculos
+        { id: 'mkt-8', name: 'Niquinqui', emoji: '🥔', category: 'tuberculos', price: 1.00, unit: 'lb', description: 'Tuberculo criollo, textura harinosa y sabor terroso. Disponible todo el ano.', availability: 'Disponible todo el ano', availClass: 'avail-now' },
+        // Organicos (Biosuelo)
+        { id: 'mkt-9', name: 'Biosuelo (1 kg)', emoji: '🌱', category: 'organicos', price: 0.50, unit: 'paquete', description: 'Abono organico fermentado de la Paca Digestora. Rico en microorganismos.', availability: 'Disponible ahora', availClass: 'avail-now' },
+        { id: 'mkt-10', name: 'Biosuelo (5 kg)', emoji: '🌱', category: 'organicos', price: 2.00, unit: 'paquete', description: 'Abono organico fermentado. Paquete para huertos familiares.', availability: 'Disponible ahora', availClass: 'avail-now' },
+        { id: 'mkt-11', name: 'Biosuelo (10 kg)', emoji: '🌱', category: 'organicos', price: 3.50, unit: 'paquete', description: 'Abono organico fermentado. Paquete para cultivos grandes.', availability: 'Disponible ahora', availClass: 'avail-now' }
+    ];
+
+    function getCart() {
+        const stored = localStorage.getItem(CART_KEY);
+        return stored ? JSON.parse(stored) : [];
+    }
+
+    function saveCart(cart) {
+        localStorage.setItem(CART_KEY, JSON.stringify(cart));
+        updateCartUI();
+    }
+
+    function addToCart(productId) {
+        const product = marketProducts.find(p => p.id === productId);
+        if (!product) return;
+
+        let cart = getCart();
+        const existing = cart.find(item => item.id === productId);
+
+        if (existing) {
+            existing.qty += 1;
+        } else {
+            cart.push({ id: product.id, name: product.name, emoji: product.emoji, price: product.price, unit: product.unit, qty: 1 });
+        }
+
+        saveCart(cart);
+        showToast(`${product.emoji} ${product.name} agregado al carrito`);
+    }
+
+    function removeFromCart(productId) {
+        let cart = getCart().filter(item => item.id !== productId);
+        saveCart(cart);
+    }
+
+    function updateCartQty(productId, delta) {
+        let cart = getCart();
+        const item = cart.find(i => i.id === productId);
+        if (!item) return;
+
+        item.qty += delta;
+        if (item.qty <= 0) {
+            cart = cart.filter(i => i.id !== productId);
+        }
+
+        saveCart(cart);
+    }
+
+    function updateCartUI() {
+        const cart = getCart();
+        const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
+        const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+
+        // Update badges
+        if (cartCount) {
+            cartCount.textContent = totalItems;
+            cartCount.style.display = totalItems > 0 ? 'flex' : 'none';
+        }
+        if (cartFloatCount) {
+            cartFloatCount.textContent = totalItems;
+            cartFloatCount.style.display = totalItems > 0 ? 'flex' : 'none';
+        }
+
+        // Update cart items
+        if (cartItems) {
+            if (cart.length === 0) {
+                cartItems.innerHTML = '<p class="cart-empty">Tu carrito esta vacio</p>';
+                cartFooter.style.display = 'none';
+            } else {
+                cartItems.innerHTML = cart.map(item => `
+                    <div class="cart-item">
+                        <div class="cart-item-emoji">${item.emoji}</div>
+                        <div class="cart-item-info">
+                            <div class="cart-item-name">${item.name}</div>
+                            <div class="cart-item-price">$${item.price.toFixed(2)} / ${item.unit}</div>
+                        </div>
+                        <div class="cart-item-controls">
+                            <button class="cart-qty-btn" onclick="window.marketUpdateQty('${item.id}', -1)">-</button>
+                            <span class="cart-item-qty">${item.qty}</span>
+                            <button class="cart-qty-btn" onclick="window.marketUpdateQty('${item.id}', 1)">+</button>
+                        </div>
+                        <button class="cart-item-remove" onclick="window.marketRemoveItem('${item.id}')" title="Eliminar">
+                            <i data-lucide="trash-2" style="width:14px;height:14px;"></i>
+                        </button>
+                    </div>
+                `).join('');
+                cartFooter.style.display = 'block';
+                if (typeof lucide !== 'undefined') lucide.createIcons();
+            }
+        }
+
+        // Update total
+        if (cartTotalPrice) {
+            cartTotalPrice.textContent = `$${totalPrice.toFixed(2)}`;
+        }
+    }
+
+    // Expose functions globally for onclick handlers
+    window.marketAddToCart = addToCart;
+    window.marketRemoveItem = removeFromCart;
+    window.marketUpdateQty = updateCartQty;
+
+    // Render market products
+    function renderMarketProducts(filter = 'all') {
+        if (!marketGrid) return;
+
+        const filtered = filter === 'all' ? marketProducts : marketProducts.filter(p => p.category === filter);
+
+        marketGrid.innerHTML = filtered.map(product => `
+            <div class="market-card" data-category="${product.category}">
+                <div class="market-card-img" style="background: linear-gradient(135deg, ${getCategoryColor(product.category)}15, ${getCategoryColor(product.category)}05);">
+                    <span>${product.emoji}</span>
+                    <span class="market-card-availability ${product.availClass}">${product.availability}</span>
+                </div>
+                <div class="market-card-body">
+                    <h4>${product.name}</h4>
+                    <p class="market-card-desc">${product.description}</p>
+                    <div class="market-card-footer">
+                        <div class="market-card-price">$${product.price.toFixed(2)} <span class="market-card-unit">/ ${product.unit}</span></div>
+                        <button class="market-add-btn" onclick="window.marketAddToCart('${product.id}')">
+                            <i data-lucide="plus"></i> Agregar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+
+        if (typeof lucide !== 'undefined') lucide.createIcons();
+    }
+
+    function getCategoryColor(category) {
+        const colors = {
+            frutales: '#f59e0b',
+            tuberculos: '#8b5a2b',
+            organicos: '#22c55e'
+        };
+        return colors[category] || '#6b7280';
+    }
+
+    // Filter buttons
+    document.querySelectorAll('.market-filter-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.market-filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            renderMarketProducts(btn.dataset.marketFilter);
+        });
+    });
+
+    // Cart open/close
+    if (cartFloatBtn) {
+        cartFloatBtn.addEventListener('click', () => cartPanel.classList.add('open'));
+    }
+
+    // Open cart when clicking nav
+    document.querySelector('[data-tab="mercado"]')?.addEventListener('click', () => {
+        setTimeout(() => cartPanel.classList.add('open'), 300);
+    });
+
+    if (cartCloseBtn) {
+        cartCloseBtn.addEventListener('click', () => cartPanel.classList.remove('open'));
+    }
+
+    // WhatsApp checkout
+    if (cartCheckoutBtn) {
+        cartCheckoutBtn.addEventListener('click', () => {
+            const cart = getCart();
+            if (cart.length === 0) return;
+
+            const totalQty = cart.reduce((sum, item) => sum + item.qty, 0);
+            const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+
+            let message = '*Mercado Organico - Rancho Amelia*\n';
+            message += '________________________________\n\n';
+            message += '*Mi Pedido:*\n\n';
+
+            cart.forEach(item => {
+                message += `${item.emoji} *${item.name}*\n`;
+                message += `   ${item.qty} ${item.unit}(s) x $${item.price.toFixed(2)} = *$${(item.qty * item.price).toFixed(2)}*\n\n`;
+            });
+
+            message += '________________________________\n';
+            message += `TOTAL: *${totalQty} items / $${totalPrice.toFixed(2)}*\n\n`;
+            message += '- Solicito disponibilidad y confirmo el pedido.\n';
+            message += '- Enviar a: [tu direccion]\n';
+            message += '________________________________\n';
+            message += '*Casa Yagua Inteligente*';
+            message += ' finca *Casa Yagua Inteligente* finca';
+
+            // Build WhatsApp URL
+            const phone = '584143083934';
+            const encoded = encodeURIComponent(message);
+            const whatsappUrl = `https://wa.me/${phone}?text=${encoded}`;
+
+            window.open(whatsappUrl, '_blank');
+        });
+    }
+
+    // Initial render
+    renderMarketProducts();
+    updateCartUI();
+
+    // ---------------------------------------------------------
     // 15. Venta Temprana - Pre-order Form
     // ---------------------------------------------------------
     const preorderForm = document.getElementById('preorder-form');
