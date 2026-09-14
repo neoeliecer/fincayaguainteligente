@@ -3461,16 +3461,19 @@ input[type="range"]::-webkit-slider-thumb:hover {
 .comparison-old {
     background: #fef2f2;
     border: 1px solid #fecaca;
+    color: #1a1a1a;
 }
 
 .comparison-new {
     background: #f0fdf4;
     border: 2px solid #2d6a4f;
+    color: #1a1a1a;
 }
 
 .comparison-item h4 {
     margin-bottom: 12px;
     font-size: 1rem;
+    color: #1a1a1a;
 }
 
 .comparison-item ul {
@@ -3482,6 +3485,7 @@ input[type="range"]::-webkit-slider-thumb:hover {
     padding: 6px 0;
     font-size: 0.9rem;
     border-bottom: 1px solid rgba(0,0,0,0.05);
+    color: #1a1a1a;
 }
 
 .comparison-new li:last-child {
@@ -3629,11 +3633,13 @@ input[type="range"]::-webkit-slider-thumb:hover {
 .tech-comparison-item:first-child {
     background: #f0fdf4;
     border: 2px solid #2d6a4f;
+    color: #1a1a1a;
 }
 
 .tech-comparison-item:last-child {
     background: #fef2f2;
     border: 1px solid #fecaca;
+    color: #1a1a1a;
 }
 
 .tech-comparison-item h4 {
@@ -3641,6 +3647,7 @@ input[type="range"]::-webkit-slider-thumb:hover {
     font-size: 1rem;
     padding-bottom: 8px;
     border-bottom: 1px solid rgba(0,0,0,0.1);
+    color: #1a1a1a;
 }
 
 .tech-list {
@@ -3654,6 +3661,7 @@ input[type="range"]::-webkit-slider-thumb:hover {
     border-bottom: 1px solid rgba(0,0,0,0.05);
     position: relative;
     padding-left: 24px;
+    color: #1a1a1a;
 }
 
 .tech-list li:last-child {
@@ -3664,7 +3672,7 @@ input[type="range"]::-webkit-slider-thumb:hover {
     content: '✓';
     position: absolute;
     left: 0;
-    color: #2d6a4f;
+    color: #16a34a;
     font-weight: bold;
 }
 
@@ -3684,6 +3692,7 @@ input[type="range"]::-webkit-slider-thumb:hover {
     border-left: 4px solid #2d6a4f;
     font-size: 0.95rem;
     line-height: 1.6;
+    color: #1a1a1a;
 }
 
 /* ============================
