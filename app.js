@@ -1629,6 +1629,90 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ---------------------------------------------------------
+    // 11b. Sync Seedlings to Simulators
+    // ---------------------------------------------------------
+    function syncSeedlingToSimulator(type, name, plantDate) {
+        // Mapping of seed types to simulator elements
+        const simulatorMap = {
+            // Mangos
+            'mango-haden': { treeNum: 1, varKey: 'haden' },
+            'mango-tommy': { treeNum: 1, varKey: 'tommy' },
+            'mango-keitt': { treeNum: 1, varKey: 'keitt' },
+            'mango-kent': { treeNum: 1, varKey: 'kent' },
+            'mango-hilacha': { isHilacha: true },
+            'mamon': { isMamon: true },
+            // Platanal
+            'platano-grande': { isPlatano: true, varKey: 'grande' },
+            'platano-bellaco': { isPlatano: true, varKey: 'bellaco' },
+            // Aji
+            'aji-dulce': { ajiKey: 'dulce' },
+            'aji-picante': { ajiKey: 'picante' },
+            'jalapeno': { ajiKey: 'jalapeno' },
+            'habanero': { ajiKey: 'habanero' },
+            // Pan de Palo
+            'pan-de-palo': { isPan: true }
+        };
+
+        const config = simulatorMap[type];
+        if (!config) return;
+
+        // Auto-update Mango trees (find first empty slot)
+        if (config.treeNum) {
+            for (let i = 1; i <= 3; i++) {
+                const variedad = document.getElementById('mango' + i + '-variedad');
+                const ultimaCosecha = document.getElementById('mango' + i + '-ultima-cosecha');
+                if (variedad && ultimaCosecha) {
+                    variedad.value = config.varKey;
+                    ultimaCosecha.value = plantDate;
+                    if (typeof updateMangoTree === 'function') updateMangoTree(i);
+                    showToast(`Simulador Mango ${i} actualizado: ${name} (${config.varKey})`);
+                    return;
+                }
+            }
+        }
+
+        // Auto-update Hilacha
+        if (config.isHilacha) {
+            const hilachaDate = document.getElementById('hilacha-ultima-cosecha');
+            if (hilachaDate) {
+                hilachaDate.value = plantDate;
+                if (typeof updateHilachaTree === 'function') updateHilachaTree();
+                showToast(`Simulador Hilacha actualizado: ${name}`);
+            }
+            return;
+        }
+
+        // Auto-update Mamon
+        if (config.isMamon) {
+            const mamonDate = document.getElementById('mamon-ultima-cosecha');
+            if (mamonDate) {
+                mamonDate.value = plantDate;
+                if (typeof updateMamonTree === 'function') updateMamonTree();
+                showToast(`Simulador Mamón actualizado: ${name}`);
+            }
+            return;
+        }
+
+        // Auto-update Platanal
+        if (config.isPlatano) {
+            showToast(`Plátano registrado en semillero: ${name}`);
+            return;
+        }
+
+        // Auto-update Aji
+        if (config.ajiKey) {
+            showToast(`Ají registrado en semillero: ${name}`);
+            return;
+        }
+
+        // Auto-update Pan de Palo
+        if (config.isPan) {
+            showToast(`Pan de Palo registrado en semillero: ${name}`);
+            return;
+        }
+    }
+
+    // ---------------------------------------------------------
     // 11. Semillero (Seedbed / Nursery) - Plantule Management
     // ---------------------------------------------------------
     const SEMILLERO_KEY = 'yagua_semillero';
@@ -1742,6 +1826,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
                 <h4>${seed.name}</h4>
                 <p class="seed-scientific-name">${seed.scientific || 'Sin nombre cientifico'}</p>
+                ${seed.type ? `<div class="seed-type-badge"><i data-lucide="link"></i> ${seed.type}</div>` : ''}
                 <div class="seed-card-meta">
                     <span><i data-lucide="map-pin"></i> ${seed.location}</span>
                     <span><i data-lucide="calendar"></i> ${formattedDate}</span>
@@ -1845,10 +1930,13 @@ document.addEventListener('DOMContentLoaded', () => {
         semilleroForm.addEventListener('submit', (e) => {
             e.preventDefault();
 
+            const seedType = document.getElementById('seed-type')?.value || '';
+
             const newSeedling = {
                 id: generateSeedId(),
                 name: seedNameInput.value.trim(),
                 scientific: seedScientificInput?.value.trim() || '',
+                type: seedType,
                 location: seedLocationInput.value.trim(),
                 date: seedDateInput.value,
                 status: seedStatusInput.value,
@@ -1859,6 +1947,11 @@ document.addEventListener('DOMContentLoaded', () => {
             seedlings.push(newSeedling);
             localStorage.setItem(SEMILLERO_KEY, JSON.stringify(seedlings));
             syncToWorker('semillero', seedlings);
+
+            // Auto-sync to simulator
+            if (seedType) {
+                syncSeedlingToSimulator(seedType, seedNameInput.value.trim(), seedDateInput.value);
+            }
 
             semilleroForm.reset();
             updateSeedDates();
