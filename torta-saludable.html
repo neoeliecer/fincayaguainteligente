@@ -1,0 +1,1177 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delicias Saludables Delitortas | Torta de Zanahoria Natural</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #c05621;
+            --primary-light: #ed8936;
+            --primary-dark: #9c4221;
+            --green: #276749;
+            --green-light: #48bb78;
+            --gold: #d69e2e;
+            --cream: #fefcf3;
+            --warm-bg: #fdf8f0;
+            --text-dark: #1a202c;
+            --text-mid: #4a5568;
+            --text-light: #718096;
+            --white: #ffffff;
+            --shadow: 0 4px 24px rgba(0,0,0,0.08);
+            --shadow-lg: 0 12px 40px rgba(0,0,0,0.12);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--text-dark);
+            background: var(--warm-bg);
+            overflow-x: hidden;
+        }
+
+        /* Hero */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            background: linear-gradient(135deg, #fefcf3 0%, #fde8d0 50%, #f6e5c3 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 700px;
+            height: 700px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(237,137,54,0.15) 0%, transparent 70%);
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: -30%;
+            left: -10%;
+            width: 500px;
+            height: 500px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(72,187,120,0.1) 0%, transparent 70%);
+        }
+
+        .hero-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 80px 24px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-content { animation: fadeInLeft 1s ease; }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(39,103,73,0.1);
+            color: var(--green);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .hero-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            font-weight: 800;
+            line-height: 1.1;
+            color: var(--text-dark);
+            margin-bottom: 16px;
+        }
+
+        .hero-title span {
+            color: var(--primary);
+            position: relative;
+        }
+
+        .hero-subtitle {
+            font-size: 1.15rem;
+            color: var(--text-mid);
+            line-height: 1.7;
+            margin-bottom: 32px;
+        }
+
+        .hero-features {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 36px;
+        }
+
+        .hero-feature {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+            color: var(--green);
+            font-weight: 500;
+        }
+
+        .hero-feature-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: rgba(39,103,73,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            padding: 16px 32px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            text-decoration: none;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(192,86,33,0.3);
+        }
+
+        .btn-secondary {
+            padding: 16px 32px;
+            background: var(--white);
+            color: var(--primary);
+            border: 2px solid var(--primary);
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .hero-image {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            animation: fadeInRight 1s ease;
+        }
+
+        .hero-cake-display {
+            width: 420px;
+            height: 420px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #fde8d0, #fed7aa);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .cake-emoji {
+            font-size: 10rem;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .floating-badge {
+            position: absolute;
+            background: var(--white);
+            border-radius: 16px;
+            padding: 12px 16px;
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            animation: floatBadge 4s ease-in-out infinite;
+        }
+
+        .floating-badge:nth-child(2) { top: 40px; right: -20px; animation-delay: 0.5s; }
+        .floating-badge:nth-child(3) { bottom: 60px; left: -30px; animation-delay: 1s; }
+        .floating-badge:nth-child(4) { top: 50%; right: -40px; animation-delay: 1.5s; }
+
+        .badge-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .badge-orange { background: rgba(237,137,54,0.15); }
+        .badge-green { background: rgba(72,187,120,0.15); }
+        .badge-gold { background: rgba(214,158,46,0.15); }
+
+        /* Ingredients Section */
+        .section {
+            padding: 100px 24px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-tag {
+            display: inline-block;
+            background: rgba(39,103,73,0.1);
+            color: var(--green);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .section-desc {
+            font-size: 1.05rem;
+            color: var(--text-mid);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .ingredients-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+
+        .ingredient-card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 36px 28px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .ingredient-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .ingredient-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+        }
+
+        .icon-carrot { background: linear-gradient(135deg, #fed7aa, #fbd38d); }
+        .icon-olive { background: linear-gradient(135deg, #c6f6d5, #9ae6b4); }
+        .icon-walnut { background: linear-gradient(135deg, #e9d8fd, #d6bcfa); }
+
+        .ingredient-card h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+            margin-bottom: 8px;
+        }
+
+        .ingredient-card p {
+            font-size: 0.9rem;
+            color: var(--text-mid);
+            line-height: 1.6;
+        }
+
+        /* Benefits */
+        .benefits-section {
+            background: var(--white);
+            padding: 100px 24px;
+        }
+
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .benefit-card {
+            text-align: center;
+            padding: 32px 20px;
+            border-radius: 16px;
+            border: 1px solid #f0f0f0;
+            transition: border-color 0.3s, transform 0.3s;
+        }
+
+        .benefit-card:hover {
+            border-color: var(--primary-light);
+            transform: translateY(-4px);
+        }
+
+        .benefit-icon {
+            font-size: 2rem;
+            margin-bottom: 12px;
+        }
+
+        .benefit-card h4 {
+            font-size: 1rem;
+            margin-bottom: 6px;
+        }
+
+        .benefit-card p {
+            font-size: 0.82rem;
+            color: var(--text-light);
+        }
+
+        /* Product / Store */
+        .store-section {
+            background: linear-gradient(135deg, #fefcf3, #fde8d0);
+            padding: 100px 24px;
+        }
+
+        .store-container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .product-card-main {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            background: var(--white);
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .product-visual {
+            background: linear-gradient(135deg, #fde8d0, #fed7aa);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 400px;
+            font-size: 8rem;
+            position: relative;
+        }
+
+        .product-details {
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .product-details h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            margin-bottom: 12px;
+        }
+
+        .product-details .product-desc {
+            font-size: 0.95rem;
+            color: var(--text-mid);
+            line-height: 1.7;
+            margin-bottom: 20px;
+        }
+
+        .product-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 24px;
+        }
+
+        .product-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.78rem;
+            font-weight: 500;
+        }
+
+        .tag-green { background: rgba(72,187,120,0.1); color: var(--green); }
+        .tag-orange { background: rgba(237,137,54,0.1); color: var(--primary); }
+
+        .product-pricing {
+            margin-bottom: 24px;
+        }
+
+        .price-label {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            margin-bottom: 8px;
+        }
+
+        .price-options {
+            display: flex;
+            gap: 12px;
+        }
+
+        .price-option {
+            flex: 1;
+            padding: 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .price-option:hover, .price-option.selected {
+            border-color: var(--primary);
+            background: rgba(192,86,33,0.05);
+        }
+
+        .price-option .size {
+            font-weight: 700;
+            font-size: 1rem;
+            color: var(--text-dark);
+        }
+
+        .price-option .price {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        .price-option .per {
+            font-size: 0.75rem;
+            color: var(--text-light);
+        }
+
+        .add-to-cart-main {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.05rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .add-to-cart-main:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(192,86,33,0.3);
+        }
+
+        /* Cart Sidebar */
+        .cart-sidebar {
+            position: fixed;
+            top: 0;
+            right: -420px;
+            width: 400px;
+            max-width: 90vw;
+            height: 100vh;
+            background: var(--white);
+            box-shadow: -4px 0 30px rgba(0,0,0,0.15);
+            z-index: 2000;
+            display: flex;
+            flex-direction: column;
+            transition: right 0.3s ease;
+        }
+
+        .cart-sidebar.open { right: 0; }
+
+        .cart-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 24px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .cart-header h3 { font-family: 'Playfair Display', serif; font-size: 1.2rem; }
+
+        .cart-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-light);
+        }
+
+        .cart-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px 24px;
+        }
+
+        .cart-empty-msg {
+            text-align: center;
+            color: var(--text-light);
+            padding: 40px 0;
+        }
+
+        .cart-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .cart-item-emoji { font-size: 2rem; }
+
+        .cart-item-info { flex: 1; }
+        .cart-item-name { font-weight: 600; font-size: 0.95rem; }
+        .cart-item-price { color: var(--primary); font-weight: 600; font-size: 0.85rem; }
+
+        .cart-item-qty {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .qty-btn {
+            width: 28px;
+            height: 28px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            background: var(--white);
+            cursor: pointer;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .qty-btn:hover { background: var(--primary); color: white; border-color: var(--primary); }
+        .qty-value { font-weight: 600; min-width: 20px; text-align: center; }
+
+        .cart-footer {
+            padding: 20px 24px;
+            border-top: 1px solid #f0f0f0;
+        }
+
+        .cart-total {
+            display: flex;
+            justify-content: space-between;
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .cart-total span:last-child { color: var(--primary); }
+
+        .btn-whatsapp {
+            width: 100%;
+            padding: 16px;
+            background: #25d366;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: background 0.2s;
+        }
+
+        .btn-whatsapp:hover { background: #1da851; }
+
+        /* Cart Float Button */
+        .cart-float {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            border: none;
+            box-shadow: 0 4px 20px rgba(192,86,33,0.4);
+            cursor: pointer;
+            font-size: 1.5rem;
+            z-index: 1999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s;
+        }
+
+        .cart-float:hover { transform: scale(1.1); }
+
+        .cart-float-count {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            background: var(--green);
+            color: white;
+            font-size: 0.7rem;
+            font-weight: 700;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Overlay */
+        .cart-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.4);
+            z-index: 1998;
+            display: none;
+        }
+
+        .cart-overlay.show { display: block; }
+
+        /* Testimonials */
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        .testimonial-card {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 28px;
+            box-shadow: var(--shadow);
+        }
+
+        .testimonial-stars { color: var(--gold); font-size: 1.1rem; margin-bottom: 12px; }
+
+        .testimonial-text {
+            font-size: 0.9rem;
+            color: var(--text-mid);
+            line-height: 1.6;
+            margin-bottom: 16px;
+            font-style: italic;
+        }
+
+        .testimonial-author {
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--text-dark);
+            color: var(--white);
+            padding: 60px 24px 30px;
+            text-align: center;
+        }
+
+        .footer-brand {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .footer-tagline {
+            color: rgba(255,255,255,0.6);
+            font-size: 0.9rem;
+            margin-bottom: 24px;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+
+        .footer-links a {
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover { color: var(--primary-light); }
+
+        .footer-copy {
+            color: rgba(255,255,255,0.4);
+            font-size: 0.8rem;
+            padding-top: 24px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: var(--text-dark);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            z-index: 3000;
+            opacity: 0;
+            transition: all 0.3s;
+            pointer-events: none;
+        }
+
+        .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+        /* Animations */
+        @keyframes fadeInLeft {
+            from { opacity: 0; transform: translateX(-40px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes fadeInRight {
+            from { opacity: 0; transform: translateX(40px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        @keyframes floatBadge {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .hero-container { grid-template-columns: 1fr; text-align: center; }
+            .hero-title { font-size: 2.5rem; }
+            .hero-features { justify-content: center; flex-wrap: wrap; }
+            .hero-cta { justify-content: center; }
+            .hero-image { margin-top: 40px; }
+            .hero-cake-display { width: 300px; height: 300px; }
+            .cake-emoji { font-size: 7rem; }
+            .ingredients-grid { grid-template-columns: 1fr; }
+            .benefits-grid { grid-template-columns: repeat(2, 1fr); }
+            .product-card-main { grid-template-columns: 1fr; }
+            .product-visual { min-height: 250px; font-size: 5rem; }
+            .testimonials-grid { grid-template-columns: 1fr; }
+            .price-options { flex-direction: column; }
+        }
+
+        @media (max-width: 500px) {
+            .benefits-grid { grid-template-columns: 1fr; }
+            .floating-badge { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <div class="hero-badge">100% Natural & Sin Azucar Refinada</div>
+                <h1 class="hero-title">Torta de <span>Zanahoria</span> Saludable</h1>
+                <p class="hero-subtitle">Delicias Saludables Delitortas. Una torta artesanal hecha con aceite de oliva extra virgen, nueces naturales y zanahoria fresca. Sabor irresistible sin culpa.</p>
+                <div class="hero-features">
+                    <div class="hero-feature">
+                        <div class="hero-feature-icon">🫒</div>
+                        <span>Aceite de Oliva EV</span>
+                    </div>
+                    <div class="hero-feature">
+                        <div class="hero-feature-icon">🥜</div>
+                        <span>Nueces Naturales</span>
+                    </div>
+                    <div class="hero-feature">
+                        <div class="hero-feature-icon">🥕</div>
+                        <span>Zanahoria Fresca</span>
+                    </div>
+                </div>
+                <div class="hero-cta">
+                    <a href="#tienda" class="btn-primary">Ordenar Ahora</a>
+                    <a href="#ingredientes" class="btn-secondary">Conocer Mas</a>
+                </div>
+            </div>
+            <div class="hero-image">
+                <div class="hero-cake-display">
+                    <span class="cake-emoji">🎂</span>
+                    <div class="floating-badge">
+                        <div class="badge-icon badge-green">🌿</div>
+                        <span>Sin Harina Blanca</span>
+                    </div>
+                    <div class="floating-badge">
+                        <div class="badge-icon badge-orange">🔥</div>
+                        <span>Baja en Calorias</span>
+                    </div>
+                    <div class="floating-badge">
+                        <div class="badge-icon badge-gold">💪</div>
+                        <span>Rica en Fibra</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Ingredientes -->
+    <section class="section" id="ingredientes">
+        <div class="section-header">
+            <span class="section-tag">Ingredientes Premium</span>
+            <h2 class="section-title">Lo Que Hace Especial Nuestra Torta</h2>
+            <p class="section-desc">Solo ingredientes naturales de primera calidad. Sin conservantes, sin colorantes artificiales, sin azucar refinada.</p>
+        </div>
+        <div class="ingredients-grid">
+            <div class="ingredient-card">
+                <div class="ingredient-icon icon-carrot">🥕</div>
+                <h3>Zanahoria Fresca</h3>
+                <p>Rica en beta-carotenos, fibra y vitaminas. Le da a la torta su sabor natural, su textura unica y su hermoso color naranja.</p>
+            </div>
+            <div class="ingredient-card">
+                <div class="ingredient-icon icon-olive">🫒</div>
+                <h3>Aceite de Oliva Extra Virgen</h3>
+                <p>Grasas saludables que reemplazan la mantequilla. Aporta humedad, sabor suave y beneficios para la salud cardiovascular.</p>
+            </div>
+            <div class="ingredient-card">
+                <div class="ingredient-icon icon-walnut">🥜</div>
+                <h3>Nueces Naturales</h3>
+                <p>Ricas en omega-3, proteinas y antioxidantes. Le dan un toque crujiente y un valor nutricional excepcional a cada bocado.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Beneficios -->
+    <section class="benefits-section">
+        <div class="section-header">
+            <span class="section-tag">Beneficios</span>
+            <h2 class="section-title">Por Que Elegir Delitortas</h2>
+        </div>
+        <div class="benefits-grid">
+            <div class="benefit-card">
+                <div class="benefit-icon">🚫</div>
+                <h4>Sin Azucar Refinada</h4>
+                <p>Endulzada naturalmente con miel y la propia zanahoria.</p>
+            </div>
+            <div class="benefit-card">
+                <div class="benefit-icon">💪</div>
+                <h4>Alta en Nutrientes</h4>
+                <p>Fibra, omega-3, vitaminas A, C y K en cada porcion.</p>
+            </div>
+            <div class="benefit-card">
+                <div class="benefit-icon">🏃</div>
+                <h4>Ideal para Deportistas</h4>
+                <p> energia sostenida sin picos de glucosa.</p>
+            </div>
+            <div class="benefit-card">
+                <div class="benefit-icon">👨‍👩‍👧‍👦</div>
+                <h4>Apta para Todos</h4>
+                <p>Ninos, adultos y adultos mayores. Sana y deliciosa.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tienda -->
+    <section class="store-section" id="tienda">
+        <div class="store-container">
+            <div class="section-header">
+                <span class="section-tag">Tienda</span>
+                <h2 class="section-title">Ordena Tu Torta</h2>
+                <p class="section-desc">Elige el tamano perfecto para ti. Horneada al pedido, fresca y con entrega a domicilio.</p>
+            </div>
+
+            <div class="product-card-main">
+                <div class="product-visual">
+                    🎂
+                </div>
+                <div class="product-details">
+                    <h2>Torta de Zanahoria Natural</h2>
+                    <p class="product-desc">Delicias Saludables Delitortas. Preparada con aceite de oliva extra virgen, nueces naturales y zanahoria fresca rallada. Sin harina refinada, sin azucar blanca. Cada bocado es pura salud y sabor.</p>
+
+                    <div class="product-tags">
+                        <span class="product-tag tag-green">🫒 Aceite de Oliva</span>
+                        <span class="product-tag tag-green">🥜 Nueces</span>
+                        <span class="product-tag tag-green">🥕 Zanahoria</span>
+                        <span class="product-tag tag-orange">Sin Azucar</span>
+                        <span class="product-tag tag-orange">Artesanal</span>
+                    </div>
+
+                    <div class="product-pricing">
+                        <p class="price-label">Elige tu tamano:</p>
+                        <div class="price-options">
+                            <div class="price-option selected" data-price="8.00" data-size="Personal" onclick="selectSize(this)">
+                                <div class="size">Personal</div>
+                                <div class="price">$8.00</div>
+                                <div class="per">6 porciones</div>
+                            </div>
+                            <div class="price-option" data-price="15.00" data-size="Familiar" onclick="selectSize(this)">
+                                <div class="size">Familiar</div>
+                                <div class="price">$15.00</div>
+                                <div class="per">12 porciones</div>
+                            </div>
+                            <div class="price-option" data-price="22.00" data-size="Para Eventos" onclick="selectSize(this)">
+                                <div class="size">Para Eventos</div>
+                                <div class="price">$22.00</div>
+                                <div class="per">20 porciones</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="add-to-cart-main" onclick="addToCartFromMain()">
+                        🛒 Agregar al Carrito
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonios -->
+    <section class="section">
+        <div class="section-header">
+            <span class="section-tag">Testimonios</span>
+            <h2 class="section-title">Lo Que Dicen Nuestros Clientes</h2>
+        </div>
+        <div class="testimonials-grid">
+            <div class="testimonial-card">
+                <div class="testimonial-stars">★★★★★</div>
+                <p class="testimonial-text">"La mejor torta que he probado. Es sana, deliciosa y mis hijos la adoran. No parece que sea saludable por lo buena que sabe."</p>
+                <p class="testimonial-author">— Maria G.</p>
+            </div>
+            <div class="testimonial-card">
+                <div class="testimonial-stars">★★★★★</div>
+                <p class="testimonial-text">"La pedi para el cumpleanos de mi hijo y todos preguntaron de donde era. El aceite de oliva le da un sabor unico. Repetiremos!"</p>
+                <p class="testimonial-author">— Carlos R.</p>
+            </div>
+            <div class="testimonial-card">
+                <div class="testimonial-stars">★★★★★</div>
+                <p class="testimonial-text">"Como deportista, busco alternativas saludables. Esta torta me da energia sin culpa. Las nueces y la zanahoria son perfectas."</p>
+                <p class="testimonial-author">— Ana P.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-brand">Delitortas</div>
+        <p class="footer-tagline">Delicias Saludables - Casa Yagua Inteligente</p>
+        <div class="footer-links">
+            <a href="#ingredientes">Ingredientes</a>
+            <a href="#tienda">Tienda</a>
+            <a href="https://t.me/ranchoamelia_bot" target="_blank">Contacto</a>
+        </div>
+        <p class="footer-copy">2026 Delitortas / Casa Yagua Inteligente. Todos los derechos reservados.</p>
+    </footer>
+
+    <!-- Cart Float -->
+    <button class="cart-float" id="cartFloat" onclick="openCart()">
+        🛒
+        <span class="cart-float-count" id="cartFloatCount" style="display: none;">0</span>
+    </button>
+
+    <!-- Cart Overlay -->
+    <div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
+
+    <!-- Cart Sidebar -->
+    <div class="cart-sidebar" id="cartSidebar">
+        <div class="cart-header">
+            <h3>Mi Pedido</h3>
+            <button class="cart-close" onclick="closeCart()">&times;</button>
+        </div>
+        <div class="cart-body" id="cartBody">
+            <p class="cart-empty-msg">Tu carrito esta vacio</p>
+        </div>
+        <div class="cart-footer" id="cartFooter" style="display: none;">
+            <div class="cart-total">
+                <span>Total:</span>
+                <span id="cartTotal">$0.00</span>
+            </div>
+            <button class="btn-whatsapp" onclick="sendWhatsApp()">
+                📲 Pedir por WhatsApp
+            </button>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
+
+    <script>
+        const CART_KEY = 'delitortas_cart';
+        let selectedSize = 'Personal';
+        let selectedPrice = 8.00;
+
+        function selectSize(el) {
+            document.querySelectorAll('.price-option').forEach(o => o.classList.remove('selected'));
+            el.classList.add('selected');
+            selectedSize = el.dataset.size;
+            selectedPrice = parseFloat(el.dataset.price);
+        }
+
+        function getCart() {
+            const stored = localStorage.getItem(CART_KEY);
+            return stored ? JSON.parse(stored) : [];
+        }
+
+        function saveCart(cart) {
+            localStorage.setItem(CART_KEY, JSON.stringify(cart));
+            updateCartUI();
+        }
+
+        function addToCart(size, price) {
+            let cart = getCart();
+            const existing = cart.find(item => item.size === size);
+            if (existing) {
+                existing.qty += 1;
+            } else {
+                cart.push({ size, price, qty: 1, emoji: '🎂', name: `Torta Zanahoria - ${size}` });
+            }
+            saveCart(cart);
+            showToast(`Torta ${size} agregada al carrito`);
+        }
+
+        function addToCartFromMain() {
+            addToCart(selectedSize, selectedPrice);
+        }
+
+        function removeFromCart(size) {
+            let cart = getCart().filter(item => item.size !== size);
+            saveCart(cart);
+        }
+
+        function updateQty(size, delta) {
+            let cart = getCart();
+            const item = cart.find(i => i.size === size);
+            if (!item) return;
+            item.qty += delta;
+            if (item.qty <= 0) cart = cart.filter(i => i.size !== size);
+            saveCart(cart);
+        }
+
+        function updateCartUI() {
+            const cart = getCart();
+            const totalItems = cart.reduce((s, i) => s + i.qty, 0);
+            const totalPrice = cart.reduce((s, i) => s + (i.price * i.qty), 0);
+
+            const floatCount = document.getElementById('cartFloatCount');
+            if (floatCount) {
+                floatCount.textContent = totalItems;
+                floatCount.style.display = totalItems > 0 ? 'flex' : 'none';
+            }
+
+            const cartBody = document.getElementById('cartBody');
+            const cartFooter = document.getElementById('cartFooter');
+
+            if (cart.length === 0) {
+                cartBody.innerHTML = '<p class="cart-empty-msg">Tu carrito esta vacio</p>';
+                cartFooter.style.display = 'none';
+            } else {
+                cartBody.innerHTML = cart.map(item => `
+                    <div class="cart-item">
+                        <span class="cart-item-emoji">${item.emoji}</span>
+                        <div class="cart-item-info">
+                            <div class="cart-item-name">${item.name}</div>
+                            <div class="cart-item-price">$${item.price.toFixed(2)} c/u</div>
+                        </div>
+                        <div class="cart-item-qty">
+                            <button class="qty-btn" onclick="updateQty('${item.size}', -1)">-</button>
+                            <span class="qty-value">${item.qty}</span>
+                            <button class="qty-btn" onclick="updateQty('${item.size}', 1)">+</button>
+                        </div>
+                    </div>
+                `).join('');
+                cartFooter.style.display = 'block';
+            }
+
+            document.getElementById('cartTotal').textContent = `$${totalPrice.toFixed(2)}`;
+        }
+
+        function openCart() {
+            document.getElementById('cartSidebar').classList.add('open');
+            document.getElementById('cartOverlay').classList.add('show');
+        }
+
+        function closeCart() {
+            document.getElementById('cartSidebar').classList.remove('open');
+            document.getElementById('cartOverlay').classList.remove('show');
+        }
+
+        function sendWhatsApp() {
+            const cart = getCart();
+            if (cart.length === 0) return;
+
+            const total = cart.reduce((s, i) => s + (i.price * i.qty), 0);
+            const totalItems = cart.reduce((s, i) => s + i.qty, 0);
+
+            let msg = '*Pedido Delitortas - Torta de Zanahoria*\n';
+            msg += '______________________________\n\n';
+            msg += '*Mi Pedido:*\n\n';
+
+            cart.forEach(item => {
+                msg += `🎂 *${item.name}*\n`;
+                msg += `   ${item.qty} x $${item.price.toFixed(2)} = *$${(item.qty * item.price).toFixed(2)}*\n\n`;
+            });
+
+            msg += '______________________________\n';
+            msg += `TOTAL: *${totalItems} torta(s) / $${total.toFixed(2)}*\n\n`;
+            msg += '- Solicito disponibilidad.\n';
+            msg += '- Entregar en: [tu direccion]\n';
+            msg += '- Fecha de entrega: [fecha]\n';
+            msg += '______________________________\n';
+            msg += '*Delicias Saludables Delitortas*';
+
+            const phone = '584228789110';
+            window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, '_blank');
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            toast.textContent = msg;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2500);
+        }
+
+        // Init
+        updateCartUI();
+    </script>
+</body>
+</html>
