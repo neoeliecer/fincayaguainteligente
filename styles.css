@@ -4042,6 +4042,21 @@ input[type="range"]::-webkit-slider-thumb:hover {
     box-shadow: 0 8px 24px rgba(0,0,0,0.1);
 }
 
+.market-card-outofstock {
+    opacity: 0.6;
+    filter: grayscale(30%);
+}
+
+.market-card-outofstock:hover {
+    transform: none;
+    box-shadow: none;
+}
+
+.market-card-outofstock-label {
+    color: #9ca3af;
+    font-style: italic;
+}
+
 .market-card-img {
     height: 140px;
     display: flex;
@@ -4134,6 +4149,11 @@ input[type="range"]::-webkit-slider-thumb:hover {
 
 .market-add-btn:active {
     transform: scale(0.95);
+}
+
+.market-add-btn-disabled {
+    background: #9ca3af !important;
+    cursor: not-allowed !important;
 }
 
 .market-add-btn i {

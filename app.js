@@ -2193,23 +2193,45 @@ document.addEventListener('DOMContentLoaded', () => {
     const cartCloseBtn = document.getElementById('cart-close-btn');
     const cartCheckoutBtn = document.getElementById('cart-checkout-btn');
 
-    // Productos del Mercado con disponibilidad estimada
+    // Productos del Mercado con disponibilidad por temporada
     const marketProducts = [
-        // Frutales
-        { id: 'mkt-1', name: 'Mango Hilacha', emoji: '🥭', category: 'frutales', price: 0.75, unit: 'lb', description: 'Mango criollo dulce y fibroso, sabor intenso. Cosecha jun-sep.', availability: 'Disponible jun-sep', availClass: 'avail-soon' },
-        { id: 'mkt-2', name: 'Mango Ingerto (Haden)', emoji: '🥭', category: 'frutales', price: 1.00, unit: 'lb', description: 'Mango ingerto de pulpa firme y sabor equilibrado. Cosecha jun-ago.', availability: 'Disponible jun-ago', availClass: 'avail-soon' },
-        { id: 'mkt-3', name: 'Mango Ingerto (Tommy)', emoji: '🥭', category: 'frutales', price: 1.00, unit: 'lb', description: 'Mango rojo brillante, jugoso y aromatico. Cosecha jul-sep.', availability: 'Disponible jul-sep', availClass: 'avail-soon' },
-        { id: 'mkt-4', name: 'Mango Ingerto (Keitt)', emoji: '🇲🇽', category: 'frutales', price: 1.00, unit: 'lb', description: 'Mango verde que madura a naranja, carnoso y dulce. Cosecha ago-oct.', availability: 'Disponible ago-oct', availClass: 'avail-later' },
-        { id: 'mkt-5', name: 'Mamon (Memiso)', emoji: '🔴', category: 'frutales', price: 0.50, unit: 'lb', description: 'Fruta acida y refrescante, ideal para jugos y dulces. Cosecha jun-sep.', availability: 'Disponible jun-sep', availClass: 'avail-soon' },
-        { id: 'mkt-6', name: 'Platano Grande', emoji: '🍌', category: 'frutales', price: 0.35, unit: 'lb', description: 'Platano de employment ideal para hervir, freir o asar. Disponible todo el ano.', availability: 'Disponible todo el ano', availClass: 'avail-now' },
-        { id: 'mkt-7', name: 'Platano Bellaco', emoji: '🍌', category: 'frutales', price: 0.40, unit: 'lb', description: 'Platano mas dulce, ideal para platanutres y maduros. Disponible todo el ano.', availability: 'Disponible todo el ano', availClass: 'avail-now' },
+        // Frutales - Temporadas en Venezuela
+        { id: 'mkt-1', name: 'Mango Hilacha', emoji: '🥭', category: 'frutales', price: 0.75, unit: 'lb', description: 'Mango criollo dulce y fibroso, sabor intenso.', harvestMonths: [6, 7, 8, 9] },
+        { id: 'mkt-2', name: 'Mango Ingerto (Haden)', emoji: '🥭', category: 'frutales', price: 1.00, unit: 'lb', description: 'Mango ingerto de pulpa firme y sabor equilibrado.', harvestMonths: [6, 7, 8] },
+        { id: 'mkt-3', name: 'Mango Ingerto (Tommy)', emoji: '🥭', category: 'frutales', price: 1.00, unit: 'lb', description: 'Mango rojo brillante, jugoso y aromatico.', harvestMonths: [7, 8, 9] },
+        { id: 'mkt-4', name: 'Mango Ingerto (Keitt)', emoji: '🥭', category: 'frutales', price: 1.00, unit: 'lb', description: 'Mango verde que madura a naranja, carnoso y dulce.', harvestMonths: [8, 9, 10] },
+        { id: 'mkt-5', name: 'Mamon (Memiso)', emoji: '🔴', category: 'frutales', price: 0.50, unit: 'lb', description: 'Fruta acida y refrescante, ideal para jugos y dulces.', harvestMonths: [6, 7, 8, 9] },
+        { id: 'mkt-6', name: 'Platano Grande', emoji: '🍌', category: 'frutales', price: 0.35, unit: 'lb', description: 'Platano ideal para hervir, freir o asar.', harvestMonths: [1,2,3,4,5,6,7,8,9,10,11,12] },
+        { id: 'mkt-7', name: 'Platano Bellaco', emoji: '🍌', category: 'frutales', price: 0.40, unit: 'lb', description: 'Platano mas dulce, ideal para platanutres y maduros.', harvestMonths: [1,2,3,4,5,6,7,8,9,10,11,12] },
         // Tuberculos
-        { id: 'mkt-8', name: 'Niquinqui', emoji: '🥔', category: 'tuberculos', price: 1.00, unit: 'lb', description: 'Tuberculo criollo, textura harinosa y sabor terroso. Disponible todo el ano.', availability: 'Disponible todo el ano', availClass: 'avail-now' },
-        // Organicos (Abono Organico)
-        { id: 'mkt-9', name: 'Abono Organico (1 kg)', emoji: '🌱', category: 'organicos', price: 0.80, unit: 'kg', description: 'Abono organico fermentado de la Paca Digestora. Rico en microorganismos y nutrientes.', availability: 'Disponible ahora', availClass: 'avail-now' },
-        { id: 'mkt-10', name: 'Abono Organico (5 kg)', emoji: '🌱', category: 'organicos', price: 4.00, unit: 'kg', description: 'Abono organico fermentado. Paquete para huertos familiares.', availability: 'Disponible ahora', availClass: 'avail-now' },
-        { id: 'mkt-11', name: 'Abono Organico (10 kg)', emoji: '🌱', category: 'organicos', price: 8.00, unit: 'kg', description: 'Abono organico fermentado. Paquete para cultivos grandes.', availability: 'Disponible ahora', availClass: 'avail-now' }
+        { id: 'mkt-8', name: 'Niquinqui', emoji: '🥔', category: 'tuberculos', price: 1.00, unit: 'lb', description: 'Tuberculo criollo, textura harinosa y sabor terroso.', harvestMonths: [1,2,3,4,5,6,7,8,9,10,11,12] },
+        // Organicos (Abono Organico) - siempre disponible
+        { id: 'mkt-9', name: 'Abono Organico (1 kg)', emoji: '🌱', category: 'organicos', price: 0.80, unit: 'kg', description: 'Abono organico fermentado de la Paca Digestora. Rico en microorganismos y nutrientes.', harvestMonths: [1,2,3,4,5,6,7,8,9,10,11,12] },
+        { id: 'mkt-10', name: 'Abono Organico (5 kg)', emoji: '🌱', category: 'organicos', price: 4.00, unit: 'kg', description: 'Abono organico fermentado. Paquete para huertos familiares.', harvestMonths: [1,2,3,4,5,6,7,8,9,10,11,12] },
+        { id: 'mkt-11', name: 'Abono Organico (10 kg)', emoji: '🌱', category: 'organicos', price: 8.00, unit: 'kg', description: 'Abono organico fermentado. Paquete para cultivos grandes.', harvestMonths: [1,2,3,4,5,6,7,8,9,10,11,12] }
     ];
+
+    function isProductInSeason(product) {
+        const now = new Date();
+        const currentMonth = now.getMonth() + 1;
+        return product.harvestMonths.includes(currentMonth);
+    }
+
+    function getHarvestStatus(product) {
+        const now = new Date();
+        const currentMonth = now.getMonth() + 1;
+        if (product.harvestMonths.includes(currentMonth)) {
+            return { inSeason: true, text: 'Disponible ahora', class: 'avail-now' };
+        }
+        // Find next available month
+        const nextMonths = product.harvestMonths.filter(m => m > currentMonth);
+        const nextMonth = nextMonths.length > 0 ? nextMonths[0] : product.harvestMonths[0];
+        const monthNames = ['','Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+        if (nextMonths.length > 0) {
+            return { inSeason: false, text: `Disponible ${monthNames[nextMonth]}`, class: 'avail-later' };
+        }
+        return { inSeason: false, text: `Disponible ${monthNames[nextMonth]}`, class: 'avail-later' };
+    }
 
     function getCart() {
         const stored = localStorage.getItem(CART_KEY);
@@ -2316,24 +2338,32 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const filtered = filter === 'all' ? marketProducts : marketProducts.filter(p => p.category === filter);
 
-        marketGrid.innerHTML = filtered.map(product => `
-            <div class="market-card" data-category="${product.category}">
+        marketGrid.innerHTML = filtered.map(product => {
+            const harvest = getHarvestStatus(product);
+            const isAvailable = harvest.inSeason;
+
+            return `
+            <div class="market-card ${!isAvailable ? 'market-card-outofstock' : ''}" data-category="${product.category}">
                 <div class="market-card-img" style="background: linear-gradient(135deg, ${getCategoryColor(product.category)}15, ${getCategoryColor(product.category)}05);">
                     <span>${product.emoji}</span>
-                    <span class="market-card-availability ${product.availClass}">${product.availability}</span>
+                    <span class="market-card-availability ${harvest.class}">${harvest.text}</span>
                 </div>
                 <div class="market-card-body">
                     <h4>${product.name}</h4>
                     <p class="market-card-desc">${product.description}</p>
                     <div class="market-card-footer">
-                        <div class="market-card-price">$${product.price.toFixed(2)} <span class="market-card-unit">/ ${product.unit}</span></div>
-                        <button class="market-add-btn" onclick="window.marketAddToCart('${product.id}')">
-                            <i data-lucide="plus"></i> Agregar
-                        </button>
+                        <div class="market-card-price">
+                            ${isAvailable ? `$${product.price.toFixed(2)} <span class="market-card-unit">/ ${product.unit}</span>` : '<span class="market-card-outofstock-label">Agotado</span>'}
+                        </div>
+                        ${isAvailable 
+                            ? `<button class="market-add-btn" onclick="window.marketAddToCart('${product.id}')"><i data-lucide="plus"></i> Agregar</button>`
+                            : `<button class="market-add-btn market-add-btn-disabled" disabled><i data-lucide="clock"></i> Sin stock</button>`
+                        }
                     </div>
                 </div>
             </div>
-        `).join('');
+            `;
+        }).join('');
 
         if (typeof lucide !== 'undefined') lucide.createIcons();
     }
