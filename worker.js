@@ -89,13 +89,62 @@ export default {
                 return new Response(JSON.stringify({ logs, semillero, inventario }), { headers: { 'Content-Type': 'application/json', ...corsHeaders } });
             }
             if (url.pathname === '/api/paca') {
-                const now = new Date();
-                const p0 = new Date('2026-09-02');
-                const p1 = new Date('2027-03-02');
-                const pct = Math.min(100, Math.max(0, ((now - p0) / (p1 - p0)) * 100));
-                const rem = Math.ceil((p1 - now) / 86400000);
+                var now = new Date();
+                var p0 = new Date('2026-09-02');
+                var p1 = new Date('2027-03-02');
+                var pct = Math.min(100, Math.max(0, ((now - p0) / (p1 - p0)) * 100));
+                var rem = Math.ceil((p1 - now) / 86400000);
                 return new Response(JSON.stringify({ name: 'Paca Venezuela', percent: pct.toFixed(1), days_remaining: rem, harvest: '2027-03-03' }), { headers: { 'Content-Type': 'application/json', ...corsHeaders } });
             }
+
+            // API: Get simulator alerts for the website
+            if (url.pathname === '/api/simulador-alerts') {
+                var now = new Date();
+                var month = now.getMonth() + 1;
+                var alerts = [];
+
+                // Mango harvest alerts
+                var trees = [
+                    { name: 'Mango Haden', start: 6, peak: 7, end: 8 },
+                    { name: 'Mango Tommy', start: 7, peak: 8, end: 9 },
+                    { name: 'Mango Keitt', start: 8, peak: 9, end: 10 },
+                    { name: 'Mango Kent', start: 7, peak: 8, end: 9 },
+                    { name: 'Mango Hilacha', start: 7, peak: 8, end: 9 },
+                    { name: 'Mamon', start: 6, peak: 7, end: 9 }
+                ];
+
+                trees.forEach(function(tree) {
+                    if (month === tree.start) alerts.push({ type: 'harvest', text: tree.name + ': empieza la cosecha!', icon: '🥭' });
+                    else if (month === tree.peak) alerts.push({ type: 'harvest', text: tree.name + ': punto maximo de cosecha', icon: '🟡' });
+                    else if (month === tree.end + 1) alerts.push({ type: 'harvest', text: tree.name + ': fin de temporada, ultimos frutos', icon: '🍂' });
+                });
+
+                // Paca progress
+                var p0 = new Date('2026-09-02');
+                var p1 = new Date('2027-03-02');
+                var pct = Math.min(100, Math.max(0, ((now - p0) / (p1 - p0)) * 100));
+                if (pct >= 25 && pct < 26) alerts.push({ type: 'paca', text: 'Paca Venezuela: 25% completado - Fase Termica Temprana', icon: '🌡️' });
+                else if (pct >= 50 && pct < 51) alerts.push({ type: 'paca', text: 'Paca Venezuela: 50% completado - Fase Termica Activa', icon: '🔥' });
+                else if (pct >= 75 && pct < 76) alerts.push({ type: 'paca', text: 'Paca Venezuela: 75% completado - Maduracion Final', icon: '✅' });
+                else if (pct >= 99) alerts.push({ type: 'paca', text: 'Paca Venezuela: LISTA PARA COSECHA!', icon: '🎉' });
+
+                return new Response(JSON.stringify({ ok: true, alerts: alerts, month: month, pacaPercent: pct.toFixed(1) }), { headers: { 'Content-Type': 'application/json', ...corsHeaders } });
+            }
+
+            // API: Push alert from website to Telegram
+            if (url.pathname === '/api/push-alert') {
+                var body2 = await request.json();
+                if (body2 && body2.message) {
+                    await fetch('https://api.telegram.org/bot' + env.BOT_TOKEN + '/sendMessage', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ chat_id: env.CHAT_ID, text: '🔔 Alerta de Simulador\n\n' + body2.message })
+                    });
+                    return new Response(JSON.stringify({ ok: true }), { headers: { 'Content-Type': 'application/json', ...corsHeaders } });
+                }
+                return new Response(JSON.stringify({ ok: false, error: 'No message' }), { headers: { 'Content-Type': 'application/json', ...corsHeaders } });
+            }
+
             return new Response('Rancho Amelia Bot - OK', { status: 200 });
         }
 
@@ -148,7 +197,7 @@ export default {
             let r = '';
 
             if (textLower === '/start' || textLower === '/help') {
-                r = 'Hola ' + firstName + '! Bot de Rancho Amelia\n\n/status - Estado general\n/paca - Paca Venezuela\n/mangos - Estado cosecha mangos\n/clima - Clima en Yagua\n/semillero - Ver plantulas\n/inventario - Ver bienes\n/bitacora - Ver ultimas entradas\n/log [cat] [nota] - Guardar en bitacora\n\nCategorias: Compost, Siembra, Limpieza, Poda, Riego, Mantenimiento';
+                r = 'Hola ' + firstName + '! Bot de Rancho Amelia\n\n/status - Estado general\n/paca - Paca Venezuela\n/mangos - Estado cosecha mangos\n/simulador - Todos los simuladores\n/clima - Clima en Yagua\n/semillero - Ver plantulas\n/inventario - Ver bienes\n/bitacora - Ver ultimas entradas\n/log [cat] [nota] - Guardar en bitacora\n\nCategorias: Compost, Siembra, Limpieza, Poda, Riego, Mantenimiento';
 
             } else if (textLower === '/status') {
                 var now = new Date();
@@ -214,6 +263,46 @@ export default {
                 });
 
                 r = 'Mangos Ingertos - Rancho Amelia\n\n' + mangoInfo + '\nTotal estimado: ~' + totalKg + ' kg\nProximo a cosechar: ' + proximoCosecha + ' (~' + diasProximo + ' dias)';
+
+            } else if (textLower === '/simulador') {
+                var now = new Date();
+                var month = now.getMonth() + 1;
+                var r2 = 'Simuladores - Rancho Amelia\n\n';
+
+                // Paca
+                var p0 = new Date('2026-09-02');
+                var p1 = new Date('2027-03-02');
+                var pp = Math.min(100, Math.max(0, ((now - p0) / (p1 - p0)) * 100));
+                var pr = Math.ceil((p1 - now) / 86400000);
+                var ph = 'Compactacion';
+                if (pp >= 15 && pp < 30) ph = 'Termica Temprana';
+                else if (pp >= 30 && pp < 50) ph = 'Termica Activa (~70C)';
+                else if (pp >= 50 && pp < 75) ph = 'Enfriamiento';
+                else if (pp >= 75 && pp < 100) ph = 'Maduracion Final';
+                else if (pp >= 100) ph = 'COSECHA LISTA';
+                r2 += 'Paca Venezuela: ' + pp.toFixed(1) + '% - ' + ph + ' (' + pr + ' dias)\n\n';
+
+                // Mangos
+                r2 += 'Mangos:\n';
+                var trees2 = [
+                    { name: 'Haden', start: 6, peak: 7, end: 8, kg: 250 },
+                    { name: 'Tommy', start: 7, peak: 8, end: 9, kg: 220 },
+                    { name: 'Keitt', start: 8, peak: 9, end: 10, kg: 280 },
+                    { name: 'Kent', start: 7, peak: 8, end: 9, kg: 260 },
+                    { name: 'Hilacha x5', start: 7, peak: 8, end: 9, kg: 900 },
+                    { name: 'Mamon x2', start: 6, peak: 7, end: 9, kg: 400 }
+                ];
+
+                trees2.forEach(function(t) {
+                    var estado = 'Reposo';
+                    if (month >= t.start && month <= t.end) {
+                        estado = 'TEMPORADA';
+                        if (month === t.peak) estado = 'PUNTO MAXIMO';
+                    } else if (month === t.start - 1) estado = 'Preparacion';
+                    r2 += '- ' + t.name + ': ' + estado + ' (~' + t.kg + ' kg)\n';
+                });
+
+                r = r2;
 
             } else if (textLower === '/clima') {
                 try {

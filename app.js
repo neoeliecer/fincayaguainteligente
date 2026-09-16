@@ -108,6 +108,23 @@ document.addEventListener('DOMContentLoaded', () => {
         if (realStageTitle) realStageTitle.textContent = 'Fase Actual: ' + phase;
         if (realTemp) realTemp.textContent = 'Temperatura ambiente (~28°C)';
         if (realMicrobeText) realMicrobeText.textContent = 'Primera capa de hojas secas colocada. La paca esta en proceso de construccion. Se continuan agregando capas de material verde y marron.';
+
+        // Check Paca milestones and send alerts
+        const PACA_ALERT_KEY = 'yagua_paca_alerts_sent';
+        const sentAlerts = JSON.parse(localStorage.getItem(PACA_ALERT_KEY) || '[]');
+        const milestones = [
+            { pct: 25, msg: 'Paca Venezuela: 25% completado - Fase Termica Temprana (~48C)' },
+            { pct: 50, msg: 'Paca Venezuela: 50% completado - Fase Termica Activa (~70C)' },
+            { pct: 75, msg: 'Paca Venezuela: 75% completado - Maduracion Final' },
+            { pct: 100, msg: 'Paca Venezuela: LISTA PARA COSECHA!' }
+        ];
+        milestones.forEach(m => {
+            if (pacaProgress >= m.pct && !sentAlerts.includes(m.pct)) {
+                sentAlerts.push(m.pct);
+                localStorage.setItem(PACA_ALERT_KEY, JSON.stringify(sentAlerts));
+                pushAlertToBot(m.msg);
+            }
+        });
         
         // Countdown para la paca 1
         const remainingMs = pacaHarvestDate - new Date();
@@ -609,6 +626,18 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         } catch (e) {
             console.log('Sync to worker failed:', e);
+        }
+    }
+
+    async function pushAlertToBot(message) {
+        try {
+            await fetch(TELEGRAM_BOT_WORKER + '/api/push-alert', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message })
+            });
+        } catch (e) {
+            console.log('Push alert failed:', e);
         }
     }
 
