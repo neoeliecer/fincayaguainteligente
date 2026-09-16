@@ -2355,7 +2355,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const mode = getMarketMode();
         if (mode === 'manual') {
             const stock = getManualStock();
-            return stock[product.id] || 0;
+            const qty = stock[product.id];
+            // If no stock defined for this product in manual mode, check season as fallback
+            if (qty === undefined || qty === null) {
+                const harvest = getHarvestStatus(product);
+                return harvest.inSeason ? 999 : 0;
+            }
+            return qty;
         }
         // Auto mode: check season
         const harvest = getHarvestStatus(product);
@@ -2456,6 +2462,19 @@ document.addEventListener('DOMContentLoaded', () => {
             });
             setManualStock(stock);
             showToast('Stock guardado correctamente');
+            renderMarketProducts();
+        });
+    }
+
+    // Reset to auto mode
+    const marketResetBtn = document.getElementById('market-reset-btn');
+    if (marketResetBtn) {
+        marketResetBtn.addEventListener('click', () => {
+            setMarketMode('auto');
+            localStorage.removeItem(MARKET_STOCK_KEY);
+            document.querySelector('input[name="market-mode"][value="auto"]').checked = true;
+            marketManualStock.style.display = 'none';
+            showToast('Modo automatico activado - Productos segun temporada');
             renderMarketProducts();
         });
     }
