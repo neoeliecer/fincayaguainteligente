@@ -200,7 +200,7 @@ document.addEventListener('DOMContentLoaded', () => {
             { label: 'Nombre', value: 'Paca Venezuela' },
             { label: 'Método', value: 'Paca Digestora Silva (Fermentación Prensada)' },
             { label: 'Dimensiones', value: '1 m x 1 m x 1 m (1,000 Litros)' },
-            { label: 'Ubicación', value: 'Finca Yagua' },
+            { label: 'Ubicación', value: 'Rancho Amelia' },
             { label: 'Día de Inicio', value: '2 de Septiembre 2026' },
             { label: 'Cosecha Estimada', value: '3 de Marzo 2027 (6 meses)' },
             { label: 'Estado actual', value: 'Compactación y Llenado' }
@@ -2656,8 +2656,8 @@ document.addEventListener('DOMContentLoaded', () => {
             message += '- Solicito disponibilidad y confirmo el pedido.\n';
             message += '- Enviar a: [tu direccion]\n';
             message += '________________________________\n';
-            message += '*Casa Yagua Inteligente*';
-            message += ' finca *Casa Yagua Inteligente* finca';
+            message += '*Rancho Amelia*';
+            message += ' finca *Rancho Amelia* finca';
 
             // Build WhatsApp URL
             const phone = '584228789110';
@@ -2824,7 +2824,7 @@ function initBlog() {
                     content,
                     image: uploadedImageUrl || null,
                     date: new Date().toISOString(),
-                    author: 'Finca Yagua'
+                    author: 'Rancho Amelia'
                 };
                 posts.unshift(newPost);
             }

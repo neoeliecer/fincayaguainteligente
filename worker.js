@@ -171,7 +171,7 @@ export default {
                 else if (pp >= 50 && pp < 75) ph = 'Enfriamiento y Maduracion';
                 else if (pp >= 75 && pp < 100) ph = 'Maduracion Final';
                 else if (pp >= 100) ph = 'LISTA PARA COSECHA';
-                r = 'Paca Venezuela\n\nProgreso: ' + pp.toFixed(1) + '%\nFase: ' + ph + '\nDias restantes: ~' + pr + '\nCosecha: 3 Marzo 2027\n\nUbicacion: Finca Yagua';
+                r = 'Paca Venezuela\n\nProgreso: ' + pp.toFixed(1) + '%\nFase: ' + ph + '\nDias restantes: ~' + pr + '\nCosecha: 3 Marzo 2027\n\nUbicacion: Rancho Amelia';
 
             } else if (textLower === '/mangos') {
                 var now = new Date();
