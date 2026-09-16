@@ -99,15 +99,75 @@ document.addEventListener('DOMContentLoaded', () => {
         if (realDaysElapsed) realDaysElapsed.textContent = `Dia ${daysElapsed} transcurrido`;
         
         let phase = 'Fase de Llenado';
-        if (pacaProgress >= 15 && pacaProgress < 30) phase = 'Fase Termica Temprana (~48C)';
-        else if (pacaProgress >= 30 && pacaProgress < 50) phase = 'Fase Termica Activa (~70C)';
-        else if (pacaProgress >= 50 && pacaProgress < 75) phase = 'Enfriamiento y Maduracion';
-        else if (pacaProgress >= 75 && pacaProgress < 100) phase = 'Maduracion Final';
-        else if (pacaProgress >= 100) phase = '¡COSECHA LISTA!';
+        let phaseIdx = 0;
+        if (pacaProgress >= 15 && pacaProgress < 30) { phase = 'Fase Termica Temprana (~48C)'; phaseIdx = 1; }
+        else if (pacaProgress >= 30 && pacaProgress < 50) { phase = 'Fase Termica Activa (~70C)'; phaseIdx = 2; }
+        else if (pacaProgress >= 50 && pacaProgress < 75) { phase = 'Enfriamiento y Maduracion'; phaseIdx = 3; }
+        else if (pacaProgress >= 75 && pacaProgress < 100) { phase = 'Maduracion Final'; phaseIdx = 4; }
+        else if (pacaProgress >= 100) { phase = '¡COSECHA LISTA!'; phaseIdx = 5; }
         
         if (realStageTitle) realStageTitle.textContent = 'Fase Actual: ' + phase;
-        if (realTemp) realTemp.textContent = 'Temperatura ambiente (~28°C)';
-        if (realMicrobeText) realMicrobeText.textContent = 'Primera capa de hojas secas colocada. La paca esta en proceso de construccion. Se continuan agregando capas de material verde y marron.';
+
+        // Temperature and microbe text by phase
+        const phaseData = [
+            { temp: '~28°C (Ambiente)', hum: '~45% (Seco)', microbe: 'Construccion de capas. Material verde y marron apilado. Colonizacion inicial por bacterias aerobicas.' },
+            { temp: '~48°C (Calentamiento)', hum: '~55% (Optimo)', microbe: 'Bacterias termofilas inician digestion. El calor interno mata semillas y patogenos. pH bajando.' },
+            { temp: '~70°C (Punto Termico)', hum: '~60% (Alto)', microbe: 'Fase mas activa. Actinomicetos destruyen celulosa. Pasteurizacion interna completa. Olor a tierra.' },
+            { temp: '~45°C (Enfriamiento)', hum: '~55% (Optimo)', microbe: 'Fungi y levaduras colonizan. Descomposicion de lignina. Material se vuelve oscuro y friable.' },
+            { temp: '~30°C (Maduracion)', hum: '~50% (Estable)', microbe: 'Microbiologia diversa estable. Humus formandose. Estructura granular apareciendo.' },
+            { temp: '~28°C (Listo)', hum: '~45% (Seco)', microbe: 'Humus maduro. Aromatico, negro, estructura de pan. pH neutro. Listo para uso.' }
+        ];
+        const pd = phaseData[phaseIdx];
+        if (realTemp) realTemp.textContent = pd.temp;
+        if (realMicrobeText) realMicrobeText.textContent = pd.microbe;
+
+        // Chemical composition by phase
+        const chemData = [
+            { ph: 6.8, phDesc: 'Neutro - Inicio', carbon: 45, nitrogen: 1.2, phosphorus: 0.3, potassium: 1.8, cn: 37, cnDesc: 'Equilibrado' },
+            { ph: 6.2, phDesc: 'Ligeramente acido', carbon: 42, nitrogen: 1.5, phosphorus: 0.4, potassium: 2.0, cn: 28, cnDesc: 'Fermentando' },
+            { ph: 5.5, phDesc: 'Acido - Termico', carbon: 38, nitrogen: 1.8, phosphorus: 0.5, potassium: 2.2, cn: 21, cnDesc: 'Activo' },
+            { ph: 5.8, phDesc: 'Recuperandose', carbon: 32, nitrogen: 2.0, phosphorus: 0.6, potassium: 2.5, cn: 16, cnDesc: 'Madurando' },
+            { ph: 6.3, phDesc: 'Neutro tendiendo', carbon: 25, nitrogen: 2.2, phosphorus: 0.7, potassium: 2.8, cn: 11, cnDesc: 'Casi listo' },
+            { ph: 6.8, phDesc: 'Neutro - Optimo', carbon: 18, nitrogen: 2.5, phosphorus: 0.8, potassium: 3.0, cn: 7, cnDesc: 'Humus maduro' }
+        ];
+        const cd = chemData[phaseIdx];
+
+        // Update chemical UI
+        const elPh = document.getElementById('real-paca-ph');
+        const elPhDesc = document.getElementById('real-paca-ph-desc');
+        const elCarbon = document.getElementById('real-paca-carbon');
+        const elNitrogen = document.getElementById('real-paca-nitrogen');
+        const elPhosphorus = document.getElementById('real-paca-phosphorus');
+        const elPotassium = document.getElementById('real-paca-potassium');
+        const elCn = document.getElementById('real-paca-cn');
+        const elCnDesc = document.getElementById('real-paca-cn-desc');
+
+        if (elPh) elPh.textContent = cd.ph.toFixed(1);
+        if (elPhDesc) elPhDesc.textContent = cd.phDesc;
+        if (elCarbon) elCarbon.textContent = cd.carbon + '%';
+        if (elNitrogen) elNitrogen.textContent = cd.nitrogen.toFixed(1) + '%';
+        if (elPhosphorus) elPhosphorus.textContent = cd.phosphorus.toFixed(1) + '%';
+        if (elPotassium) elPotassium.textContent = cd.potassium.toFixed(1) + '%';
+        if (elCn) elCn.textContent = cd.cn + ':1';
+        if (elCnDesc) elCnDesc.textContent = cd.cnDesc;
+
+        // Update bars
+        const barCarbon = document.getElementById('bar-carbon');
+        const barNitrogen = document.getElementById('bar-nitrogen');
+        const barPhosphorus = document.getElementById('bar-phosphorus');
+        const barPotassium = document.getElementById('bar-potassium');
+        if (barCarbon) barCarbon.style.width = cd.carbon + '%';
+        if (barNitrogen) barNitrogen.style.width = (cd.nitrogen / 3 * 100) + '%';
+        if (barPhosphorus) barPhosphorus.style.width = (cd.phosphorus / 1 * 100) + '%';
+        if (barPotassium) barPotassium.style.width = (cd.potassium / 4 * 100) + '%';
+
+        // Update timeline active state
+        document.querySelectorAll('.timeline-item').forEach((item, i) => {
+            item.classList.toggle('active', i <= phaseIdx);
+        });
+
+        // Humidity
+        if (realHumidity) realHumidity.textContent = pd.hum;
 
         // Check Paca milestones and send alerts
         const PACA_ALERT_KEY = 'yagua_paca_alerts_sent';

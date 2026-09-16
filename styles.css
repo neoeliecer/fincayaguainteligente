@@ -822,6 +822,99 @@ body {
     color: var(--text-secondary);
 }
 
+/* Col 4: Chemical Composition */
+.monitor-col-chemical h4 {
+    font-size: 0.95rem;
+    color: #fff;
+    margin-bottom: 12px;
+    font-family: 'Outfit', sans-serif;
+    border-left: 3px solid #8b5cf6;
+    padding-left: 8px;
+}
+
+.chemical-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+}
+
+.chemical-item {
+    background: rgba(255,255,255,0.05);
+    border-radius: 8px;
+    padding: 10px;
+    text-align: center;
+}
+
+.chemical-label {
+    display: block;
+    font-size: 0.7rem;
+    color: rgba(255,255,255,0.5);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+}
+
+.chemical-value {
+    display: block;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 2px;
+}
+
+.chemical-desc {
+    display: block;
+    font-size: 0.65rem;
+    color: rgba(255,255,255,0.4);
+}
+
+.chemical-bar {
+    height: 4px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 2px;
+    margin-top: 6px;
+    overflow: hidden;
+}
+
+.chemical-bar div {
+    height: 100%;
+    border-radius: 2px;
+    transition: width 1s ease;
+}
+
+.chemical-timeline {
+    background: rgba(255,255,255,0.03);
+    border-radius: 8px;
+    padding: 12px;
+}
+
+.chemical-timeline h5 {
+    font-size: 0.8rem;
+    color: rgba(255,255,255,0.6);
+    margin-bottom: 8px;
+}
+
+.timeline-item {
+    font-size: 0.75rem;
+    color: rgba(255,255,255,0.4);
+    padding: 4px 0;
+    border-left: 2px solid rgba(255,255,255,0.1);
+    padding-left: 10px;
+    margin-bottom: 4px;
+}
+
+.timeline-item.active {
+    color: #fff;
+    border-left-color: var(--accent-green);
+    font-weight: 500;
+}
+
+.tl-month {
+    font-weight: 600;
+    color: var(--accent-gold);
+    margin-right: 6px;
+}
+
 /* ==========================================================================
    Simulador Tab Styles
    ========================================================================== */
