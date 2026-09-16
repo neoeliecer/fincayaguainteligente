@@ -2234,10 +2234,10 @@ document.addEventListener('DOMContentLoaded', () => {
         { id: 'mkt-7', name: 'Platano Bellaco', emoji: '🍌', category: 'frutales', price: 0.40, unit: 'lb', description: 'Platano mas dulce, ideal para platanutres y maduros.', harvestMonths: [1,2,3,4,5,6,7,8,9,10,11,12] },
         // Tuberculos
         { id: 'mkt-8', name: 'Niquinqui', emoji: '🥔', category: 'tuberculos', price: 1.00, unit: 'lb', description: 'Tuberculo criollo, textura harinosa y sabor terroso.', harvestMonths: [1,2,3,4,5,6,7,8,9,10,11,12] },
-        // Organicos (Abono Organico) - siempre disponible
-        { id: 'mkt-9', name: 'Abono Organico (1 kg)', emoji: '🌱', category: 'organicos', price: 0.80, unit: 'kg', description: 'Abono organico fermentado de la Paca Digestora. Rico en microorganismos y nutrientes.', harvestMonths: [1,2,3,4,5,6,7,8,9,10,11,12] },
-        { id: 'mkt-10', name: 'Abono Organico (5 kg)', emoji: '🌱', category: 'organicos', price: 4.00, unit: 'kg', description: 'Abono organico fermentado. Paquete para huertos familiares.', harvestMonths: [1,2,3,4,5,6,7,8,9,10,11,12] },
-        { id: 'mkt-11', name: 'Abono Organico (10 kg)', emoji: '🌱', category: 'organicos', price: 8.00, unit: 'kg', description: 'Abono organico fermentado. Paquete para cultivos grandes.', harvestMonths: [1,2,3,4,5,6,7,8,9,10,11,12] }
+        // Organicos (Abono Organico) - NO DISPONIBLE - Paca aun no esta lista
+        { id: 'mkt-9', name: 'Abono Organico (1 kg)', emoji: '🌱', category: 'organicos', price: 0.80, unit: 'kg', description: 'Abono organico fermentado de la Paca Digestora. Disponible cuando la Paca este lista (Marzo 2027).', harvestMonths: [1,2,3,4,5,6,7,8,9,10,11,12], notReady: true, readyDate: 'Marzo 2027' },
+        { id: 'mkt-10', name: 'Abono Organico (5 kg)', emoji: '🌱', category: 'organicos', price: 4.00, unit: 'kg', description: 'Abono organico fermentado. Disponible cuando la Paca este lista (Marzo 2027).', harvestMonths: [1,2,3,4,5,6,7,8,9,10,11,12], notReady: true, readyDate: 'Marzo 2027' },
+        { id: 'mkt-11', name: 'Abono Organico (10 kg)', emoji: '🌱', category: 'organicos', price: 8.00, unit: 'kg', description: 'Abono organico fermentado. Disponible cuando la Paca este lista (Marzo 2027).', harvestMonths: [1,2,3,4,5,6,7,8,9,10,11,12], notReady: true, readyDate: 'Marzo 2027' }
     ];
 
     function isProductInSeason(product) {
@@ -2381,6 +2381,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function getProductStock(product) {
+        // Check if product is not ready yet (e.g., Paca not finished)
+        if (product.notReady) return 0;
+
         const mode = getMarketMode();
         if (mode === 'manual') {
             const stock = getManualStock();
@@ -2582,7 +2585,10 @@ document.addEventListener('DOMContentLoaded', () => {
             const harvest = getHarvestStatus(product);
 
             let availText, availClass;
-            if (mode === 'manual') {
+            if (product.notReady) {
+                availText = `Proximamente (${product.readyDate || 'TBD'})`;
+                availClass = 'avail-later';
+            } else if (mode === 'manual') {
                 if (stock > 0) {
                     availText = `Stock: ${stock} ${product.unit}`;
                     availClass = 'avail-now';
