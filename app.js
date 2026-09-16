@@ -2327,6 +2327,139 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // ---------------------------------------------------------
+    // Mercado Admin - Stock Management
+    // ---------------------------------------------------------
+    const MARKET_STOCK_KEY = 'yagua_market_stock';
+    const MARKET_MODE_KEY = 'yagua_market_mode';
+    let marketAdminMode = false;
+
+    function getMarketMode() {
+        return localStorage.getItem(MARKET_MODE_KEY) || 'auto';
+    }
+
+    function setMarketMode(mode) {
+        localStorage.setItem(MARKET_MODE_KEY, mode);
+    }
+
+    function getManualStock() {
+        const stored = localStorage.getItem(MARKET_STOCK_KEY);
+        return stored ? JSON.parse(stored) : {};
+    }
+
+    function setManualStock(stock) {
+        localStorage.setItem(MARKET_STOCK_KEY, JSON.stringify(stock));
+    }
+
+    function getProductStock(product) {
+        const mode = getMarketMode();
+        if (mode === 'manual') {
+            const stock = getManualStock();
+            return stock[product.id] || 0;
+        }
+        // Auto mode: check season
+        const harvest = getHarvestStatus(product);
+        return harvest.inSeason ? 999 : 0;
+    }
+
+    function renderStockInputs() {
+        const grid = document.getElementById('market-stock-grid');
+        if (!grid) return;
+
+        const stock = getManualStock();
+        grid.innerHTML = marketProducts.map(p => `
+            <div class="market-stock-item">
+                <span class="stock-emoji">${p.emoji}</span>
+                <div class="stock-info">
+                    <div class="stock-name">${p.name}</div>
+                    <div class="stock-unit">/ ${p.unit}</div>
+                </div>
+                <input type="number" class="market-stock-input" 
+                    data-product-id="${p.id}" 
+                    value="${stock[p.id] || 0}" 
+                    min="0" max="9999">
+            </div>
+        `).join('');
+    }
+
+    // Admin login handlers
+    const marketAdminBtn = document.getElementById('market-admin-btn');
+    const marketAdminLogin = document.getElementById('market-admin-login');
+    const marketAdminPanel = document.getElementById('market-admin-panel');
+    const marketLoginBtn = document.getElementById('market-login-btn');
+    const marketCancelBtn = document.getElementById('market-cancel-btn');
+    const marketSaveStockBtn = document.getElementById('market-save-stock-btn');
+    const marketManualStock = document.getElementById('market-manual-stock');
+
+    if (marketAdminBtn) {
+        marketAdminBtn.addEventListener('click', () => {
+            if (marketAdminMode) {
+                marketAdminMode = false;
+                marketAdminPanel.style.display = 'none';
+                marketAdminBtn.classList.remove('catalogo-admin-btn-active');
+                marketAdminBtn.innerHTML = '<i data-lucide="lock"></i> Admin Stock';
+                renderMarketProducts();
+                if (typeof lucide !== 'undefined') lucide.createIcons();
+            } else {
+                marketAdminLogin.style.display = 'block';
+            }
+        });
+    }
+
+    if (marketLoginBtn) {
+        marketLoginBtn.addEventListener('click', () => {
+            const user = document.getElementById('market-admin-user').value.trim();
+            const pin = document.getElementById('market-admin-pin').value.trim();
+            if (user === 'neoeliecer' && pin === '1981') {
+                marketAdminMode = true;
+                marketAdminLogin.style.display = 'none';
+                marketAdminPanel.style.display = 'block';
+                marketAdminBtn.classList.add('catalogo-admin-btn-active');
+                marketAdminBtn.innerHTML = '<i data-lucide="unlock"></i> Salir Admin';
+
+                // Set current mode
+                const currentMode = getMarketMode();
+                document.querySelector(`input[name="market-mode"][value="${currentMode}"]`).checked = true;
+                marketManualStock.style.display = currentMode === 'manual' ? 'block' : 'none';
+                if (currentMode === 'manual') renderStockInputs();
+
+                if (typeof lucide !== 'undefined') lucide.createIcons();
+            } else {
+                alert('Credenciales incorrectas.');
+            }
+        });
+    }
+
+    if (marketCancelBtn) {
+        marketCancelBtn.addEventListener('click', () => {
+            marketAdminLogin.style.display = 'none';
+        });
+    }
+
+    // Mode toggle
+    document.querySelectorAll('input[name="market-mode"]').forEach(radio => {
+        radio.addEventListener('change', (e) => {
+            setMarketMode(e.target.value);
+            marketManualStock.style.display = e.target.value === 'manual' ? 'block' : 'none';
+            if (e.target.value === 'manual') renderStockInputs();
+            renderMarketProducts();
+        });
+    });
+
+    // Save stock
+    if (marketSaveStockBtn) {
+        marketSaveStockBtn.addEventListener('click', () => {
+            const inputs = document.querySelectorAll('.market-stock-input');
+            const stock = {};
+            inputs.forEach(input => {
+                stock[input.dataset.productId] = parseInt(input.value) || 0;
+            });
+            setManualStock(stock);
+            showToast('Stock guardado correctamente');
+            renderMarketProducts();
+        });
+    }
+
     // Expose functions globally for onclick handlers
     window.marketAddToCart = addToCart;
     window.marketRemoveItem = removeFromCart;
@@ -2337,16 +2470,32 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!marketGrid) return;
 
         const filtered = filter === 'all' ? marketProducts : marketProducts.filter(p => p.category === filter);
+        const mode = getMarketMode();
 
         marketGrid.innerHTML = filtered.map(product => {
+            const stock = getProductStock(product);
+            const isAvailable = stock > 0;
             const harvest = getHarvestStatus(product);
-            const isAvailable = harvest.inSeason;
+
+            let availText, availClass;
+            if (mode === 'manual') {
+                if (stock > 0) {
+                    availText = `Stock: ${stock} ${product.unit}`;
+                    availClass = 'avail-now';
+                } else {
+                    availText = 'Agotado';
+                    availClass = 'avail-later';
+                }
+            } else {
+                availText = harvest.text;
+                availClass = harvest.class;
+            }
 
             return `
             <div class="market-card ${!isAvailable ? 'market-card-outofstock' : ''}" data-category="${product.category}">
                 <div class="market-card-img" style="background: linear-gradient(135deg, ${getCategoryColor(product.category)}15, ${getCategoryColor(product.category)}05);">
                     <span>${product.emoji}</span>
-                    <span class="market-card-availability ${harvest.class}">${harvest.text}</span>
+                    <span class="market-card-availability ${availClass}">${availText}</span>
                 </div>
                 <div class="market-card-body">
                     <h4>${product.name}</h4>

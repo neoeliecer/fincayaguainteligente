@@ -2951,6 +2951,52 @@
             <div class="section-header">
                 <h2>Mercado Organico Ecologico</h2>
                 <p>Productos frescos directo de nuestra finca. Cosecha responsable y sustentable.</p>
+                <button class="btn btn-secondary btn-sm" id="market-admin-btn" style="margin-top: 8px;">
+                    <i data-lucide="lock"></i> Admin Stock
+                </button>
+            </div>
+
+            <!-- Admin Login Panel -->
+            <div id="market-admin-login" class="card" style="display: none; max-width: 400px; margin: 0 auto 24px;">
+                <h4>Acceso Admin Mercado</h4>
+                <div class="form-group">
+                    <label>Usuario</label>
+                    <input type="text" id="market-admin-user" placeholder="Usuario master">
+                </div>
+                <div class="form-group">
+                    <label>PIN</label>
+                    <input type="password" id="market-admin-pin" placeholder="PIN de 4 digitos">
+                </div>
+                <div style="display: flex; gap: 8px;">
+                    <button class="btn btn-primary" id="market-login-btn">Entrar</button>
+                    <button class="btn btn-secondary" id="market-cancel-btn">Cancelar</button>
+                </div>
+            </div>
+
+            <!-- Admin Stock Panel -->
+            <div id="market-admin-panel" class="card" style="display: none; margin-bottom: 24px;">
+                <h4>Gestionar Stock</h4>
+                <div class="market-mode-toggle">
+                    <label class="market-mode-option">
+                        <input type="radio" name="market-mode" value="auto" checked>
+                        <span>Automatico (temporada)</span>
+                        <small>Muestra disponible segun mes de cosecha</small>
+                    </label>
+                    <label class="market-mode-option">
+                        <input type="radio" name="market-mode" value="manual">
+                        <span>Manual (inventario real)</span>
+                        <small>Define cantidades exactas en kg</small>
+                    </label>
+                </div>
+                <div id="market-manual-stock" style="display: none;">
+                    <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 12px;">Define las cantidades disponibles en kg (0 = agotado):</p>
+                    <div class="market-stock-grid" id="market-stock-grid">
+                        <!-- Se llena con JS -->
+                    </div>
+                    <button class="btn btn-primary" id="market-save-stock-btn" style="margin-top: 12px;">
+                        <i data-lucide="save"></i> Guardar Stock
+                    </button>
+                </div>
             </div>
 
             <!-- Filtros de Categoria -->
