@@ -2356,16 +2356,72 @@ document.addEventListener('DOMContentLoaded', () => {
         if (mode === 'manual') {
             const stock = getManualStock();
             const qty = stock[product.id];
-            // If no stock defined for this product in manual mode, check season as fallback
             if (qty === undefined || qty === null) {
                 const harvest = getHarvestStatus(product);
                 return harvest.inSeason ? 999 : 0;
             }
             return qty;
         }
-        // Auto mode: check season
-        const harvest = getHarvestStatus(product);
-        return harvest.inSeason ? 999 : 0;
+
+        // Auto mode: read kg from simulator DOM
+        return getSimulatorStock(product);
+    }
+
+    function getSimulatorStock(product) {
+        const currentMonth = new Date().getMonth() + 1;
+
+        // Helper: check if product is in season
+        const inSeason = product.harvestMonths.includes(currentMonth);
+        if (!inSeason) return 0;
+
+        // Map market products to simulator data
+        switch (product.id) {
+            // Mango Hilacha - 5 trees
+            case 'mkt-1': {
+                const el = document.getElementById('hilacha-total-kg');
+                if (el) {
+                    const kg = parseInt(el.textContent) || 0;
+                    return kg;
+                }
+                // Fallback: estimate from baseYield
+                return mangoData.hilacha ? mangoData.hilacha.baseYield.large * 5 : 0;
+            }
+
+            // Mamón - 2 trees
+            case 'mkt-5': {
+                const el = document.getElementById('mamon-kg');
+                if (el) {
+                    const kgPerTree = parseInt(el.textContent) || 0;
+                    return kgPerTree * 2; // 2 trees
+                }
+                return mangoData.mamon ? mangoData.mamon.baseYield.large * 2 : 0;
+            }
+
+            // Mango Ingertos - 3 trees (check each variety)
+            case 'mkt-2': // Haden
+            case 'mkt-3': // Tommy
+            case 'mkt-4': { // Keitt
+                let totalKg = 0;
+                const varieties = { 'mkt-2': 'haden', 'mkt-3': 'tommy', 'mkt-4': 'keitt' };
+                const targetVar = varieties[product.id];
+
+                for (let i = 1; i <= 3; i++) {
+                    const variedad = document.getElementById('mango' + i + '-variedad');
+                    const kgEl = document.getElementById('mango' + i + '-kg');
+                    if (variedad && kgEl) {
+                        const selectedVar = variedad.value;
+                        if (selectedVar === targetVar) {
+                            totalKg += parseInt(kgEl.textContent) || 0;
+                        }
+                    }
+                }
+                return totalKg;
+            }
+
+            // Platanos, tuberculos, abono: always available if in season
+            default:
+                return inSeason ? 999 : 0;
+        }
     }
 
     function renderStockInputs() {
@@ -2506,8 +2562,17 @@ document.addEventListener('DOMContentLoaded', () => {
                     availClass = 'avail-later';
                 }
             } else {
-                availText = harvest.text;
-                availClass = harvest.class;
+                // Auto mode: show kg from simulator
+                if (stock > 0 && stock < 999) {
+                    availText = `~${stock} ${product.unit} disponibles`;
+                    availClass = 'avail-now';
+                } else if (stock >= 999) {
+                    availText = harvest.text;
+                    availClass = harvest.class;
+                } else {
+                    availText = harvest.text;
+                    availClass = harvest.class;
+                }
             }
 
             return `
