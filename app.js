@@ -2286,11 +2286,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // Productos del Mercado con disponibilidad por temporada
     const marketProducts = [
         // Frutales - Temporadas en Venezuela
-        { id: 'mkt-1', name: 'Mango Hilacha', emoji: '🥭', category: 'frutales', price: 0.75, unit: 'lb', description: 'Mango criollo dulce y fibroso, sabor intenso.', harvestMonths: [6, 7, 8, 9] },
+        { id: 'mkt-1', name: 'Mango Hilacha', emoji: '🥭', category: 'frutales', price: 0.75, unit: 'lb', description: 'Mango criollo dulce y fibroso, sabor intenso.', harvestMonths: [6, 7, 8] },
         { id: 'mkt-2', name: 'Mango Ingerto (Haden)', emoji: '🥭', category: 'frutales', price: 1.00, unit: 'lb', description: 'Mango ingerto de pulpa firme y sabor equilibrado.', harvestMonths: [6, 7, 8] },
         { id: 'mkt-3', name: 'Mango Ingerto (Tommy)', emoji: '🥭', category: 'frutales', price: 1.00, unit: 'lb', description: 'Mango rojo brillante, jugoso y aromatico.', harvestMonths: [7, 8, 9] },
         { id: 'mkt-4', name: 'Mango Ingerto (Keitt)', emoji: '🥭', category: 'frutales', price: 1.00, unit: 'lb', description: 'Mango verde que madura a naranja, carnoso y dulce.', harvestMonths: [8, 9, 10] },
-        { id: 'mkt-5', name: 'Mamon (Memiso)', emoji: '🔴', category: 'frutales', price: 0.50, unit: 'lb', description: 'Fruta acida y refrescante, ideal para jugos y dulces.', harvestMonths: [6, 7, 8, 9] },
+        { id: 'mkt-5', name: 'Mamon (Memiso)', emoji: '🔴', category: 'frutales', price: 0.50, unit: 'lb', description: 'Fruta acida y refrescante, ideal para jugos y dulces.', harvestMonths: [6, 7, 8] },
         { id: 'mkt-6', name: 'Platano Grande', emoji: '🍌', category: 'frutales', price: 0.35, unit: 'lb', description: 'Platano ideal para hervir, freir o asar.', harvestMonths: [1,2,3,4,5,6,7,8,9,10,11,12] },
         { id: 'mkt-7', name: 'Platano Bellaco', emoji: '🍌', category: 'frutales', price: 0.40, unit: 'lb', description: 'Platano mas dulce, ideal para platanutres y maduros.', harvestMonths: [1,2,3,4,5,6,7,8,9,10,11,12] },
         // Tuberculos
