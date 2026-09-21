@@ -85,6 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const realStageTitle = document.getElementById('real-paca-stage-title');
     const realTemp = document.getElementById('real-paca-temp');
     const realMicrobeText = document.getElementById('real-paca-microbe-text');
+    const realHumidity = document.getElementById('real-paca-humidity');
 
     function updateRealPacaTimer() {
         const now = new Date();
