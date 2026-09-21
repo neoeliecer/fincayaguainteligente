@@ -8,8 +8,10 @@ recursos/Paca_Digestora_Silva.pdf
 
 # Node modules
 node_modules/
-
-# Wrangler/Cloudflare
+package-lock.json
+package.json
+wrangler.toml
+wrangler.jsonc
 .wrangler/
 .dev.vars
 
@@ -17,3 +19,7 @@ node_modules/
 Thumbs.db
 .DS_Store
 *.lock
+
+# Build output
+dist/
+.build/
