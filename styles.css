@@ -4292,6 +4292,28 @@ input[type="range"]::-webkit-slider-thumb:hover {
     line-height: 1.4;
 }
 
+.market-card-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.78rem;
+    color: #ec4899;
+    text-decoration: none;
+    margin-bottom: 12px;
+    font-weight: 500;
+    transition: opacity 0.2s;
+}
+
+.market-card-link:hover {
+    opacity: 0.75;
+    text-decoration: underline;
+}
+
+.market-card-link svg {
+    width: 13px;
+    height: 13px;
+}
+
 .market-card-footer {
     display: flex;
     align-items: center;
