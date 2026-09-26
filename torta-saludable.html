@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Delicias Saludables Delitortas | Torta de Zanahoria Natural</title>
+    <title>Torta de Zanahoria Saludable | Delicias Saludables Delitortas</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -361,6 +361,149 @@
         .benefit-card p {
             font-size: 0.82rem;
             color: var(--text-light);
+        }
+
+        /* Ciencia: Beneficios por ingrediente */
+        .science-section {
+            background: linear-gradient(180deg, #fdf8f0 0%, #fefcf3 100%);
+            padding: 100px 24px;
+        }
+
+        .science-intro {
+            max-width: 760px;
+            margin: 0 auto 56px;
+            text-align: center;
+        }
+
+        .science-list {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .science-item {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 32px;
+            border: 1px solid #f0f0f0;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .science-item:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .science-head {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 20px;
+            padding-bottom: 18px;
+            border-bottom: 2px solid #f7f0e5;
+        }
+
+        .science-emoji {
+            font-size: 2.4rem;
+            line-height: 1;
+            flex-shrink: 0;
+        }
+
+        .science-head h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            color: var(--text-dark);
+        }
+
+        .science-head .science-sub {
+            display: block;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.82rem;
+            font-weight: 500;
+            color: var(--primary);
+            margin-top: 2px;
+        }
+
+        .science-points {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .science-point {
+            display: flex;
+            gap: 14px;
+        }
+
+        .science-bullet {
+            flex-shrink: 0;
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            color: var(--white);
+            margin-top: 2px;
+        }
+
+        .bullet-carrot { background: #ed8936; }
+        .bullet-walnut { background: #8b5a2b; }
+        .bullet-olive { background: #276749; }
+
+        .science-point h4 {
+            font-size: 1rem;
+            color: var(--text-dark);
+            margin-bottom: 4px;
+        }
+
+        .science-point p {
+            font-size: 0.88rem;
+            color: var(--text-mid);
+            line-height: 1.65;
+        }
+
+        .science-point strong {
+            color: var(--text-dark);
+            font-weight: 600;
+        }
+
+        .synergy-banner {
+            max-width: 1000px;
+            margin: 28px auto 0;
+            background: linear-gradient(135deg, #276749, #48bb78);
+            color: var(--white);
+            border-radius: 20px;
+            padding: 28px 32px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .synergy-banner .synergy-icon {
+            font-size: 2.6rem;
+            flex-shrink: 0;
+        }
+
+        .synergy-banner h4 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.25rem;
+            margin-bottom: 4px;
+        }
+
+        .synergy-banner p {
+            font-size: 0.9rem;
+            opacity: 0.95;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 768px) {
+            .science-item { padding: 24px 20px; }
+            .synergy-banner { flex-direction: column; text-align: center; padding: 24px 20px; }
         }
 
         /* Product / Store */
@@ -833,7 +976,7 @@
                 </div>
                 <div class="hero-cta">
                     <a href="#tienda" class="btn-primary">Ordenar Ahora</a>
-                    <a href="#ingredientes" class="btn-secondary">Conocer Mas</a>
+                    <a href="#beneficios" class="btn-secondary">Ver Beneficios</a>
                 </div>
             </div>
             <div class="hero-image">
@@ -902,12 +1045,138 @@
             <div class="benefit-card">
                 <div class="benefit-icon">🏃</div>
                 <h4>Ideal para Deportistas</h4>
-                <p> energia sostenida sin picos de glucosa.</p>
+                <p>Energia sostenida sin picos de glucosa.</p>
             </div>
             <div class="benefit-card">
                 <div class="benefit-icon">👨‍👩‍👧‍👦</div>
                 <h4>Apta para Todos</h4>
                 <p>Ninos, adultos y adultos mayores. Sana y deliciosa.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Ciencia: Beneficios por Ingrediente -->
+    <section class="science-section" id="beneficios">
+        <div class="section-header">
+            <span class="section-tag">Evidencia Nutricional</span>
+            <h2 class="section-title">Los Beneficios de Cada Ingrediente</h2>
+        </div>
+
+        <div class="science-intro">
+            <p class="section-desc">No es un postre cualquiera. La sinergia entre zanahoria, nueces y aceite de oliva convierte cada rebanada en una fuente real de nutrientes funcionales que cuida la vision, el corazon, el cerebro y la digestion.</p>
+        </div>
+
+        <div class="science-list">
+
+            <!-- Zanahoria -->
+            <div class="science-item">
+                <div class="science-head">
+                    <div class="science-emoji">🥕</div>
+                    <div>
+                        <h3>La Zanahoria</h3>
+                        <span class="science-sub">Vitaminas, vista y absorcion multiplicada</span>
+                    </div>
+                </div>
+                <div class="science-points">
+                    <div class="science-point">
+                        <div class="science-bullet bullet-carrot">1</div>
+                        <div>
+                            <h4>Vitamina A y betacarotenos</h4>
+                            <p>Es una excelente fuente de <strong>betacaroteno</strong> (precursor de la vitamina A) y <strong>luteina</strong>, los cuales contribuyen a la <strong>salud ocular y la vision nocturna</strong>, asi como al mantenimiento de la <strong>piel, mucosas y sistema inmunitario</strong>.</p>
+                        </div>
+                    </div>
+                    <div class="science-point">
+                        <div class="science-bullet bullet-carrot">2</div>
+                        <div>
+                            <h4>Propiedades antioxidantes y antienvejecimiento</h4>
+                            <p>Aporta polifenoles y vitamina C que ayudan a <strong>neutralizar los radicales libres</strong> y reducir el estres oxidativo.</p>
+                        </div>
+                    </div>
+                    <div class="science-point">
+                        <div class="science-bullet bullet-carrot">3</div>
+                        <div>
+                            <h4>Mayor absorcion al hornearse</h4>
+                            <p>El calor ablanda las paredes celulares de la zanahoria liberando el betacaroteno. Como el betacaroteno es un nutriente <strong>liposoluble</strong>, al hornearse junto al <strong>aceite de oliva</strong> (grasa saludable), la biodisponibilidad y <strong>absorcion intestinal de la vitamina A se multiplica significativamente</strong> (entre 3 y 4 veces o mas).</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Nueces -->
+            <div class="science-item">
+                <div class="science-head">
+                    <div class="science-emoji">🥜</div>
+                    <div>
+                        <h3>Las Nueces</h3>
+                        <span class="science-sub">Omega-3 vegetal para el corazon y el cerebro</span>
+                    </div>
+                </div>
+                <div class="science-points">
+                    <div class="science-point">
+                        <div class="science-bullet bullet-walnut">1</div>
+                        <div>
+                            <h4>Salud cardiovascular</h4>
+                            <p>Las nueces aportan <strong>grasas saludables (omega-3 vegetal o acido alfa-linolenico - ALA)</strong>, proteina vegetal y polifenoles. Ayudan a <strong>reducir el colesterol LDL</strong> ("malo"), mejorar la elasticidad de las arterias y combatir procesos inflamatorios.</p>
+                        </div>
+                    </div>
+                    <div class="science-point">
+                        <div class="science-bullet bullet-walnut">2</div>
+                        <div>
+                            <h4>Proteccion cerebral y cognitiva</h4>
+                            <p>El consumo de nueces y sus nutrientes neuroprotectores favorece el <strong>rendimiento cognitivo</strong>, apoyando funciones como la <strong>memoria de trabajo y la atencion</strong>.</p>
+                        </div>
+                    </div>
+                    <div class="science-point">
+                        <div class="science-bullet bullet-walnut">3</div>
+                        <div>
+                            <h4>Efecto saciante</h4>
+                            <p>Su densidad nutricional y aporte de fibra ayudan a <strong>prolongar la sensacion de saciedad</strong>.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Aceite de oliva -->
+            <div class="science-item">
+                <div class="science-head">
+                    <div class="science-emoji">🫒</div>
+                    <div>
+                        <h3>El Aceite de Oliva</h3>
+                        <span class="science-sub">Grasas monoinsaturadas y polifenoles</span>
+                    </div>
+                </div>
+                <div class="science-points">
+                    <div class="science-point">
+                        <div class="science-bullet bullet-olive">1</div>
+                        <div>
+                            <h4>Grasas monoinsaturadas y polifenoles</h4>
+                            <p>Es rico en <strong>acido oleico</strong> y compuestos fenolicos antioxidantes (como el <strong>oleocantal, hidroxitirosol y tirosol</strong>).</p>
+                        </div>
+                    </div>
+                    <div class="science-point">
+                        <div class="science-bullet bullet-olive">2</div>
+                        <div>
+                            <h4>Proteccion del corazon y control metabolico</h4>
+                            <p>Ayuda a <strong>mejorar el perfil lipidico</strong> (mantiene o eleva el colesterol bueno HDL y reduce el LDL), contribuye a regular la <strong>presion arterial</strong> y favorece el control de la <strong>glucemia y la sensibilidad a la insulina</strong>.</p>
+                        </div>
+                    </div>
+                    <div class="science-point">
+                        <div class="science-bullet bullet-olive">3</div>
+                        <div>
+                            <h4>Digestion y salud hepatica</h4>
+                            <p>Facilita la lubricacion del sistema digestivo y apoya la <strong> digestion y absorcion de nutrientes</strong>.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Banner sinergia -->
+        <div class="synergy-banner">
+            <div class="synergy-icon">✨</div>
+            <div>
+                <h4>La Sinergia del Aceite de Oliva</h4>
+                <p>Al combinar la zanahoria (rica en betacaroteno liposoluble) con el aceite de oliva (fuente de grasa saludable), el cuerpo absorbe la vitamina A de forma hasta <strong>3 a 4 veces mas eficiente</strong> que comiendo la zanahoria cruda. Una sinergia que solo se logra al hornear juntos.</p>
             </div>
         </div>
     </section>
@@ -926,7 +1195,7 @@
                     🎂
                 </div>
                 <div class="product-details">
-                    <h2>Torta de Zanahoria Natural</h2>
+                    <h2>Torta de Zanahoria Saludable</h2>
                     <p class="product-desc">Delicias Saludables Delitortas. Preparada con aceite de oliva extra virgen, nueces naturales y zanahoria fresca rallada. Sin harina refinada, sin azucar blanca. Cada bocado es pura salud y sabor.</p>
 
                     <div class="product-tags">
