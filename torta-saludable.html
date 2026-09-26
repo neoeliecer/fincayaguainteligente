@@ -276,7 +276,7 @@
 
         .ingredients-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(2, 1fr);
             gap: 30px;
         }
 
@@ -454,6 +454,7 @@
         .bullet-carrot { background: #ed8936; }
         .bullet-walnut { background: #8b5a2b; }
         .bullet-olive { background: #276749; }
+        .bullet-raisin { background: #7b2d5e; }
 
         .science-point h4 {
             font-size: 1rem;
@@ -501,9 +502,45 @@
             line-height: 1.6;
         }
 
+        .portion-note {
+            max-width: 1000px;
+            margin: 20px auto 0;
+            background: #fffaf0;
+            border: 1px dashed var(--gold);
+            border-radius: 16px;
+            padding: 20px 24px;
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+        }
+
+        .portion-note .portion-icon {
+            font-size: 1.6rem;
+            flex-shrink: 0;
+            line-height: 1.2;
+        }
+
+        .portion-note h4 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.05rem;
+            color: var(--text-dark);
+            margin-bottom: 4px;
+        }
+
+        .portion-note p {
+            font-size: 0.87rem;
+            color: var(--text-mid);
+            line-height: 1.6;
+        }
+
+        .portion-note strong {
+            color: var(--primary);
+        }
+
         @media (max-width: 768px) {
             .science-item { padding: 24px 20px; }
             .synergy-banner { flex-direction: column; text-align: center; padding: 24px 20px; }
+            .portion-note { flex-direction: column; text-align: center; padding: 20px; }
         }
 
         /* Product / Store */
@@ -959,7 +996,7 @@
             <div class="hero-content">
                 <div class="hero-badge">100% Natural & Sin Azucar Refinada</div>
                 <h1 class="hero-title">Torta de <span>Zanahoria</span> Saludable</h1>
-                <p class="hero-subtitle">Delicias Saludables Delitortas. Una torta artesanal hecha con aceite de oliva extra virgen, nueces naturales y zanahoria fresca. Sabor irresistible sin culpa.</p>
+                <p class="hero-subtitle">Delicias Saludables Delitortas. Una torta artesanal hecha con aceite de oliva extra virgen, nueces naturales, zanahoria fresca y uvas pasas. Sabor irresistible sin culpa.</p>
                 <div class="hero-features">
                     <div class="hero-feature">
                         <div class="hero-feature-icon">🫒</div>
@@ -972,6 +1009,10 @@
                     <div class="hero-feature">
                         <div class="hero-feature-icon">🥕</div>
                         <span>Zanahoria Fresca</span>
+                    </div>
+                    <div class="hero-feature">
+                        <div class="hero-feature-icon">🍇</div>
+                        <span>Uvas Pasas</span>
                     </div>
                 </div>
                 <div class="hero-cta">
@@ -1021,6 +1062,11 @@
                 <div class="ingredient-icon icon-walnut">🥜</div>
                 <h3>Nueces Naturales</h3>
                 <p>Ricas en omega-3, proteinas y antioxidantes. Le dan un toque crujiente y un valor nutricional excepcional a cada bocado.</p>
+            </div>
+            <div class="ingredient-card">
+                <div class="ingredient-icon icon-olive">🍇</div>
+                <h3>Uvas Pasas</h3>
+                <p>Dulzura natural con potasio, fibra, boro y acido tartarico prebiotico. Aportan energia y estabecen la microbiota intestinal.</p>
             </div>
         </div>
     </section>
@@ -1136,6 +1182,54 @@
                 </div>
             </div>
 
+            <!-- Uvas Pasas -->
+            <div class="science-item">
+                <div class="science-head">
+                    <div class="science-emoji">🍇</div>
+                    <div>
+                        <h3>Las Uvas Pasas</h3>
+                        <span class="science-sub">Micronutrientes y bioactivos que complementan todo lo anterior</span>
+                    </div>
+                </div>
+                <div class="science-points">
+                    <div class="science-point">
+                        <div class="science-bullet bullet-raisin">1</div>
+                        <div>
+                            <h4>Salud digestiva y efecto prebiotico</h4>
+                            <p><strong>Fibra soluble e insoluble:</strong> favorecen el transito intestinal, aumentan el volumen de las heces y ayudan a combatir el estreñimiento. Ademas, el <strong>acido tartarico</strong> presente en las pasas fermenta en el colon y actua como <strong>prebiotico</strong>, estimulando el crecimiento de bacterias beneficiosas y mejorando la microbiota gastrointestinal.</p>
+                        </div>
+                    </div>
+                    <div class="science-point">
+                        <div class="science-bullet bullet-raisin">2</div>
+                        <div>
+                            <h4>Proteccion cardiovascular y presion arterial</h4>
+                            <p>Aportan entre <strong>749 mg y 880 mg de potasio por cada 100 g</strong>, ademas de polifenoles y flavonoides que combaten el estres oxidativo y ayudan a reducir el <strong>colesterol LDL y los trigliceridos</strong>. Ensayos clinicos han comprobado que reemplazar snacks procesados por pasas logra una <strong>reduccion de hasta 8,7 mmHg en la presion arterial sistolica</strong> y disminuye en un <strong>23% los niveles de glucosa despues de comer</strong> en personas con diabetes tipo 2.</p>
+                        </div>
+                    </div>
+                    <div class="science-point">
+                        <div class="science-bullet bullet-raisin">3</div>
+                        <div>
+                            <h4>Salud osea y absorcion de minerales</h4>
+                            <p>Ademas de aportar calcio, contienen <strong>boro</strong> (aprox. 2,2 mg/100 g), un oligoelemento clave que optimiza la absorcion del <strong>calcio, magnesio, fosforo y vitamina D</strong> en el organismo, reforzando la densidad de los huesos y dientes.</p>
+                        </div>
+                    </div>
+                    <div class="science-point">
+                        <div class="science-bullet bullet-raisin">4</div>
+                        <div>
+                            <h4>Respuesta glucemica moderada</h4>
+                            <p>Aunque contienen azucares naturales (fructosa y glucosa), su contenido de fibra <strong>ralentiza la absorcion de los carbohidratos</strong>, otorgandoles un indice glucemico moderado (aprox. <strong>49 a 64</strong>) que evita picos bruscos de azucar en sangre si se consumen con moderacion.</p>
+                        </div>
+                    </div>
+                    <div class="science-point">
+                        <div class="science-bullet bullet-raisin">5</div>
+                        <div>
+                            <h4>Salud bucal y prevencion de la anemia</h4>
+                            <p>Contienen fitoquimicos con accion antibacteriana (como el <strong>acido oleanolico</strong>) que ayudan a inhibir bacterias bucales asociadas al desarrollo de caries. Ademas aportan <strong>hierro y cobre</strong> para favorecer la produccion de globulos rojos y prevenir la anemia, siendo una excelente fuente de energia natural.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Aceite de oliva -->
             <div class="science-item">
                 <div class="science-head">
@@ -1179,6 +1273,15 @@
                 <p>Al combinar la zanahoria (rica en betacaroteno liposoluble) con el aceite de oliva (fuente de grasa saludable), el cuerpo absorbe la vitamina A de forma hasta <strong>3 a 4 veces mas eficiente</strong> que comiendo la zanahoria cruda. Una sinergia que solo se logra al hornear juntos.</p>
             </div>
         </div>
+
+        <!-- Porcion recomendada -->
+        <div class="portion-note">
+            <div class="portion-icon">💡</div>
+            <div>
+                <h4>Porcion recomendada</h4>
+                <p>Dada su concentracion calorica y glucidica por el proceso de deshidratacion, los especialistas aconsejan una racion de <strong>25 a 40 gramos al dia</strong> (un punado pequeno o unas 2 cucharadas). En nuestra torta se emplean de forma moderada para aportar dulzura natural sin perder el perfil saludable.</p>
+            </div>
+        </div>
     </section>
 
     <!-- Tienda -->
@@ -1202,6 +1305,7 @@
                         <span class="product-tag tag-green">🫒 Aceite de Oliva</span>
                         <span class="product-tag tag-green">🥜 Nueces</span>
                         <span class="product-tag tag-green">🥕 Zanahoria</span>
+                        <span class="product-tag tag-green">🍇 Uvas Pasas</span>
                         <span class="product-tag tag-orange">Sin Azucar</span>
                         <span class="product-tag tag-orange">Artesanal</span>
                     </div>
