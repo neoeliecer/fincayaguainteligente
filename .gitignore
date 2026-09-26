@@ -4,21 +4,20 @@ recursos/*.m4a
 recursos/**/*.mp4
 recursos/**/*.m4a
 recursos/**/*.mp3
-recursos/Paca_Digestora_Silva.pdf
 
 # Node modules
 node_modules/
 package-lock.json
-package.json
-wrangler.toml
-wrangler.jsonc
+bun.lockb
+
+# Wrangler / Cloudflare (este repo es estatico, no usa Workers)
 .wrangler/
 .dev.vars
+wrangler.jsonc
 
 # Archivos del sistema
 Thumbs.db
 .DS_Store
-*.lock
 
 # Build output
 dist/
