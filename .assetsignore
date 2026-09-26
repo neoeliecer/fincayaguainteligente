@@ -1,0 +1,10 @@
+# Excluir de la subida a Cloudflare Workers Assets
+node_modules/**
+.git/**
+.wrangler/**
+*.wrangler*
+worker.js
+package.json
+package-lock.json
+vercel.json
+.gitignore

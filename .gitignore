@@ -10,10 +10,9 @@ node_modules/
 package-lock.json
 bun.lockb
 
-# Wrangler / Cloudflare (este repo es estatico, no usa Workers)
+# Wrangler / Cloudflare
 .wrangler/
 .dev.vars
-wrangler.jsonc
 
 # Archivos del sistema
 Thumbs.db
