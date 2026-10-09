@@ -2300,7 +2300,9 @@ document.addEventListener('DOMContentLoaded', () => {
         { id: 'mkt-10', name: 'Abono Organico (5 kg)', emoji: '🌱', category: 'organicos', price: 4.00, unit: 'kg', description: 'Abono organico fermentado. Disponible cuando la Paca este lista (Marzo 2027).', harvestMonths: [1,2,3,4,5,6,7,8,9,10,11,12], notReady: true, readyDate: 'Marzo 2027' },
         { id: 'mkt-11', name: 'Abono Organico (10 kg)', emoji: '🌱', category: 'organicos', price: 8.00, unit: 'kg', description: 'Abono organico fermentado. Disponible cuando la Paca este lista (Marzo 2027).', harvestMonths: [1,2,3,4,5,6,7,8,9,10,11,12], notReady: true, readyDate: 'Marzo 2027' },
         // Delitortas - Torta Saludable de Zanahoria
-        { id: 'mkt-12', name: 'Torta Saludable de Zanahoria', emoji: '🎂', category: 'delicatessen', price: 22.00, unit: 'torta', description: 'Torta de zanahoria con aceite de oliva y nueces. Sin azucar refinada. Tamano para eventos (20-30 personas).', harvestMonths: [1,2,3,4,5,6,7,8,9,10,11,12], link: 'torta-saludable.html' }
+        { id: 'mkt-12', name: 'Torta Saludable de Zanahoria', emoji: '🎂', category: 'delicatessen', price: 22.00, unit: 'torta', description: 'Torta de zanahoria con aceite de oliva y nueces. Sin azucar refinada. Tamano para eventos (20-30 personas).', harvestMonths: [1,2,3,4,5,6,7,8,9,10,11,12], link: 'torta-saludable.html' },
+        // Snacks
+        { id: 'mkt-13', name: 'Platano Deshidratado (Snack)', emoji: '🍌', category: 'snacks', price: 1.50, unit: 'bolsa', description: 'Chips de platano verde deshidratado, crocante y natural. Sin aceites ni conservantes. Ideal para picar.', harvestMonths: [1,2,3,4,5,6,7,8,9,10,11,12] }
     ];
 
     function isProductInSeason(product) {
@@ -2705,7 +2707,8 @@ document.addEventListener('DOMContentLoaded', () => {
             frutales: '#f59e0b',
             tuberculos: '#8b5a2b',
             organicos: '#22c55e',
-            delicatessen: '#ec4899'
+            delicatessen: '#ec4899',
+            snacks: '#0ea5e9'
         };
         return colors[category] || '#6b7280';
     }
