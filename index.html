@@ -239,6 +239,13 @@
                                 <text x="40" y="70" text-anchor="middle" class="svg-paca-label">VENEZUELA</text>
                             </g>
 
+                            <!-- Paca Colombia -->
+                            <g class="svg-element clickable" id="elem-paca2" data-title="Paca Colombia" data-desc="Segunda paca digestora de la finca Yagua. Inicio: 15 de Septiembre 2026 (15 dias despues de la Paca Venezuela). Cosecha estimada: 15 de Marzo 2027.">
+                                <rect x="25" y="95" width="30" height="30" rx="4" class="svg-paca svg-paca-active" />
+                                <text x="40" y="114" class="svg-paca-num">2</text>
+                                <text x="40" y="140" text-anchor="middle" class="svg-paca-label">COLOMBIA</text>
+                            </g>
+
                             <!-- Cultivos de Aromáticas & Autoriego (Orégano y Albahaca) -->
                             <g class="svg-element clickable" id="elem-aromaticas" data-title="Parcela de Aromáticas (Autoriego)" data-desc="Cultivos de albahaca y orégano. Equipado con un sistema de riego localizado. Actúa como barrera biológica: las aromáticas confunden a las plagas y atraen insectos polinizadores y depredadores benéficos.">
                                 <!-- Planting Beds -->
@@ -284,7 +291,7 @@
             </div>
 
             <!-- Monitoreo de Paca Real #1 (COUNTDOWN & ANIMATION WIDGET) -->
-            <div class="paca-real-monitor card" style="margin-top: 24px;">
+            <div class="paca-real-monitor card" id="paca-ven-monitor" style="margin-top: 24px;">
                 <div class="monitor-header">
                     <div class="monitor-title">
                         <i data-lucide="flame" class="icon-hot"></i>
@@ -495,6 +502,149 @@
                                     <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
                                 </button>
                             </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Monitoreo de Paca Real #2 - PACA COLOMBIA (COUNTDOWN & ANIMATION WIDGET) -->
+            <div class="paca-real-monitor card" id="paca-col-monitor" style="margin-top: 24px;">
+                <div class="monitor-header">
+                    <div class="monitor-title">
+                        <i data-lucide="flame" class="icon-hot"></i>
+                        <div>
+                            <h3>Monitoreo en Tiempo Real: Paca Colombia</h3>
+                            <p class="helper-text" style="margin-bottom: 0;">Segunda paca digestora de la finca Yagua, iniciada 15 dias despues de la Paca Venezuela.</p>
+                        </div>
+                    </div>
+                    <div class="date-badge">
+                        <span>Inicio: 15 de Septiembre de 2026</span>
+                    </div>
+                </div>
+
+                <div class="monitor-grid">
+                    <!-- Column 1: Live Animation -->
+                    <div class="monitor-col-anim">
+                        <div class="paca-3d-box-container">
+                            <div class="heat-wave wave-1"></div>
+                            <div class="heat-wave wave-2"></div>
+                            <div class="heat-wave wave-3"></div>
+                            <div class="paca-3d-box">
+                                <div class="paca-box-side paca-front"></div>
+                                <div class="paca-box-side paca-top"></div>
+                                <div class="paca-box-side paca-right"></div>
+                                <div class="percent-label" id="c2-percent">0%</div>
+                            </div>
+                        </div>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar-fill" id="c2-progress" style="width: 0%;"></div>
+                        </div>
+                        <div class="progress-labels">
+                            <span id="c2-days-elapsed">Dia 1 transcurrido</span>
+                            <span>Dia 180 (Cosecha)</span>
+                        </div>
+                    </div>
+
+                    <!-- Column 2: Countdown Timer -->
+                    <div class="monitor-col-countdown">
+                        <h4>Tiempo Restante para la Cosecha (6 Meses)</h4>
+                        <div class="countdown-clock" id="c2-countdown-clock">
+                            <div class="clock-unit">
+                                <span class="number" id="c2-cd-days">182</span>
+                                <span class="label">Días</span>
+                            </div>
+                            <div class="clock-unit">
+                                <span class="number" id="c2-cd-hours">0</span>
+                                <span class="label">Horas</span>
+                            </div>
+                            <div class="clock-unit">
+                                <span class="number" id="c2-cd-minutes">0</span>
+                                <span class="label">Min.</span>
+                            </div>
+                            <div class="clock-unit">
+                                <span class="number" id="c2-cd-seconds">0</span>
+                                <span class="label">Seg.</span>
+                            </div>
+                        </div>
+                        <p class="harvest-date-hint">Cosecha estimada para: <strong>15 de Marzo de 2027</strong></p>
+                    </div>
+
+                    <!-- Column 3: Biological Process Info -->
+                    <div class="monitor-col-stats">
+                        <h4 id="c2-stage-title">Actividad Biológica Actual (Fase de Llenado)</h4>
+                        <ul class="stats-list">
+                            <li>
+                                <i data-lucide="thermometer" class="stat-icon-temp"></i>
+                                <div>
+                                    <strong>Temperatura Estimada:</strong>
+                                    <span id="c2-temp">~28°C (Ambiente)</span>
+                                </div>
+                            </li>
+                            <li>
+                                <i data-lucide="droplets" class="stat-icon-hum"></i>
+                                <div>
+                                    <strong>Humedad Interna Ajustada:</strong>
+                                    <span id="c2-humidity">~45% (Seco)</span>
+                                </div>
+                            </li>
+                            <li>
+                                <i data-lucide="cloud-rain" style="color: var(--accent-blue);"></i>
+                                <div>
+                                    <strong>Factor Clima Yagua (Open-Meteo):</strong>
+                                    <span id="c2-weather-factor">Obteniendo datos de lluvia...</span>
+                                </div>
+                            </li>
+                            <li>
+                                <i data-lucide="binary" class="stat-icon-bio"></i>
+                                <div>
+                                    <strong>Proceso Microbiológico:</strong>
+                                    <span id="c2-microbe-text">Construccion de capas. Material verde y marron apilado. Colonizacion inicial por bacterias aerobicas.</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Column 4: Chemical Composition -->
+                    <div class="monitor-col-chemical">
+                        <h4>Composición Química Estimada</h4>
+                        <div class="chemical-grid">
+                            <div class="chemical-item">
+                                <span class="chemical-label">pH</span>
+                                <span class="chemical-value" id="c2-ph">6.8</span>
+                                <span class="chemical-desc" id="c2-ph-desc">Neutro - Inicio</span>
+                            </div>
+                            <div class="chemical-item">
+                                <span class="chemical-label">Carbono (C)</span>
+                                <span class="chemical-value" id="c2-carbon">45%</span>
+                                <div class="chemical-bar"><div id="c2-bar-carbon" style="width: 45%; background: #8b5cf6;"></div></div>
+                            </div>
+                            <div class="chemical-item">
+                                <span class="chemical-label">Nitrógeno (N)</span>
+                                <span class="chemical-value" id="c2-nitrogen">1.2%</span>
+                                <div class="chemical-bar"><div id="c2-bar-nitrogen" style="width: 24%; background: #22c55e;"></div></div>
+                            </div>
+                            <div class="chemical-item">
+                                <span class="chemical-label">Fósforo (P)</span>
+                                <span class="chemical-value" id="c2-phosphorus">0.3%</span>
+                                <div class="chemical-bar"><div id="c2-bar-phosphorus" style="width: 15%; background: #f59e0b;"></div></div>
+                            </div>
+                            <div class="chemical-item">
+                                <span class="chemical-label">Potasio (K)</span>
+                                <span class="chemical-value" id="c2-potassium">1.8%</span>
+                                <div class="chemical-bar"><div id="c2-bar-potassium" style="width: 36%; background: #ef4444;"></div></div>
+                            </div>
+                            <div class="chemical-item">
+                                <span class="chemical-label">Relación C:N</span>
+                                <span class="chemical-value" id="c2-cn">37:1</span>
+                                <span class="chemical-desc" id="c2-cn-desc">Equilibrado</span>
+                            </div>
+                        </div>
+                        <div class="chemical-timeline" style="margin-top: 16px;">
+                            <h5>Evolución Esperada</h5>
+                            <div class="timeline-item active"><span class="tl-month">Mes 1-2</span> C:N ~37:1, pH neutro, materia verde dominante</div>
+                            <div class="timeline-item"><span class="tl-month">Mes 3</span> C:N ~25:1, pH ácido, termófilas activas</div>
+                            <div class="timeline-item"><span class="tl-month">Mes 4-5</span> C:N ~15:1, pH recuperándose, maduración</div>
+                            <div class="timeline-item"><span class="tl-month">Mes 6</span> C:N ~10:1, humus listo, pH 6.5-7.0</div>
                         </div>
                     </div>
                 </div>
@@ -1456,7 +1606,8 @@
                             <div class="form-group">
                                 <label for="log-category">Categoría</label>
                                 <select id="log-category" required>
-                                    <option value="compost">Compost / Paca Digestora</option>
+                                    <option value="compost">Compost / Paca Venezuela</option>
+                                    <option value="paca-colombia">Compost / Paca Colombia</option>
                                     <option value="siembra">Siembra / Plantacion</option>
                                     <option value="riego">Autoriego / Aromáticas</option>
                                     <option value="limpieza">Limpieza de Casa (Nevera/Cocina)</option>

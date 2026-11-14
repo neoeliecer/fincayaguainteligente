@@ -1574,6 +1574,7 @@ input[type="range"]::-webkit-slider-thumb:hover {
 }
 
 .timeline-dot.compost { background-color: var(--accent-brown); }
+.timeline-dot.paca-colombia { background-color: #f77f00; }
 .timeline-dot.riego { background-color: var(--accent-blue); }
 .timeline-dot.limpieza { background-color: var(--accent-green); }
 .timeline-dot.poda { background-color: var(--accent-gold); }

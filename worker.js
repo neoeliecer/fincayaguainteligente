@@ -23,12 +23,20 @@ export default {
 
                 // Monthly paca alert (1st of each month)
                 if (day === 1) {
-                    const p0 = new Date('2026-09-02');
-                    const p1 = new Date('2027-03-02');
-                    const pp = Math.min(100, Math.max(0, ((now - p0) / (p1 - p0)) * 100));
-                    const pr = Math.ceil((p1 - now) / 86400000);
-                    const monthsLeft = Math.ceil(pr / 30);
+                    var p0 = new Date('2026-09-02');
+                    var p1 = new Date('2027-03-02');
+                    var pp = Math.min(100, Math.max(0, ((now - p0) / (p1 - p0)) * 100));
+                    var pr = Math.ceil((p1 - now) / 86400000);
+                    var monthsLeft = Math.ceil(pr / 30);
                     alerts.push('Paca Venezuela: ' + pp.toFixed(1) + '% completado. Quedan ~' + monthsLeft + ' meses (' + pr + ' dias) para cosecha.');
+
+                    // Paca Colombia (inicio 15 sep 2026, cosecha 15 mar 2027)
+                    var c0 = new Date('2026-09-15');
+                    var c1 = new Date('2027-03-15');
+                    var cp = Math.min(100, Math.max(0, ((now - c0) / (c1 - c0)) * 100));
+                    var cr = Math.ceil((c1 - now) / 86400000);
+                    var cMonthsLeft = Math.ceil(cr / 30);
+                    alerts.push('Paca Colombia: ' + cp.toFixed(1) + '% completado. Quedan ~' + cMonthsLeft + ' meses (' + cr + ' dias) para cosecha.');
                 }
 
                 // Mango harvest alerts (June 1 - August 31)
@@ -96,6 +104,14 @@ export default {
                 var rem = Math.ceil((p1 - now) / 86400000);
                 return new Response(JSON.stringify({ name: 'Paca Venezuela', percent: pct.toFixed(1), days_remaining: rem, harvest: '2027-03-03' }), { headers: { 'Content-Type': 'application/json', ...corsHeaders } });
             }
+            if (url.pathname === '/api/paca2') {
+                var now2 = new Date();
+                var q0 = new Date('2026-09-15');
+                var q1 = new Date('2027-03-15');
+                var pct2 = Math.min(100, Math.max(0, ((now2 - q0) / (q1 - q0)) * 100));
+                var rem2 = Math.ceil((q1 - now2) / 86400000);
+                return new Response(JSON.stringify({ name: 'Paca Colombia', percent: pct2.toFixed(1), days_remaining: rem2, harvest: '2027-03-15' }), { headers: { 'Content-Type': 'application/json', ...corsHeaders } });
+            }
 
             // API: Get simulator alerts for the website
             if (url.pathname === '/api/simulador-alerts') {
@@ -128,7 +144,16 @@ export default {
                 else if (pct >= 75 && pct < 76) alerts.push({ type: 'paca', text: 'Paca Venezuela: 75% completado - Maduracion Final', icon: '✅' });
                 else if (pct >= 99) alerts.push({ type: 'paca', text: 'Paca Venezuela: LISTA PARA COSECHA!', icon: '🎉' });
 
-                return new Response(JSON.stringify({ ok: true, alerts: alerts, month: month, pacaPercent: pct.toFixed(1) }), { headers: { 'Content-Type': 'application/json', ...corsHeaders } });
+                // Paca Colombia progress (inicio 15 sep 2026)
+                var q0 = new Date('2026-09-15');
+                var q1 = new Date('2027-03-15');
+                var pct2 = Math.min(100, Math.max(0, ((now - q0) / (q1 - q0)) * 100));
+                if (pct2 >= 25 && pct2 < 26) alerts.push({ type: 'paca', text: 'Paca Colombia: 25% completado - Fase Termica Temprana', icon: '🌡️' });
+                else if (pct2 >= 50 && pct2 < 51) alerts.push({ type: 'paca', text: 'Paca Colombia: 50% completado - Fase Termica Activa', icon: '🔥' });
+                else if (pct2 >= 75 && pct2 < 76) alerts.push({ type: 'paca', text: 'Paca Colombia: 75% completado - Maduracion Final', icon: '✅' });
+                else if (pct2 >= 99) alerts.push({ type: 'paca', text: 'Paca Colombia: LISTA PARA COSECHA!', icon: '🎉' });
+
+                return new Response(JSON.stringify({ ok: true, alerts: alerts, month: month, pacaPercent: pct.toFixed(1), paca2Percent: pct2.toFixed(1) }), { headers: { 'Content-Type': 'application/json', ...corsHeaders } });
             }
 
             // API: Push alert from website to Telegram
@@ -197,7 +222,7 @@ export default {
             let r = '';
 
             if (textLower === '/start' || textLower === '/help') {
-                r = 'Hola ' + firstName + '! Bot de Rancho Amelia\n\n/status - Estado general\n/paca - Paca Venezuela\n/mangos - Estado cosecha mangos\n/simulador - Todos los simuladores\n/clima - Clima en Yagua\n/semillero - Ver plantulas\n/inventario - Ver bienes\n/bitacora - Ver ultimas entradas\n/log [cat] [nota] - Guardar en bitacora\n\nCategorias: Compost, Siembra, Limpieza, Poda, Riego, Mantenimiento';
+                r = 'Hola ' + firstName + '! Bot de Rancho Amelia\n\n/status - Estado general\n/paca - Paca Venezuela\n/paca2 - Paca Colombia\n/mangos - Estado cosecha mangos\n/simulador - Todos los simuladores\n/clima - Clima en Yagua\n/semillero - Ver plantulas\n/inventario - Ver bienes\n/bitacora - Ver ultimas entradas\n/log [cat] [nota] - Guardar en bitacora\n\nCategorias: Compost, Paca Colombia, Siembra, Limpieza, Poda, Riego, Mantenimiento';
 
             } else if (textLower === '/status') {
                 var now = new Date();
@@ -205,8 +230,12 @@ export default {
                 var s1 = new Date('2027-03-02');
                 var pct = Math.min(100, Math.max(0, ((now - s0) / (s1 - s0)) * 100));
                 var rem = Math.ceil((s1 - now) / 86400000);
+                var c0s = new Date('2026-09-15');
+                var c1s = new Date('2027-03-15');
+                var pct2 = Math.min(100, Math.max(0, ((now - c0s) / (c1s - c0s)) * 100));
+                var rem2 = Math.ceil((c1s - now) / 86400000);
                 var semillero = await env.BITACORA.get('semillero', { type: 'json' }) || [];
-                r = 'Estado de Rancho Amelia\n\nPaca Venezuela: ' + pct.toFixed(1) + '% (' + rem + ' dias)\nSemillero: ' + semillero.length + ' plantulas\nBlog: Activo';
+                r = 'Estado de Rancho Amelia\n\nPaca Venezuela: ' + pct.toFixed(1) + '% (' + rem + ' dias)\nPaca Colombia: ' + pct2.toFixed(1) + '% (' + rem2 + ' dias)\nSemillero: ' + semillero.length + ' plantulas\nBlog: Activo';
 
             } else if (textLower === '/paca') {
                 var now = new Date();
@@ -221,6 +250,20 @@ export default {
                 else if (pp >= 75 && pp < 100) ph = 'Maduracion Final';
                 else if (pp >= 100) ph = 'LISTA PARA COSECHA';
                 r = 'Paca Venezuela\n\nProgreso: ' + pp.toFixed(1) + '%\nFase: ' + ph + '\nDias restantes: ~' + pr + '\nCosecha: 3 Marzo 2027\n\nUbicacion: Rancho Amelia';
+
+            } else if (textLower === '/paca2') {
+                var now = new Date();
+                var q0 = new Date('2026-09-15');
+                var q1 = new Date('2027-03-15');
+                var pp = Math.min(100, Math.max(0, ((now - q0) / (q1 - q0)) * 100));
+                var pr = Math.ceil((q1 - now) / 86400000);
+                var ph = 'Compactacion y Llenado';
+                if (pp >= 15 && pp < 30) ph = 'Fase Termica Temprana';
+                else if (pp >= 30 && pp < 50) ph = 'Fase Termica Activa (~70C)';
+                else if (pp >= 50 && pp < 75) ph = 'Enfriamiento y Maduracion';
+                else if (pp >= 75 && pp < 100) ph = 'Maduracion Final';
+                else if (pp >= 100) ph = 'LISTA PARA COSECHA';
+                r = 'Paca Colombia\n\nProgreso: ' + pp.toFixed(1) + '%\nFase: ' + ph + '\nDias restantes: ~' + pr + '\nCosecha: 15 Marzo 2027\nInicio: 15 Septiembre 2026\n\nUbicacion: Rancho Amelia';
 
             } else if (textLower === '/mangos') {
                 var now = new Date();
@@ -281,6 +324,19 @@ export default {
                 else if (pp >= 75 && pp < 100) ph = 'Maduracion Final';
                 else if (pp >= 100) ph = 'COSECHA LISTA';
                 r2 += 'Paca Venezuela: ' + pp.toFixed(1) + '% - ' + ph + ' (' + pr + ' dias)\n\n';
+
+                // Paca Colombia
+                var qc0 = new Date('2026-09-15');
+                var qc1 = new Date('2027-03-15');
+                var pp2 = Math.min(100, Math.max(0, ((now - qc0) / (qc1 - qc0)) * 100));
+                var pr2 = Math.ceil((qc1 - now) / 86400000);
+                var ph2 = 'Compactacion';
+                if (pp2 >= 15 && pp2 < 30) ph2 = 'Termica Temprana';
+                else if (pp2 >= 30 && pp2 < 50) ph2 = 'Termica Activa (~70C)';
+                else if (pp2 >= 50 && pp2 < 75) ph2 = 'Enfriamiento';
+                else if (pp2 >= 75 && pp2 < 100) ph2 = 'Maduracion Final';
+                else if (pp2 >= 100) ph2 = 'COSECHA LISTA';
+                r2 += 'Paca Colombia: ' + pp2.toFixed(1) + '% - ' + ph2 + ' (' + pr2 + ' dias)\n\n';
 
                 // Mangos
                 r2 += 'Mangos:\n';
@@ -363,7 +419,7 @@ export default {
 
             } else if (textLower.startsWith('/log ')) {
                 var raw = text.substring(5).trim();
-                var categories = ['compost', 'siembra', 'limpieza', 'poda', 'riego', 'mantenimiento'];
+                var categories = ['paca colombia', 'colombia', 'compost', 'siembra', 'limpieza', 'poda', 'riego', 'mantenimiento'];
                 var category = 'General';
                 var note = raw;
                 for (var i = 0; i < categories.length; i++) {

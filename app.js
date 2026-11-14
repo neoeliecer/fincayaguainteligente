@@ -162,8 +162,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (barPhosphorus) barPhosphorus.style.width = (cd.phosphorus / 1 * 100) + '%';
         if (barPotassium) barPotassium.style.width = (cd.potassium / 4 * 100) + '%';
 
-        // Update timeline active state
-        document.querySelectorAll('.timeline-item').forEach((item, i) => {
+        // Update timeline active state (scoped to Venezuela card only)
+        document.querySelectorAll('#paca-ven-monitor .timeline-item').forEach((item, i) => {
             item.classList.toggle('active', i <= phaseIdx);
         });
 
@@ -208,6 +208,136 @@ document.addEventListener('DOMContentLoaded', () => {
 
     setInterval(updateRealPacaTimer, 1000);
     updateRealPacaTimer();
+
+    // ---------------------------------------------------------
+    // 3b. Real-Time Active Paca Colombia Monitor & Countdown
+    //     Inicio: 15 Sept 2026 - Cosecha: 15 Marzo 2027 (6 meses)
+    // ---------------------------------------------------------
+    const c2StartDate = new Date('2026-09-15T00:00:00');
+    const c2HarvestDate = new Date(c2StartDate);
+    c2HarvestDate.setMonth(c2HarvestDate.getMonth() + 6);
+
+    const phaseDataC2 = [
+        { temp: '~28°C (Ambiente)', hum: '~45% (Seco)', microbe: 'Construccion de capas. Material verde y marron apilado. Colonizacion inicial por bacterias aerobicas.' },
+        { temp: '~48°C (Calentamiento)', hum: '~55% (Optimo)', microbe: 'Bacterias termofilas inician digestion. El calor interno mata semillas y patogenos. pH bajando.' },
+        { temp: '~70°C (Punto Termico)', hum: '~60% (Alto)', microbe: 'Fase mas activa. Actinomicetos destruyen celulosa. Pasteurizacion interna completa. Olor a tierra.' },
+        { temp: '~45°C (Enfriamiento)', hum: '~55% (Optimo)', microbe: 'Fungi y levaduras colonizan. Descomposicion de lignina. Material se vuelve oscuro y friable.' },
+        { temp: '~30°C (Maduracion)', hum: '~50% (Estable)', microbe: 'Microbiologia diversa estable. Humus formandose. Estructura granular apareciendo.' },
+        { temp: '~28°C (Listo)', hum: '~45% (Seco)', microbe: 'Humus maduro. Aromatico, negro, estructura de pan. pH neutro. Listo para uso.' }
+    ];
+    const chemDataC2 = [
+        { ph: 6.8, phDesc: 'Neutro - Inicio', carbon: 45, nitrogen: 1.2, phosphorus: 0.3, potassium: 1.8, cn: 37, cnDesc: 'Equilibrado' },
+        { ph: 6.2, phDesc: 'Ligeramente acido', carbon: 42, nitrogen: 1.5, phosphorus: 0.4, potassium: 2.0, cn: 28, cnDesc: 'Fermentando' },
+        { ph: 5.5, phDesc: 'Acido - Termico', carbon: 38, nitrogen: 1.8, phosphorus: 0.5, potassium: 2.2, cn: 21, cnDesc: 'Activo' },
+        { ph: 5.8, phDesc: 'Recuperandose', carbon: 32, nitrogen: 2.0, phosphorus: 0.6, potassium: 2.5, cn: 16, cnDesc: 'Madurando' },
+        { ph: 6.3, phDesc: 'Neutro tendiendo', carbon: 25, nitrogen: 2.2, phosphorus: 0.7, potassium: 2.8, cn: 11, cnDesc: 'Casi listo' },
+        { ph: 6.8, phDesc: 'Neutro - Optimo', carbon: 18, nitrogen: 2.5, phosphorus: 0.8, potassium: 3.0, cn: 7, cnDesc: 'Humus maduro' }
+    ];
+
+    function c2(id) { return document.getElementById(id); }
+
+    function updateColombiaPacaTimer() {
+        const now = new Date();
+        const elapsed = now - c2StartDate;
+        const total = c2HarvestDate - c2StartDate;
+        const pacaProgress = Math.min(100, Math.max(0, (elapsed / total) * 100));
+
+        const c2Percent = c2('c2-percent');
+        const c2Progress = c2('c2-progress');
+        const c2DaysElapsed = c2('c2-days-elapsed');
+        if (c2Percent) c2Percent.textContent = `${pacaProgress.toFixed(1)}%`;
+        if (c2Progress) c2Progress.style.width = `${pacaProgress}%`;
+
+        const daysElapsed = Math.floor(elapsed / 86400000);
+        if (c2DaysElapsed) c2DaysElapsed.textContent = `Dia ${daysElapsed} transcurrido`;
+
+        let phase = 'Fase de Llenado';
+        let phaseIdx = 0;
+        if (pacaProgress >= 15 && pacaProgress < 30) { phase = 'Fase Termica Temprana (~48C)'; phaseIdx = 1; }
+        else if (pacaProgress >= 30 && pacaProgress < 50) { phase = 'Fase Termica Activa (~70C)'; phaseIdx = 2; }
+        else if (pacaProgress >= 50 && pacaProgress < 75) { phase = 'Enfriamiento y Maduracion'; phaseIdx = 3; }
+        else if (pacaProgress >= 75 && pacaProgress < 100) { phase = 'Maduracion Final'; phaseIdx = 4; }
+        else if (pacaProgress >= 100) { phase = '¡COSECHA LISTA!'; phaseIdx = 5; }
+
+        const c2StageTitle = c2('c2-stage-title');
+        if (c2StageTitle) c2StageTitle.textContent = 'Fase Actual: ' + phase;
+
+        const pd = phaseDataC2[phaseIdx];
+        const c2Temp = c2('c2-temp');
+        const c2Microbe = c2('c2-microbe-text');
+        const c2Humidity = c2('c2-humidity');
+        if (c2Temp) c2Temp.textContent = pd.temp;
+        if (c2Microbe) c2Microbe.textContent = pd.microbe;
+        if (c2Humidity) c2Humidity.textContent = pd.hum;
+
+        const cd = chemDataC2[phaseIdx];
+        const mapC2 = {
+            'c2-ph': cd.ph.toFixed(1),
+            'c2-ph-desc': cd.phDesc,
+            'c2-carbon': cd.carbon + '%',
+            'c2-nitrogen': cd.nitrogen.toFixed(1) + '%',
+            'c2-phosphorus': cd.phosphorus.toFixed(1) + '%',
+            'c2-potassium': cd.potassium.toFixed(1) + '%',
+            'c2-cn': cd.cn + ':1',
+            'c2-cn-desc': cd.cnDesc
+        };
+        Object.keys(mapC2).forEach(id => { const el = c2(id); if (el) el.textContent = mapC2[id]; });
+
+        const barMap = {
+            'c2-bar-carbon': cd.carbon + '%',
+            'c2-bar-nitrogen': (cd.nitrogen / 3 * 100) + '%',
+            'c2-bar-phosphorus': (cd.phosphorus / 1 * 100) + '%',
+            'c2-bar-potassium': (cd.potassium / 4 * 100) + '%'
+        };
+        Object.keys(barMap).forEach(id => { const el = c2(id); if (el) el.style.width = barMap[id]; });
+
+        // Update timeline active state (scoped to Colombia card only)
+        document.querySelectorAll('#paca-col-monitor .timeline-item').forEach((item, i) => {
+            item.classList.toggle('active', i <= phaseIdx);
+        });
+
+        // Milestone alerts (separate key so it does not collide with Venezuela)
+        const PACA2_ALERT_KEY = 'yagua_paca2_alerts_sent';
+        const sentAlerts = JSON.parse(localStorage.getItem(PACA2_ALERT_KEY) || '[]');
+        const milestones = [
+            { pct: 25, msg: 'Paca Colombia: 25% completado - Fase Termica Temprana (~48C)' },
+            { pct: 50, msg: 'Paca Colombia: 50% completado - Fase Termica Activa (~70C)' },
+            { pct: 75, msg: 'Paca Colombia: 75% completado - Maduracion Final' },
+            { pct: 100, msg: 'Paca Colombia: LISTA PARA COSECHA!' }
+        ];
+        milestones.forEach(m => {
+            if (pacaProgress >= m.pct && !sentAlerts.includes(m.pct)) {
+                sentAlerts.push(m.pct);
+                localStorage.setItem(PACA2_ALERT_KEY, JSON.stringify(sentAlerts));
+                pushAlertToBot(m.msg);
+            }
+        });
+
+        // Countdown
+        const remainingMs = c2HarvestDate - now;
+        const c2cdDays = c2('c2-cd-days');
+        const c2cdHours = c2('c2-cd-hours');
+        const c2cdMin = c2('c2-cd-minutes');
+        const c2cdSec = c2('c2-cd-seconds');
+        if (remainingMs <= 0) {
+            if (c2cdDays) c2cdDays.textContent = '0';
+            if (c2cdHours) c2cdHours.textContent = '0';
+            if (c2cdMin) c2cdMin.textContent = '0';
+            if (c2cdSec) c2cdSec.textContent = '0';
+        } else {
+            const d = Math.floor(remainingMs / (1000 * 60 * 60 * 24));
+            const h = Math.floor((remainingMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const m = Math.floor((remainingMs % (1000 * 60 * 60)) / (1000 * 60));
+            const s = Math.floor((remainingMs % (1000 * 60)) / 1000);
+            if (c2cdDays) c2cdDays.textContent = d;
+            if (c2cdHours) c2cdHours.textContent = h;
+            if (c2cdMin) c2cdMin.textContent = m;
+            if (c2cdSec) c2cdSec.textContent = s;
+        }
+    }
+
+    setInterval(updateColombiaPacaTimer, 1000);
+    updateColombiaPacaTimer();
 
     // ---------------------------------------------------------
     // 4. Interactive SVG Map & Details Metadata
@@ -283,6 +413,15 @@ document.addEventListener('DOMContentLoaded', () => {
             { label: 'Cosecha Estimada', value: '3 de Marzo 2027 (6 meses)' },
             { label: 'Estado actual', value: 'Compactación y Llenado' }
         ],
+        'elem-paca2': [
+            { label: 'Nombre', value: 'Paca Colombia' },
+            { label: 'Método', value: 'Paca Digestora Silva (Fermentación Prensada)' },
+            { label: 'Dimensiones', value: '1 m x 1 m x 1 m (1,000 Litros)' },
+            { label: 'Ubicación', value: 'Rancho Amelia' },
+            { label: 'Día de Inicio', value: '15 de Septiembre 2026' },
+            { label: 'Cosecha Estimada', value: '15 de Marzo 2027 (6 meses)' },
+            { label: 'Estado actual', value: 'Compactación y Llenado' }
+        ],
         'elem-aromaticas': [
             { label: 'Cultivos instalados', value: 'Albahaca y Orégano' },
             { label: 'Sistema de Riego', value: 'Autoriego por goteo localizado' },
@@ -311,7 +450,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 if (id === 'elem-aromaticas') {
                     statItem.classList.add('water-status');
-                } else if (id === 'elem-paca1') {
+                } else if (id.indexOf('elem-paca') === 0) {
                     statItem.classList.add('paca-status');
                 } else if (id.includes('platanos')) {
                     statItem.classList.add('water-status');
@@ -333,6 +472,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const weatherHeader = document.getElementById('header-weather');
         const pacaWeatherFactor = document.getElementById('real-paca-weather-factor');
         const pacaHumidity = document.getElementById('real-paca-humidity');
+        const c2WeatherFactor = document.getElementById('c2-weather-factor');
 
         try {
             // Latitude and Longitude for El Toco, Yagua, Guacara, Carabobo: 10.2576, -67.8867
@@ -379,6 +519,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     pacaWeatherFactor.textContent = `Lluvia registrada: +${rainTotal.toFixed(1)} mm. Humedad alta.`;
                     pacaWeatherFactor.style.color = '#3a86c8';
                 }
+                if (c2WeatherFactor) {
+                    c2WeatherFactor.textContent = `Lluvia registrada: +${rainTotal.toFixed(1)} mm. Humedad alta.`;
+                    c2WeatherFactor.style.color = '#3a86c8';
+                }
                 const rainHydrationBonus = Math.round(rainTotal * 1.5);
                 const finalMoisture = Math.min(85, 60 + rainHydrationBonus);
                 if (pacaHumidity) {
@@ -394,6 +538,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (pacaWeatherFactor) {
                     pacaWeatherFactor.textContent = `Seco (Humedad del aire: ${humidity}%). Riego normal.`;
                     pacaWeatherFactor.style.color = 'var(--text-muted)';
+                }
+                if (c2WeatherFactor) {
+                    c2WeatherFactor.textContent = `Seco (Humedad del aire: ${humidity}%). Riego normal.`;
+                    c2WeatherFactor.style.color = 'var(--text-muted)';
                 }
                 if (pacaHumidity) {
                     pacaHumidity.textContent = `~60% (Estable / Óptimo)`;
@@ -648,6 +796,12 @@ document.addEventListener('DOMContentLoaded', () => {
             details: 'Se inicia la Paca Venezuela de 1 m³ Silva en la finca Yagua. Inicio: 2 de Septiembre 2026. Cosecha estimada: 2 de Marzo 2027.'
         },
         {
+            date: '2026-09-15',
+            category: 'paca-colombia',
+            title: 'Inicio de la Paca Colombia',
+            details: 'Se inicia la Paca Colombia de 1 m³ Silva en la finca Yagua, 15 dias despues de la Paca Venezuela. Inicio: 15 de Septiembre 2026. Cosecha estimada: 15 de Marzo 2027.'
+        },
+        {
             date: '2026-08-10',
             category: 'riego',
             title: 'Establecimiento de Aromáticas y Autoriego',
@@ -669,6 +823,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const categoryLabels = {
         'compost': 'Compost',
+        'paca-colombia': 'Paca Colombia',
         'riego': 'Autoriego',
         'limpieza': 'Limpieza',
         'poda': 'Mantenimiento Patio',
@@ -705,7 +860,19 @@ document.addEventListener('DOMContentLoaded', () => {
     function getLogs() {
         const stored = localStorage.getItem('yagua_logs_v6');
         if (stored) {
-            return JSON.parse(stored);
+            const logs = JSON.parse(stored);
+            // Insercion unica de la entrada semilla de la Paca Colombia
+            // (los navegadores que ya tenian la bitacora guardada no la tenian).
+            if (!localStorage.getItem('yagua_colombia_seed_v1')) {
+                const already = logs.some(l => l.title === 'Inicio de la Paca Colombia');
+                if (!already) {
+                    const seed = seedLogs.find(l => l.title === 'Inicio de la Paca Colombia');
+                    if (seed) logs.push(seed);
+                }
+                localStorage.setItem('yagua_colombia_seed_v1', '1');
+                localStorage.setItem('yagua_logs_v6', JSON.stringify(logs));
+            }
+            return logs;
         }
         localStorage.setItem('yagua_logs_v6', JSON.stringify(seedLogs));
         return seedLogs;
@@ -726,6 +893,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     'Compost': 'compost', 'Siembra': 'siembra',
                     'Limpieza': 'limpieza', 'Poda': 'poda',
                     'Riego': 'riego', 'Mantenimiento': 'mantenimiento',
+                    'Paca Colombia': 'paca-colombia', 'Paca colombia': 'paca-colombia', 'Colombia': 'paca-colombia',
                     'General': 'general'
                 };
                 const category = catMap[entry.category] || 'general';
