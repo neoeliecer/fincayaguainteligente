@@ -384,25 +384,36 @@ document.addEventListener('DOMContentLoaded', () => {
             { label: 'Especie', value: 'Melicoccus bijugatus (Mamón)' },
             { label: 'Estrato', value: 'Dosel Medio-Alto' },
             { label: 'Hojas', value: 'Pequeñas (Descomposición rápida para compost)' },
-            { label: 'Estado', value: 'Operativo, follaje verde' }
+            { label: 'Estado', value: 'Operativo, follaje verde' },
+            { label: 'Sector', value: 'Sur de la finca' }
         ],
         'elem-moringa': [
             { label: 'Especie', value: 'Moringa oleifera (Moringa)' },
             { label: 'Estrato', value: 'Dosel Medio (Crecimiento rápido)' },
             { label: 'Rol Ecológico', value: 'Concentrado de Nitrógeno y Potasio' },
-            { label: 'Uso en Compost', value: 'Acelerador verde de fermentación' }
+            { label: 'Uso en Compost', value: 'Acelerador verde de fermentación' },
+            { label: 'Sector', value: 'Este, junto al platanal' }
+        ],
+        'elem-moringa2': [
+            { label: 'Especie', value: 'Moringa oleifera (Moringa)' },
+            { label: 'Estrato', value: 'Dosel Medio (Siembra reciente)' },
+            { label: 'Rol Ecológico', value: 'Hojas ricas en N y K para las pacas' },
+            { label: 'Estado', value: 'En desarrollo, junto al platanal' },
+            { label: 'Sector', value: 'Este de la finca' }
         ],
         'elem-platanos-grandes': [
             { label: 'Especie', value: 'Musa paradisiaca (Plátano)' },
             { label: 'Cantidad', value: '5 Matas Grandes (Adultas)' },
             { label: 'Fase de Cultivo', value: 'Fase productiva (Desarrollo de racimos)' },
-            { label: 'Humedad Suelo', value: 'Monitoreando por Clima...' }
+            { label: 'Humedad Suelo', value: 'Monitoreando por Clima...' },
+            { label: 'Sector', value: 'Este de la finca' }
         ],
         'elem-platanos-bebes': [
             { label: 'Especie', value: 'Musa paradisiaca (Plátano)' },
             { label: 'Cantidad', value: '5 Matas Chicas (Bebés/Colinos)' },
             { label: 'Fase de Cultivo', value: 'Crecimiento inicial y enraizamiento' },
-            { label: 'Humedad Suelo', value: 'Monitoreando por Clima...' }
+            { label: 'Humedad Suelo', value: 'Monitoreando por Clima...' },
+            { label: 'Sector', value: 'Este de la finca' }
         ],
         'elem-paca1': [
             { label: 'Nombre', value: 'Paca Venezuela' },
@@ -426,7 +437,8 @@ document.addEventListener('DOMContentLoaded', () => {
             { label: 'Cultivos instalados', value: 'Albahaca y Orégano' },
             { label: 'Sistema de Riego', value: 'Autoriego por goteo localizado' },
             { label: 'Control Biológico', value: 'Atrae mariquitas, avispas y polinizadores' },
-            { label: 'Humedad Suelo Promedio', value: '65% - Óptimo' }
+            { label: 'Humedad Suelo Promedio', value: '65% - Óptimo' },
+            { label: 'Sector', value: 'Norte, junto a los mangos' }
         ]
     };
 
@@ -805,7 +817,7 @@ document.addEventListener('DOMContentLoaded', () => {
             date: '2026-08-10',
             category: 'riego',
             title: 'Establecimiento de Aromáticas y Autoriego',
-            details: 'Siembra de albahaca y orégano en bancales sur. Conexión de manguera de autoriego con aspersores e inicio de monitoreo de humedad a profundidad de 10-15 cm.'
+            details: 'Siembra de albahaca y orégano en bancales norte. Conexión de manguera de autoriego con aspersores e inicio de monitoreo de humedad a profundidad de 10-15 cm.'
         },
         {
             date: '2026-08-22',

@@ -374,6 +374,44 @@ body {
     pointer-events: none;
 }
 
+/* Rosa de los vientos */
+.svg-compass-circle {
+    fill: rgba(11, 30, 24, 0.55);
+    stroke: rgba(255, 255, 255, 0.45);
+    stroke-width: 1.5;
+    pointer-events: none;
+}
+
+.svg-compass-n {
+    fill: #ffffff;
+    font-size: 11px;
+    font-weight: 800;
+    font-family: 'Outfit', sans-serif;
+    text-anchor: middle;
+    pointer-events: none;
+}
+
+.svg-compass-needle-n {
+    fill: var(--accent-green, #2d6a4f);
+    pointer-events: none;
+}
+
+.svg-compass-needle-s {
+    fill: rgba(255, 255, 255, 0.55);
+    pointer-events: none;
+}
+
+/* Rótulos cardinales en los bordes del mapa */
+.svg-cardinal {
+    fill: rgba(255, 255, 255, 0.75);
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    font-family: 'Outfit', sans-serif;
+    text-anchor: middle;
+    pointer-events: none;
+}
+
 /* Pacas Digestoras styling */
 .svg-paca {
     stroke-width: 2;
