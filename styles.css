@@ -2231,6 +2231,200 @@ input[type="range"]::-webkit-slider-thumb:hover {
     color: var(--accent-green);
 }
 
+/* ==========================================================================
+   Plantas Saludables (fichas de remedios naturales)
+   ========================================================================== */
+.planta-ficha {
+    padding: 0;
+    overflow: hidden;
+    margin-bottom: 24px;
+}
+
+.planta-ficha-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 20px 24px;
+    background: rgba(82, 183, 136, 0.05);
+    border-bottom: 1px solid var(--border-light);
+    flex-wrap: wrap;
+}
+
+.planta-ficha-header .guia-plantas-icon {
+    margin: 0;
+    flex-shrink: 0;
+}
+
+.planta-ficha-title {
+    flex: 1;
+    min-width: 160px;
+}
+
+.planta-ficha-title h3 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.4rem;
+    color: #fff;
+    margin: 0;
+}
+
+.planta-ficha-title .guia-plantas-sci {
+    margin: 2px 0 0;
+    text-align: left;
+}
+
+.planta-ficha-header .guia-plantas-tags {
+    margin: 0;
+    justify-content: flex-end;
+}
+
+.planta-ficha-body {
+    padding: 24px;
+    display: grid;
+    gap: 24px;
+}
+
+.planta-bloque h4 {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.02rem;
+    color: var(--accent-green);
+    margin-bottom: 12px;
+}
+
+.planta-bloque h4 i {
+    width: 18px;
+    height: 18px;
+}
+
+.planta-items {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 12px;
+}
+
+.planta-item {
+    background: var(--bg-primary);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-sm);
+    padding: 14px 16px;
+}
+
+.planta-item strong {
+    display: block;
+    font-size: 0.9rem;
+    color: #fff;
+    margin-bottom: 5px;
+}
+
+.planta-item p {
+    font-size: 0.84rem;
+    color: var(--text-secondary);
+    margin: 0;
+}
+
+.planta-usos {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 12px;
+}
+
+.planta-uso {
+    background: var(--bg-primary);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-sm);
+    padding: 16px;
+}
+
+.planta-uso h5 {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.95rem;
+    color: #fff;
+    margin-bottom: 10px;
+}
+
+.planta-uso h5 i {
+    width: 16px;
+    height: 16px;
+    color: var(--accent-blue);
+}
+
+.planta-uso ol {
+    margin: 0;
+    padding-left: 18px;
+    display: grid;
+    gap: 6px;
+}
+
+.planta-uso li {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+.planta-dosis {
+    color: var(--accent-gold);
+    font-weight: 700;
+}
+
+.planta-warn {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    padding: 16px;
+    border-radius: var(--radius-sm);
+    background: rgba(239, 68, 68, 0.08);
+    border: 1px solid rgba(239, 68, 68, 0.35);
+}
+
+.planta-warn > i {
+    width: 20px;
+    height: 20px;
+    color: #ef4444;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.planta-warn p {
+    font-size: 0.86rem;
+    color: #fca5a5;
+    margin: 0 0 6px;
+}
+
+.planta-warn p:last-child {
+    margin-bottom: 0;
+}
+
+.planta-nota {
+    font-size: 0.76rem !important;
+    font-style: italic;
+    color: var(--text-muted) !important;
+}
+
+.planta-proximamente {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 24px;
+    text-align: center;
+}
+
+.planta-proximamente i {
+    width: 22px;
+    height: 22px;
+    color: var(--accent-green);
+    flex-shrink: 0;
+}
+
+.planta-proximamente p {
+    margin: 0;
+    font-size: 0.88rem;
+    color: var(--text-secondary);
+}
+
 /* Guia Categories */
 .guia-category {
     margin-bottom: 32px;

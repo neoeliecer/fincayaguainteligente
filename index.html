@@ -60,6 +60,9 @@
         <button class="nav-btn" data-tab="catalogo">
             <i data-lucide="trees"></i> <span>Catálogo</span>
         </button>
+        <button class="nav-btn" data-tab="plantas">
+            <i data-lucide="heart-pulse"></i> <span>Plantas</span>
+        </button>
         <button class="nav-btn" data-tab="biblioteca">
             <i data-lucide="book-open"></i> <span>Biblioteca</span>
         </button>
@@ -2043,6 +2046,115 @@
             <div class="catalogo-category">
                 <h3><i data-lucide="flower-2"></i> Aromáticas</h3>
                 <div class="catalogo-grid" id="catalogo-aromaticas"></div>
+            </div>
+        </section>
+
+        <!-- Tab: Plantas Saludables -->
+        <section id="plantas" class="tab-panel">
+            <div class="section-header">
+                <h2>Plantas Saludables</h2>
+                <p>Fichas de remedios naturales: beneficios, formas de uso y precauciones de las plantas medicinales.</p>
+            </div>
+
+            <!-- Ficha: Ortiga -->
+            <article class="planta-ficha card">
+                <div class="planta-ficha-header">
+                    <div class="guia-plantas-icon" style="color: var(--accent-green);"><i data-lucide="leaf"></i></div>
+                    <div class="planta-ficha-title">
+                        <h3>Ortiga</h3>
+                        <p class="guia-plantas-sci">Urtica dioica</p>
+                    </div>
+                    <div class="guia-plantas-tags">
+                        <span class="guia-tag">Circulación</span>
+                        <span class="guia-tag">Antiinflamatoria</span>
+                        <span class="guia-tag">Diurética</span>
+                        <span class="guia-tag">Depurativa</span>
+                    </div>
+                </div>
+
+                <div class="planta-ficha-body">
+
+                    <!-- Beneficios: Circulación -->
+                    <div class="planta-bloque">
+                        <h4><i data-lucide="heart-pulse"></i> Circulación y varices</h4>
+                        <div class="planta-items">
+                            <div class="planta-item">
+                                <strong>Estimula la circulación sanguínea</strong>
+                                <p>Su cocción ayuda a favorecer el flujo sanguíneo y contribuye a tratar los edemas causados por la insuficiencia de retorno venoso en las extremidades.</p>
+                            </div>
+                            <div class="planta-item">
+                                <strong>Acción hemostática y tonificante</strong>
+                                <p>Contiene principios activos con efecto hemostático (vasoconstrictor), lo que ayuda a tonificar las paredes de los vasos sanguíneos.</p>
+                            </div>
+                            <div class="planta-item">
+                                <strong>Efecto diurético y depurativo</strong>
+                                <p>Al facilitar la eliminación renal de líquidos acumulados, disminuye la hinchazón, la tensión y la sensación de cansancio en las piernas.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Beneficios: Antiinflamatoria -->
+                    <div class="planta-bloque">
+                        <h4><i data-lucide="flame"></i> Antiinflamatoria y analgésica</h4>
+                        <div class="planta-items">
+                            <div class="planta-item">
+                                <strong>Riqueza en flavonoides</strong>
+                                <p>Contiene compuestos antioxidantes y antiinflamatorios como la <em>rutina</em>, <em>quercetina</em> e <em>isoquercitrina</em> que ayudan a calmar la inflamación en los tejidos.</p>
+                            </div>
+                            <div class="planta-item">
+                                <strong>Mecanismo de acción</strong>
+                                <p>Estudios farmacológicos han observado que extractos de la raíz de ortiga inhiben la enzima 5-lipooxigenasa y la síntesis de leucotrienos (mediadores clave en los procesos inflamatorios).</p>
+                            </div>
+                            <div class="planta-item">
+                                <strong>Potenciador de tratamientos</strong>
+                                <p>Se ha documentado que el uso de ortiga puede potenciar el efecto antiinflamatorio de fármacos analgésicos convencionales como el diclofenaco.</p>
+                            </div>
+                            <div class="planta-item">
+                                <strong>Aplicaciones antiinflamatorias</strong>
+                                <p>Alivia dolores articulares y reumáticos (artrosis, artritis, reumatismo, gota, contusiones y fracturas). En infusión, favorece la eliminación del ácido úrico y las toxinas que desencadenan la inflamación articular.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Formas de uso -->
+                    <div class="planta-bloque">
+                        <h4><i data-lucide="flask-conical"></i> Formas de uso recomendadas</h4>
+                        <div class="planta-usos">
+                            <div class="planta-uso">
+                                <h5><i data-lucide="droplet"></i> Uso externo — Compresas o baños locales</h5>
+                                <ol>
+                                    <li>Prepara una decocción hirviendo <span class="planta-dosis">100 g de ortiga por litro de agua</span> a fuego lento durante <span class="planta-dosis">30 minutos</span>.</li>
+                                    <li>Deja entibiar o enfriar, cuela y empapa paños o compresas.</li>
+                                    <li>Aplica directamente sobre las zonas con varices o realiza baños de piernas.</li>
+                                </ol>
+                            </div>
+                            <div class="planta-uso">
+                                <h5><i data-lucide="cup-soda"></i> Uso interno — Infusión</h5>
+                                <ol>
+                                    <li>Hierve entre <span class="planta-dosis">2 y 5 gramos de hoja triturada por taza</span> de agua durante <span class="planta-dosis">3 minutos</span>.</li>
+                                    <li>Deja reposar <span class="planta-dosis">20 minutos</span> antes de colar.</li>
+                                    <li>Consumir de <span class="planta-dosis">2 a 3 tazas al día</span> para promover la depuración del organismo y la circulación.</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Precauciones -->
+                    <div class="planta-warn">
+                        <i data-lucide="alert-triangle"></i>
+                        <div>
+                            <p><strong>Precaución:</strong> si padeces insuficiencia cardíaca, insuficiencia renal o hipertensión arterial, se aconseja no consumir infusiones diuréticas sin antes consultar con un profesional médico.</p>
+                            <p class="planta-nota">Esta información es educativa y de uso tradicional; no sustituye el diagnóstico ni el tratamiento médico.</p>
+                        </div>
+                    </div>
+
+                </div>
+            </article>
+
+            <!-- Próximas plantas -->
+            <div class="planta-proximamente card">
+                <i data-lucide="sprout"></i>
+                <p><strong>Próximamente:</strong> Moringa, Sábila, Albahaca y más plantas saludables de la finca.</p>
             </div>
         </section>
 
