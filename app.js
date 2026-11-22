@@ -3364,6 +3364,9 @@ const AUTH_USERS_KEY = 'yagua_authorized_users';
 const AUTH_CURRENT_KEY = 'yagua_current_user';
 const SESSION_KEY = 'yagua_session';
 const SESSION_TIMEOUT = 30 * 60 * 1000;
+const REMEMBER_KEY = 'yagua_session_remember';
+const REMEMBER_USER_KEY = 'yagua_remember_user';
+const REMEMBER_TIMEOUT = 30 * 24 * 60 * 60 * 1000; // 30 dias
 
 function getAuthorizedUsers() {
     const stored = localStorage.getItem(AUTH_USERS_KEY);
@@ -3406,8 +3409,10 @@ function initBitacoraAuth() {
             const pin = document.getElementById('login-pin').value;
             const found = isAuthorized(user, pin);
             if (found) {
+                const remember = document.getElementById('login-remember').checked;
                 localStorage.setItem(AUTH_CURRENT_KEY, user);
-                createSession();
+                if (remember) localStorage.setItem(REMEMBER_USER_KEY, user);
+                createSession(remember);
                 showBitacora();
                 loginError.style.display = 'none';
             } else {
@@ -3459,14 +3464,27 @@ function initBitacoraAuth() {
 
     if (btnLogout) {
         btnLogout.addEventListener('click', () => {
+            clearTimeout(inactivityTimer);
             sessionStorage.removeItem(SESSION_KEY);
             sessionStorage.removeItem(SESSION_KEY + '_time');
+            localStorage.removeItem(REMEMBER_KEY);
+            localStorage.removeItem(REMEMBER_USER_KEY);
             localStorage.removeItem(AUTH_CURRENT_KEY);
             showLogin();
         });
     }
 
     function checkSession() {
+        // Sesion "recordada" en localStorage: persiste al cerrar el navegador (30 dias)
+        const rememberTime = localStorage.getItem(REMEMBER_KEY);
+        if (rememberTime) {
+            if (Date.now() - parseInt(rememberTime) > REMEMBER_TIMEOUT) {
+                localStorage.removeItem(REMEMBER_KEY);
+                localStorage.removeItem(REMEMBER_USER_KEY);
+            } else {
+                return true;
+            }
+        }
         const session = sessionStorage.getItem(SESSION_KEY);
         const sessionTime = sessionStorage.getItem(SESSION_KEY + '_time');
         if (!session || !sessionTime) return false;
@@ -3480,9 +3498,17 @@ function initBitacoraAuth() {
         return true;
     }
 
-    function createSession() {
-        sessionStorage.setItem(SESSION_KEY, 'active');
-        sessionStorage.setItem(SESSION_KEY + '_time', Date.now().toString());
+    function createSession(remember) {
+        const now = Date.now().toString();
+        if (remember) {
+            localStorage.setItem(REMEMBER_KEY, now);
+            sessionStorage.removeItem(SESSION_KEY);
+            sessionStorage.removeItem(SESSION_KEY + '_time');
+        } else {
+            localStorage.removeItem(REMEMBER_KEY);
+            sessionStorage.setItem(SESSION_KEY, 'active');
+            sessionStorage.setItem(SESSION_KEY + '_time', now);
+        }
     }
 
     function showBitacora() {
@@ -3499,7 +3525,7 @@ function initBitacoraAuth() {
     function showLogin() {
         bitacoraLogin.style.display = 'flex';
         bitacoraContent.style.display = 'none';
-        document.getElementById('login-user').value = '';
+        document.getElementById('login-user').value = localStorage.getItem(REMEMBER_USER_KEY) || '';
         document.getElementById('login-pin').value = '';
         if (typeof lucide !== 'undefined') lucide.createIcons();
     }
@@ -3507,7 +3533,10 @@ function initBitacoraAuth() {
     let inactivityTimer;
     function resetInactivityTimer() {
         clearTimeout(inactivityTimer);
+        // Con "Recordarme" la sesion no expira por inactividad (dura hasta 30 dias)
+        if (localStorage.getItem(REMEMBER_KEY)) return;
         inactivityTimer = setTimeout(() => {
+            if (localStorage.getItem(REMEMBER_KEY)) return;
             if (checkSession()) {
                 sessionStorage.removeItem(SESSION_KEY);
                 sessionStorage.removeItem(SESSION_KEY + '_time');
