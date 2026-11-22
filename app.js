@@ -377,10 +377,53 @@ document.addEventListener('DOMContentLoaded', () => {
         'elem-mango4': [
             { label: 'Especie', value: 'Mangifera indica (Mango)' },
             { label: 'Estrato', value: 'Dosel Alto' },
-            { label: 'Amortiguación', value: 'Barrera natural contra vientos del sur' },
-            { label: 'Estado', value: 'Saludable' }
+            { label: 'Amortiguación', value: 'Barrera natural contra vientos' },
+            { label: 'Estado', value: 'Saludable' },
+            { label: 'Sector', value: 'Norte (borde norte)' }
+        ],
+        'elem-mango5': [
+            { label: 'Especie', value: 'Mangifera indica (Mango)' },
+            { label: 'Estrato', value: 'Dosel Alto' },
+            { label: 'Aporte de Materia Seca', value: 'Alto en hojarasca foliar' },
+            { label: 'Estado', value: 'Saludable, sin plagas' },
+            { label: 'Sector', value: 'Norte (franja del frente)' }
+        ],
+        'elem-mango-sur': [
+            { label: 'Especie', value: 'Mangifera indica (Mango)' },
+            { label: 'Estrato', value: 'Dosel Alto' },
+            { label: 'Función', value: 'Sombra y protección del suelo en el sur' },
+            { label: 'Estado', value: 'Saludable' },
+            { label: 'Sector', value: 'Sur de la finca' }
+        ],
+        'elem-mango-inj1': [
+            { label: 'Especie', value: 'Mangifera indica (Injerto)' },
+            { label: 'Técnica', value: 'Injerto sobre patrón resistente' },
+            { label: 'Línea', value: '1 de 3 injertos (borde este)' },
+            { label: 'Estado', value: 'En producción' },
+            { label: 'Sector', value: 'Este de la finca' }
+        ],
+        'elem-mango-inj2': [
+            { label: 'Especie', value: 'Mangifera indica (Injerto)' },
+            { label: 'Técnica', value: 'Injerto sobre patrón resistente' },
+            { label: 'Línea', value: '2 de 3 injertos (borde este)' },
+            { label: 'Estado', value: 'En producción' },
+            { label: 'Sector', value: 'Este de la finca' }
+        ],
+        'elem-mango-inj3': [
+            { label: 'Especie', value: 'Mangifera indica (Injerto)' },
+            { label: 'Técnica', value: 'Injerto sobre patrón resistente' },
+            { label: 'Línea', value: '3 de 3 injertos (ángulo sureste)' },
+            { label: 'Estado', value: 'En producción' },
+            { label: 'Sector', value: 'Sureste de la finca' }
         ],
         'elem-mamon': [
+            { label: 'Especie', value: 'Melicoccus bijugatus (Mamón)' },
+            { label: 'Estrato', value: 'Dosel Medio-Alto' },
+            { label: 'Hojas', value: 'Pequeñas (Descomposición rápida para compost)' },
+            { label: 'Estado', value: 'Operativo, follaje verde' },
+            { label: 'Sector', value: 'Sur de la finca' }
+        ],
+        'elem-mamon2': [
             { label: 'Especie', value: 'Melicoccus bijugatus (Mamón)' },
             { label: 'Estrato', value: 'Dosel Medio-Alto' },
             { label: 'Hojas', value: 'Pequeñas (Descomposición rápida para compost)' },
@@ -406,14 +449,14 @@ document.addEventListener('DOMContentLoaded', () => {
             { label: 'Cantidad', value: '5 Matas Grandes (Adultas)' },
             { label: 'Fase de Cultivo', value: 'Fase productiva (Desarrollo de racimos)' },
             { label: 'Humedad Suelo', value: 'Monitoreando por Clima...' },
-            { label: 'Sector', value: 'Este de la finca' }
+            { label: 'Sector', value: 'Centro-este de la finca' }
         ],
         'elem-platanos-bebes': [
             { label: 'Especie', value: 'Musa paradisiaca (Plátano)' },
             { label: 'Cantidad', value: '5 Matas Chicas (Bebés/Colinos)' },
             { label: 'Fase de Cultivo', value: 'Crecimiento inicial y enraizamiento' },
             { label: 'Humedad Suelo', value: 'Monitoreando por Clima...' },
-            { label: 'Sector', value: 'Este de la finca' }
+            { label: 'Sector', value: 'Centro-este (al sur de las matas grandes)' }
         ],
         'elem-paca1': [
             { label: 'Nombre', value: 'Paca Venezuela' },

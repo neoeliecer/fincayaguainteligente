@@ -85,14 +85,14 @@
         <section id="mapa" class="tab-panel active">
             <div class="section-header">
                 <h2>Distribución Espacial de la Finca</h2>
-                <p>Mapa interactivo a escala de los 3,500 m². Explora los árboles, platanales, pacas digestoras y el sistema de riego.</p>
+                <p>Mapa interactivo a escala real (53 × 65 m, trazado con coordenadas GPS). Explora los árboles, platanales, pacas digestoras y el sistema de riego.</p>
             </div>
             
             <div class="map-container-layout">
                 <div class="map-card card">
                     <div class="svg-map-wrapper">
                         <!-- SVG Map of the Farm -->
-                        <svg viewBox="0 0 800 500" class="farm-svg" id="farm-svg">
+                        <svg viewBox="0 0 630 750" class="farm-svg" id="farm-svg">
                             <!-- Definitions for patterns, gradients, etc -->
                             <defs>
                                 <pattern id="grass-pattern" width="10" height="10" patternUnits="userSpaceOnUse">
@@ -105,80 +105,106 @@
                             </defs>
 
                             <!-- Ground / Grass Base -->
-                            <rect width="800" height="500" class="svg-ground" fill="url(#grass-pattern)" />
+                            <rect width="630" height="750" class="svg-ground" fill="url(#grass-pattern)" />
                             
                             <!-- Sun Glow overlay -->
-                            <circle cx="100" cy="100" r="180" fill="url(#sun-glow)" />
+                            <circle cx="70" cy="70" r="150" fill="url(#sun-glow)" />
 
-                            <!-- Fence / Cerca Perimetral (Dashed brown border) -->
-                            <rect x="20" y="20" width="760" height="460" rx="10" class="svg-fence" />
+                            <!-- Fence / Cerca Perimetral — 52.7 m x 64.4 m a escala real (10 px/m) -->
+                            <rect x="48" y="58" width="527" height="644" rx="12" class="svg-fence" />
 
                             <!-- Water / Irrigation Pipes (Dashed blue lines) -->
-                            <path d="M 400 350 L 520 350 L 520 275 L 640 275 L 640 370" class="svg-irrigation-pipe" />
+                            <path d="M 331 444 L 460 444 L 460 390" class="svg-irrigation-pipe" />
 
-                            <!-- Farmhouse Area / Casa Yagua -->
+                            <!-- Farmhouse Area / Casa Yagua (huella real 14.9 x 16.9 m) -->
                             <g class="svg-element clickable" id="elem-house" data-title="Casa Principal Yagua" data-desc="Vivienda bajo régimen de comodato. Cuenta con cocina, nevera y áreas de estancia. El comodatario asume el mantenimiento estricto de higiene y orden de estas instalaciones.">
-                                <rect x="330" y="200" width="140" height="110" rx="8" class="svg-house-base" />
-                                <polygon points="315,200 400,140 485,200" class="svg-house-roof" />
-                                <rect x="380" y="250" width="40" height="60" class="svg-house-door" />
-                                <rect x="345" y="225" width="25" height="25" rx="3" class="svg-house-window" />
-                                <rect x="430" y="225" width="25" height="25" rx="3" class="svg-house-window" />
-                                <text x="400" y="190" text-anchor="middle" class="svg-house-label">CASA YAGUA</text>
+                                <rect x="182" y="356" width="149" height="169" rx="4" class="svg-house-base" />
+                                <polygon points="186,360 327,360 256.5,395" class="svg-house-roof" />
+                                <polygon points="186,521 327,521 256.5,486" class="svg-house-roof" />
+                                <polygon points="186,360 256.5,395 256.5,486 186,521" class="svg-house-roof" />
+                                <polygon points="327,360 327,521 256.5,486 256.5,395" class="svg-house-roof" />
+                                <rect x="241" y="512" width="31" height="13" rx="2" class="svg-house-door" />
+                                <text x="256.5" y="506" text-anchor="middle" class="svg-house-label">CASA YAGUA</text>
                             </g>
 
-                            <!-- Large Mango Trees (4 Matas Grandes de Mango) -->
+                            <!-- 5 Mangos del frente (franja norte, coordenadas GPS) -->
                             <!-- Mango 1 -->
-                            <g class="svg-element clickable svg-tree" id="elem-mango1" data-title="Mango Grande #1" data-desc="Uno de los 4 mangos gigantes del dosel alto. Produce gran cantidad de hojarasca (alta en carbono) ideal para balancear las pacas digestoras, además de frutos estacionales.">
-                                <circle cx="140" cy="120" r="45" class="svg-leaf-shadow" />
-                                <circle cx="140" cy="120" r="40" class="svg-mango-leaves" />
-                                <circle cx="125" cy="110" r="10" class="svg-mango-fruit" />
-                                <circle cx="155" cy="130" r="8" class="svg-mango-fruit" />
-                                <text x="140" y="125" class="svg-tree-label">MANGO</text>
+                            <g class="svg-element clickable svg-tree" id="elem-mango1" data-title="Mango Grande #1" data-desc="Uno de los 5 mangos gigantes del frente (lado norte). Ubicado en el extremo oeste de la franja norte. Produce gran cantidad de hojarasca (alta en carbono) ideal para balancear las pacas digestoras, además de frutos estacionales.">
+                                <circle cx="69.3" cy="263.9" r="30" class="svg-leaf-shadow" />
+                                <circle cx="69.3" cy="263.9" r="25" class="svg-mango-leaves" />
+                                <circle cx="60" cy="255" r="6" class="svg-mango-fruit" />
+                                <circle cx="78" cy="272" r="5" class="svg-mango-fruit" />
+                                <text x="69.3" y="268" class="svg-tree-label">MANGO</text>
                             </g>
 
                             <!-- Mango 2 -->
-                            <g class="svg-element clickable svg-tree" id="elem-mango2" data-title="Mango Grande #2" data-desc="Gran árbol de mango. Proporciona sombra y amortiguación térmica a la sección norte de la finca. Su hojarasca se almacena para alimentar la Paca #2.">
-                                <circle cx="270" cy="90" r="48" class="svg-leaf-shadow" />
-                                <circle cx="270" cy="90" r="42" class="svg-mango-leaves" />
-                                <circle cx="275" cy="80" r="9" class="svg-mango-fruit" />
-                                <text x="270" y="95" class="svg-tree-label">MANGO</text>
+                            <g class="svg-element clickable svg-tree" id="elem-mango2" data-title="Mango Grande #2" data-desc="Gran árbol de mango en la franja norte. Proporciona sombra y amortiguación térmica a la sección norte de la finca. Su hojarasca se almacena para alimentar la Paca #2.">
+                                <circle cx="172.8" cy="214.7" r="30" class="svg-leaf-shadow" />
+                                <circle cx="172.8" cy="214.7" r="25" class="svg-mango-leaves" />
+                                <circle cx="164" cy="206" r="6" class="svg-mango-fruit" />
+                                <text x="172.8" y="219" class="svg-tree-label">MANGO</text>
                             </g>
 
                             <!-- Mango 3 -->
-                            <g class="svg-element clickable svg-tree" id="elem-mango3" data-title="Mango Grande #3" data-desc="Ubicado en la franja noreste, dentro del sector norte de la finca. Genera biomasa densa. Excelente salud forestal. Aporte clave de materia orgánica para el reciclaje de nutrientes en el suelo.">
-                                <circle cx="680" cy="140" r="45" class="svg-leaf-shadow" />
-                                <circle cx="680" cy="140" r="40" class="svg-mango-leaves" />
-                                <circle cx="690" cy="130" r="8" class="svg-mango-fruit" />
-                                <circle cx="665" cy="150" r="10" class="svg-mango-fruit" />
-                                <text x="680" y="145" class="svg-tree-label">MANGO</text>
+                            <g class="svg-element clickable svg-tree" id="elem-mango3" data-title="Mango Grande #3" data-desc="Ubicado en la franja norte de la finca, cerca del borde norte. Genera biomasa densa. Excelente salud forestal. Aporte clave de materia orgánica para el reciclaje de nutrientes en el suelo.">
+                                <circle cx="160.6" cy="125.6" r="30" class="svg-leaf-shadow" />
+                                <circle cx="160.6" cy="125.6" r="25" class="svg-mango-leaves" />
+                                <circle cx="170" cy="116" r="6" class="svg-mango-fruit" />
+                                <circle cx="150" cy="136" r="7" class="svg-mango-fruit" />
+                                <text x="160.6" y="130" class="svg-tree-label">MANGO</text>
                             </g>
 
                             <!-- Mango 4 -->
-                            <g class="svg-element clickable svg-tree" id="elem-mango4" data-title="Mango Grande #4" data-desc="Árbol de mango en la sección sur-oeste. Forma parte de la barrera cortaviento natural de la finca. Su cobertura foliar reduce la evaporación del suelo circundante.">
-                                <circle cx="160" cy="380" r="45" class="svg-leaf-shadow" />
-                                <circle cx="160" cy="380" r="40" class="svg-mango-leaves" />
-                                <circle cx="170" cy="370" r="9" class="svg-mango-fruit" />
-                                <text x="160" y="385" class="svg-tree-label">MANGO</text>
+                            <g class="svg-element clickable svg-tree" id="elem-mango4" data-title="Mango Grande #4" data-desc="Árbol de mango sobre el borde norte de la finca. Forma parte de la barrera cortaviento natural de la finca. Su cobertura foliar reduce la evaporación del suelo circundante.">
+                                <circle cx="321.9" cy="101" r="30" class="svg-leaf-shadow" />
+                                <circle cx="321.9" cy="101" r="25" class="svg-mango-leaves" />
+                                <circle cx="331" cy="92" r="6" class="svg-mango-fruit" />
+                                <text x="321.9" y="105" class="svg-tree-label">MANGO</text>
                             </g>
 
-                            <!-- Mamón Tree (1 Mata de Mamón) -->
-                            <g class="svg-element clickable svg-tree" id="elem-mamon" transform="translate(-140,330)" data-title="Mata de Mamón" data-desc="Árbol de dosel medio-alto con frutos dulces en racimo. Sus hojas pequeñas se descomponen más rápido que las del mango, ideales para las capas intermedias del compostaje. Sector sur de la finca.">
-                                <circle cx="580" cy="110" r="38" class="svg-leaf-shadow" />
-                                <circle cx="580" cy="110" r="34" class="svg-mamon-leaves" />
-                                <circle cx="570" cy="100" r="4" class="svg-mamon-fruit" />
-                                <circle cx="585" cy="120" r="5" class="svg-mamon-fruit" />
-                                <text x="580" y="115" class="svg-tree-label">MAMÓN</text>
+                            <!-- Mango 5 -->
+                            <g class="svg-element clickable svg-tree" id="elem-mango5" data-title="Mango Grande #5" data-desc="Quinto árbol de mango de la franja norte, al norte de la casa. Aporta sombra, frutos y hojarasca para el compostaje de las pacas digestoras.">
+                                <circle cx="318.8" cy="196.3" r="30" class="svg-leaf-shadow" />
+                                <circle cx="318.8" cy="196.3" r="25" class="svg-mango-leaves" />
+                                <circle cx="310" cy="187" r="6" class="svg-mango-fruit" />
+                                <text x="318.8" y="200" class="svg-tree-label">MANGO</text>
                             </g>
 
-                            <!-- Moringa Tree (1 Mata de Moringa) -->
-                            <g class="svg-element clickable svg-tree" id="elem-moringa" transform="translate(80,-40)" data-title="Mata de Moringa" data-desc="Conocida como el árbol de la vida. Altamente rica en nutrientes (nitrógeno, potasio). Sus recortes verdes se usan en las pacas digestoras como catalizador de fermentación debido a su alto contenido proteico. Sector este, junto al platanal.">
-                                <ellipse cx="640" cy="370" rx="30" ry="38" class="svg-leaf-shadow" />
-                                <ellipse cx="640" cy="370" rx="26" ry="34" class="svg-moringa-leaves" />
-                                <text x="640" y="375" class="svg-tree-label">MORINGA</text>
+                            <!-- Mango del Sur -->
+                            <g class="svg-element clickable svg-tree" id="elem-mango-sur" data-title="Mango del Sur" data-desc="Árbol de mango ubicado en el sector sur de la finca, entre el mamón y las pacas digestoras. Protege el suelo del sol directo en la franja sur.">
+                                <circle cx="321.9" cy="601.8" r="30" class="svg-leaf-shadow" />
+                                <circle cx="321.9" cy="601.8" r="25" class="svg-mango-leaves" />
+                                <circle cx="312" cy="593" r="6" class="svg-mango-fruit" />
+                                <text x="321.9" y="606" class="svg-tree-label">MANGO</text>
+                            </g>
+
+                            <!-- Mamón 1 (sector sur) -->
+                            <g class="svg-element clickable svg-tree" id="elem-mamon" data-title="Mata de Mamón #1" data-desc="Árbol de dosel medio-alto con frutos dulces en racimo. Sus hojas pequeñas se descomponen más rápido que las del mango, ideales para las capas intermedias del compostaje. Sector sur de la finca.">
+                                <circle cx="157.6" cy="644.8" r="26" class="svg-leaf-shadow" />
+                                <circle cx="157.6" cy="644.8" r="22" class="svg-mamon-leaves" />
+                                <circle cx="150" cy="637" r="4" class="svg-mamon-fruit" />
+                                <circle cx="165" cy="652" r="5" class="svg-mamon-fruit" />
+                                <text x="157.6" y="649" class="svg-tree-label">MAMÓN</text>
+                            </g>
+
+                            <!-- Mamón 2 (sector sur) -->
+                            <g class="svg-element clickable svg-tree" id="elem-mamon2" data-title="Mata de Mamón #2" data-desc="Segunda mata de mamón en el sector sur de la finca. Sus hojas pequeñas se descomponen rápido y aportan nitrógeno a las capas intermedias del compostaje.">
+                                <circle cx="264.1" cy="558.8" r="26" class="svg-leaf-shadow" />
+                                <circle cx="264.1" cy="558.8" r="22" class="svg-mamon-leaves" />
+                                <circle cx="256" cy="551" r="4" class="svg-mamon-fruit" />
+                                <circle cx="272" cy="566" r="5" class="svg-mamon-fruit" />
+                                <text x="264.1" y="563" class="svg-tree-label">MAMÓN</text>
+                            </g>
+
+                            <!-- Moringa (sector este, junto al platanal) -->
+                            <g class="svg-element clickable svg-tree" id="elem-moringa" data-title="Mata de Moringa" data-desc="Conocida como el árbol de la vida. Altamente rica en nutrientes (nitrógeno, potasio). Sus recortes verdes se usan en las pacas digestoras como catalizador de fermentación debido a su alto contenido proteico. Sector este, junto al platanal.">
+                                <ellipse cx="420" cy="285" rx="30" ry="34" class="svg-leaf-shadow" />
+                                <ellipse cx="420" cy="285" rx="26" ry="30" class="svg-moringa-leaves" />
+                                <text x="420" y="290" class="svg-tree-label">MORINGA</text>
                             </g>
 
                             <!-- Plátanos Grandes (5 Matas Adultas) -->
-                            <g class="clickable svg-element" id="elem-platanos-grandes" transform="translate(250,0)" data-title="Platanal - 5 Matas Grandes" data-desc="Grupo de 5 matas adultas de plátano (Musa paradisiaca) en crecimiento vegetativo avanzado y desarrollo de racimos. Poseen hojas anchas de gran tamaño y demandan alta humedad de suelo. Sector este de la finca.">
+                            <g class="clickable svg-element" id="elem-platanos-grandes" transform="translate(20,-24)" data-title="Platanal - 5 Matas Grandes" data-desc="Grupo de 5 matas adultas de plátano (Musa paradisiaca) en crecimiento vegetativo avanzado y desarrollo de racimos. Poseen hojas anchas de gran tamaño y demandan alta humedad de suelo. Centro-este de la finca.">
                                 <!-- Trunk 1 -->
                                 <path d="M 335 440 L 335 410" stroke="#7a8d6e" stroke-width="4.5" stroke-linecap="round" fill="none" />
                                 <path d="M 335 410 Q 320 395 315 400" stroke="#52b788" stroke-width="2.5" stroke-linecap="round" fill="none" />
@@ -207,7 +233,7 @@
                             </g>
 
                             <!-- Plátanos Bebés (5 Hijos/Colinos pequeños) -->
-                            <g class="clickable svg-element" id="elem-platanos-bebes" transform="translate(250,0)" data-title="Platanal - 5 Hijos (Bebés)" data-desc="Grupo de 5 plantas jóvenes (colinos recién establecidos). Se encuentran en desarrollo inicial de raíces y son muy sensibles a la pérdida de humedad del suelo. Sector este de la finca.">
+                            <g class="clickable svg-element" id="elem-platanos-bebes" transform="translate(-82,44)" data-title="Platanal - 5 Hijos (Bebés)" data-desc="Grupo de 5 plantas jóvenes (colinos recién establecidos). Se encuentran en desarrollo inicial de raíces y son muy sensibles a la pérdida de humedad del suelo. Centro-este de la finca, al sur de las matas grandes.">
                                 <!-- Baby 1 -->
                                 <path d="M 445 440 L 445 428" stroke="#5c8f6e" stroke-width="2.5" stroke-linecap="round" fill="none" />
                                 <path d="M 445 428 Q 438 420 435 424" stroke="#74c69d" stroke-width="1.8" stroke-linecap="round" fill="none" />
@@ -232,63 +258,79 @@
                                 <text x="468" y="458" text-anchor="middle" class="svg-tree-label" style="fill: var(--text-secondary); font-size: 8px;">5 PLÁTANOS B.</text>
                             </g>
 
-                            <!-- Paca Venezuela -->
+                            <!-- Paca Venezuela (borde sur) -->
                             <g class="svg-element clickable" id="elem-paca1" data-title="Paca Venezuela" data-desc="Paca digestora en proceso de construccion. Ubicada en la finca Yagua. Inicio: 2 de Septiembre 2026. Cosecha estimada: 2 de Marzo 2027.">
-                                <rect x="25" y="25" width="30" height="30" rx="4" class="svg-paca svg-paca-active" />
-                                <text x="40" y="44" class="svg-paca-num">1</text>
-                                <text x="40" y="70" text-anchor="middle" class="svg-paca-label">VENEZUELA</text>
+                                <rect x="354.5" y="659.4" width="20" height="20" rx="4" class="svg-paca svg-paca-active" />
+                                <text x="364.5" y="674" class="svg-paca-num">1</text>
+                                <text x="351" y="675" text-anchor="end" class="svg-paca-label">VENEZUELA</text>
                             </g>
 
-                            <!-- Paca Colombia -->
+                            <!-- Paca Colombia (borde sur) -->
                             <g class="svg-element clickable" id="elem-paca2" data-title="Paca Colombia" data-desc="Segunda paca digestora de la finca Yagua. Inicio: 15 de Septiembre 2026 (15 dias despues de la Paca Venezuela). Cosecha estimada: 15 de Marzo 2027.">
-                                <rect x="25" y="95" width="30" height="30" rx="4" class="svg-paca svg-paca-active" />
-                                <text x="40" y="114" class="svg-paca-num">2</text>
-                                <text x="40" y="140" text-anchor="middle" class="svg-paca-label">COLOMBIA</text>
+                                <rect x="378.8" y="656.4" width="20" height="20" rx="4" class="svg-paca svg-paca-active" />
+                                <text x="388.8" y="671" class="svg-paca-num">2</text>
+                                <text x="402" y="672" text-anchor="start" class="svg-paca-label">COLOMBIA</text>
                             </g>
 
                             <!-- Cultivos de Aromáticas & Autoriego (Orégano y Albahaca) -->
-                            <g class="svg-element clickable" id="elem-aromaticas" transform="translate(-30,-60)" data-title="Parcela de Aromáticas (Autoriego)" data-desc="Cultivos de albahaca y orégano. Equipado con un sistema de riego localizado. Actúa como barrera biológica: las aromáticas confunden a las plagas y atraen insectos polinizadores y depredadores benéficos. Ubicadas en el sector norte, junto a los mangos.">
+                            <g class="svg-element clickable" id="elem-aromaticas" data-title="Parcela de Aromáticas (Autoriego)" data-desc="Cultivos de albahaca y orégano. Equipado con un sistema de riego localizado. Actúa como barrera biológica: las aromáticas confunden a las plagas y atraen insectos polinizadores y depredadores benéficos. Ubicadas en el sector norte, junto a los mangos.">
                                 <!-- Planting Beds -->
-                                <rect x="520" y="230" width="140" height="40" rx="5" class="svg-bed" />
-                                <rect x="520" y="280" width="140" height="40" rx="5" class="svg-bed" />
+                                <rect x="247" y="314" width="70" height="16" rx="4" class="svg-bed" />
+                                <rect x="247" y="333" width="70" height="16" rx="4" class="svg-bed" />
                                 <!-- Basil icons represented as dark green dots -->
-                                <circle cx="535" cy="250" r="6" class="svg-basil-plant" />
-                                <circle cx="565" cy="250" r="6" class="svg-basil-plant" />
-                                <circle cx="595" cy="250" r="6" class="svg-basil-plant" />
-                                <circle cx="625" cy="250" r="6" class="svg-basil-plant" />
+                                <circle cx="262" cy="322" r="4.5" class="svg-basil-plant" />
+                                <circle cx="282" cy="322" r="4.5" class="svg-basil-plant" />
+                                <circle cx="302" cy="322" r="4.5" class="svg-basil-plant" />
                                 <!-- Oregano represented as lighter green clusters -->
-                                <path d="M 530 300 Q 535 292 540 300" class="svg-oregano-plant" stroke-width="4" />
-                                <path d="M 560 300 Q 565 292 570 300" class="svg-oregano-plant" stroke-width="4" />
-                                <path d="M 590 300 Q 595 292 600 300" class="svg-oregano-plant" stroke-width="4" />
-                                <path d="M 620 300 Q 625 292 630 300" class="svg-oregano-plant" stroke-width="4" />
+                                <path d="M 258 345 Q 262 338 266 345" class="svg-oregano-plant" stroke-width="3" />
+                                <path d="M 278 345 Q 282 338 286 345" class="svg-oregano-plant" stroke-width="3" />
+                                <path d="M 298 345 Q 302 338 306 345" class="svg-oregano-plant" stroke-width="3" />
                                 <!-- Water Spraying simulation circles -->
-                                <circle cx="550" cy="250" r="12" class="svg-water-sprinkle" />
-                                <circle cx="610" cy="250" r="12" class="svg-water-sprinkle" />
-                                <circle cx="550" cy="300" r="12" class="svg-water-sprinkle" />
-                                <circle cx="610" cy="300" r="12" class="svg-water-sprinkle" />
-                                <text x="590" y="215" text-anchor="middle" class="svg-bed-label">AROMÁTICAS</text>
+                                <circle cx="272" cy="322" r="9" class="svg-water-sprinkle" />
+                                <circle cx="292" cy="341" r="9" class="svg-water-sprinkle" />
+                                <text x="282.3" y="306" text-anchor="middle" class="svg-bed-label">AROMÁTICAS</text>
                             </g>
 
                             <!-- Moringa Nueva (siembra reciente, junto al platanal - sector este) -->
                             <g class="svg-element clickable svg-tree" id="elem-moringa2" data-title="Mata de Moringa Nueva" data-desc="Moringa recién sembrada junto al platanal en el sector este de la finca. Sus hojas verdes son ricas en nitrógeno y potasio; se usan como catalizador de fermentación en las pacas digestoras.">
-                                <ellipse cx="585" cy="325" rx="30" ry="38" class="svg-leaf-shadow" />
-                                <ellipse cx="585" cy="325" rx="26" ry="34" class="svg-moringa-leaves" />
-                                <text x="585" y="330" class="svg-tree-label">MORINGA</text>
+                                <ellipse cx="464.9" cy="356" rx="30" ry="34" class="svg-leaf-shadow" />
+                                <ellipse cx="464.9" cy="356" rx="26" ry="30" class="svg-moringa-leaves" />
+                                <text x="464.9" y="361" class="svg-tree-label">MORINGA</text>
+                            </g>
+
+                            <!-- 3 Mangos Injertados (línea sobre el borde este) -->
+                            <g class="svg-element clickable svg-tree" id="elem-mango-inj1" data-title="Mango Injerto #1" data-desc="Mango injertado en el borde este de la finca. Injerto de variedad productiva sobre patrón resistente. Primero de la línea de 3 mangos injertados del lado este.">
+                                <circle cx="516.6" cy="482" r="26" class="svg-leaf-shadow" />
+                                <circle cx="516.6" cy="482" r="21" class="svg-mango-leaves" />
+                                <circle cx="508" cy="474" r="5" class="svg-mango-fruit" />
+                                <text x="516.6" y="486" class="svg-tree-label">MANGO</text>
+                            </g>
+                            <g class="svg-element clickable svg-tree" id="elem-mango-inj2" data-title="Mango Injerto #2" data-desc="Segundo mango injertado sobre el borde este de la finca. Parte de la línea de 3 injertos orientada de noreste a sureste.">
+                                <circle cx="525.8" cy="589.6" r="26" class="svg-leaf-shadow" />
+                                <circle cx="525.8" cy="589.6" r="21" class="svg-mango-leaves" />
+                                <circle cx="517" cy="581" r="5" class="svg-mango-fruit" />
+                                <text x="525.8" y="594" class="svg-tree-label">MANGO</text>
+                            </g>
+                            <g class="svg-element clickable svg-tree" id="elem-mango-inj3" data-title="Mango Injerto #3" data-desc="Tercer mango injertado, en el ángulo sureste de la finca. Cierra la línea de 3 injertos del lado este.">
+                                <circle cx="537.9" cy="651" r="26" class="svg-leaf-shadow" />
+                                <circle cx="537.9" cy="651" r="21" class="svg-mango-leaves" />
+                                <circle cx="529" cy="643" r="5" class="svg-mango-fruit" />
+                                <text x="537.9" y="655" class="svg-tree-label">MANGO</text>
                             </g>
 
                             <!-- Rosa de los vientos -->
                             <g class="svg-compass" id="compass-rose">
-                                <circle cx="740" cy="64" r="26" class="svg-compass-circle" />
-                                <text x="740" y="54" class="svg-compass-n">N</text>
-                                <polygon points="740,57 746,72 734,72" class="svg-compass-needle-n" />
-                                <polygon points="734,72 746,72 740,85" class="svg-compass-needle-s" />
+                                <circle cx="603" cy="32" r="25" class="svg-compass-circle" />
+                                <text x="603" y="23" class="svg-compass-n">N</text>
+                                <polygon points="603,27 609,41 597,41" class="svg-compass-needle-n" />
+                                <polygon points="597,41 609,41 603,54" class="svg-compass-needle-s" />
                             </g>
 
                             <!-- Rótulos cardinales (fuera de la cerca perimetral) -->
-                            <text x="400" y="15" class="svg-cardinal">NORTE</text>
-                            <text x="400" y="496" class="svg-cardinal">SUR</text>
-                            <text x="11" y="250" class="svg-cardinal" transform="rotate(-90 11 250)">OESTE</text>
-                            <text x="789" y="250" class="svg-cardinal" transform="rotate(90 789 250)">ESTE</text>
+                            <text x="311.5" y="40" class="svg-cardinal">NORTE</text>
+                            <text x="311.5" y="732" class="svg-cardinal">SUR</text>
+                            <text x="22" y="380" class="svg-cardinal" transform="rotate(-90 22 380)">OESTE</text>
+                            <text x="605" y="380" class="svg-cardinal" transform="rotate(90 605 380)">ESTE</text>
                         </svg>
                     </div>
                 </div>
@@ -318,7 +360,7 @@
                         <i data-lucide="flame" class="icon-hot"></i>
                         <div>
                             <h3>Monitoreo en Tiempo Real: Paca Venezuela</h3>
-                            <p class="helper-text" style="margin-bottom: 0;">Paca activa instalada en la esquina noroeste de la cerca perimetral (lado norte).</p>
+                            <p class="helper-text" style="margin-bottom: 0;">Paca activa instalada en el borde sur de la cerca perimetral.</p>
                         </div>
                     </div>
                     <div class="date-badge">
