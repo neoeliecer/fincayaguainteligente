@@ -2272,6 +2272,13 @@ input[type="range"]::-webkit-slider-thumb:hover {
     text-align: left;
 }
 
+.planta-alias {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin: 4px 0 0;
+    text-align: left;
+}
+
 .planta-ficha-header .guia-plantas-tags {
     margin: 0;
     justify-content: flex-end;
